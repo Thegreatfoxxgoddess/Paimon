@@ -510,7 +510,8 @@ if paimon.has_bot:
                 owner = [
                     [
                         InlineKeyboardButton(
-                            text="🧙🏻‍♂️  ᴄᴏɴᴛᴀᴛᴏ", url="https://t.me/thegreatfoxxgoddess"
+                            text="🧙🏻‍♂️  ᴄᴏɴᴛᴀᴛᴏ",
+                            url="https://t.me/thegreatfoxxgoddess",
                         ),
                         InlineKeyboardButton(
                             text="💭  sᴛᴀᴛᴜs", callback_data="status_alive"
@@ -844,7 +845,8 @@ if paimon.has_bot:
                 buttons = [
                     [
                         InlineKeyboardButton(
-                            "REPL", url="https://replit.com/@thegreatfoxxgoddess/StringSessionKX"
+                            "REPL",
+                            url="https://replit.com/@thegreatfoxxgoddess/StringSessionKX",
                         ),
                         InlineKeyboardButton(
                             "Pyrogram Bot", url="https://t.me/genStr_Bot"
@@ -1098,9 +1100,7 @@ if paimon.has_bot:
                     thumb_img = "https://telegra.ph/file/8db040d03e6c5ba2cfd08.png"
                 else:
                     c_data = f"troll_{key_}"
-                    i_m_content = (
-                        f"Only <b>{r_name}</b> cannot see this message. UwU"
-                    )
+                    i_m_content = f"Only <b>{r_name}</b> cannot see this message. UwU"
                     i_l_des = f"Message hidden from {r_name}"
                     title = "Troll"
                     thumb_img = "https://i.imgur.com/0vg5B0A.png"
