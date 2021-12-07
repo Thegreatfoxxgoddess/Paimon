@@ -78,7 +78,7 @@ async def save_msg_alive(message: Message):
 
 
 @paimon.on_cmd(
-    "alive",
+    "ialive",
     about={
         "header": "Alive apenas",
     },
