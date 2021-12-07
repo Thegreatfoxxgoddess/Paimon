@@ -1,7 +1,3 @@
-# Copyright (C) 2020 by UsergeTeam@Github, < https://github.com/UsergeTeam >.
-#
-# Edited by Alicia
-
 import asyncio
 from datetime import datetime
 
@@ -27,9 +23,9 @@ async def pingme(message: Message):
         end = datetime.now()
         t_m_s = (end - start).microseconds / 1000
         m_s = round((t_m_s - 0.6) / 3, 3)
-        await message.edit(f"🏓 ᴀᴠᴇʀᴀɢᴇ ᴘᴏɴɢ! \n`{m_s} ᴍs`")
+        await message.edit(f"**Average Ping!**\n`{m_s} ms`")
     else:
-        await message.edit("`🏓 ᴘᴏɴɢ!`")
+        await message.edit("`ara ara`")
         end = datetime.now()
         m_s = (end - start).microseconds / 1000
-        await message.edit(f"ᴘɪɴɢ - `{m_s} ᴍs`\nᴜᴘᴛɪᴍᴇ - `{paimon.uptime}`")
+        await message.edit(f"**ara ara**\n`{m_s} ms`")
