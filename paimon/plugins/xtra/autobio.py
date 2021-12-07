@@ -54,7 +54,7 @@ async def auto_bio(msg: Message):
         )
         return
 
-    BIO_QUOTES = HINDI_QUOTES if "hi" in msg.input_str.lower() else ENGLISH_QUOTES
+    BIO_QUOTES = ENGLISH_QUOTES
     USER_DATA.update_one({"_id": "BIO_UPDATION"}, {"$set": {"on": True}}, upsert=True)
     await msg.edit(
         "Auto Bio Updation is **Started** Successfully...", log=__name__, del_in=3
