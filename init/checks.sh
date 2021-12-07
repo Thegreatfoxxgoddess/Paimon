@@ -5,33 +5,33 @@
 # Edited by Alicia
 
 _checkBashReq() {
-    log "Verificando Comandos Bash ..."
-    command -v jq &> /dev/null || quit "Comando necessário :jq : não foi encontrado! !"
+    log "Checking Bash Commands ..."
+    command -v jq &> /dev/null || quit "Required command :jq : was not found! !"
 }
 
 _checkPythonVersion() {
-    log "Verificando a versão do Python..."
+    log "Checking Python Version..."
     getPythonVersion
     ( test -z $pVer || test $(sed 's/\.//g' <<< $pVer) -lt 3${minPVer}0 ) \
-        && quit "Você DEVE ter uma versão python de pelo menos 3.$minPVer.0 !"
+        && quit "You MUST have a python version of at least 3. $minPVer.0 !"
     log "\tPYTHON encontrado- v$pVer ..."
 }
 
 _checkConfigFile() {
-    log "Verificando o arquivo de configuração ..."
+    log "Checking the configuration file..."
     configPath="config.env"
     if test -f $configPath; then
-        log "\tArquivo de configuração encontrado : $configPath, Exportando ..."
+        log "\tconfiguration file found : $configPath, Exporting .."
         set -a
         . $configPath
         set +a
         test ${_____REMOVE_____THIS_____LINE_____:-fasle} = true \
-            && quit "Remova a linha mencionada na primeira hashtag do arquivo config.env"
+            && quit "Remove the line mentioned in the first hashtag from config.env"
     fi
 }
 
 _checkRequiredVars() {
-    log "Verificando ENV Vars obrigatórias ..."
+    log "Checking mandatory ENV Vars..."
     for var in API_ID API_HASH LOG_CHANNEL_ID DATABASE_URL; do
         test -z ${!var} && quit "Requer $var var !"
     done
@@ -41,7 +41,7 @@ _checkRequiredVars() {
 }
 
 _checkDefaultVars() {
-    replyLastMessage "Verificando ENV Vars padrão ..."
+    replyLastMessage "Checking Default ENV Vars ..."
     declare -rA def_vals=(
         [WORKERS]=0
         [PREFERRED_LANGUAGE]="pt"
@@ -90,7 +90,7 @@ print(quote_plus("'$uNameAndPass'"))')
 }
 
 _checkDatabase() {
-    editLastMessage "Verificando DATABASE_URL ..."
+    editLastMessage "Checking DATABASE_URL ..."
     local mongoErr=$(runPythonCode '
 import pymongo
 try:
@@ -101,13 +101,13 @@ except Exception as e:
 }
 
 _checkTriggers() {
-    editLastMessage "Verificando TRIGGERS ..."
+    editLastMessage "Checking TRIGGERS ..."
     test $CMD_TRIGGER = $SUDO_TRIGGER \
         && quit "Invalid SUDO_TRIGGER!, You can't use $CMD_TRIGGER as SUDO_TRIGGER"
 }
 
 _checkPaths() {
-    editLastMessage "Verificando Paths ..."
+    editLastMessage "Checking Paths ..."
     for path in $DOWN_PATH logs; do
         test ! -d $path && {
             log "\tCriando Path : ${path%/} ..."
@@ -118,8 +118,8 @@ _checkPaths() {
 
 _checkUpstreamRepo() {
     remoteIsExist $UPSTREAM_REMOTE || addUpstream
-    editLastMessage "Buscando dados de UPSTREAM_REPO ..."
-    fetchUpstream || updateUpstream && fetchUpstream || quit "UPSTREAM_REPO inválido !"
+    editLastMessage "Fetching data from UPSTREAM_REPO ..."
+    fetchUpstream || updateUpstream && fetchUpstream || quit "UPSTREAM_REPO invalid !"
     fetchBranches
     updateBuffer
 }
@@ -127,11 +127,11 @@ _checkUpstreamRepo() {
 _setupPlugins() {
     local link path tmp
     if test $(grep -P '^'$2'$' <<< $3); then
-        editLastMessage "Clonando $1 Plugins ..."
+        editLastMessage "Cloning $1 Plugins ..."
         link=$(test $4 && echo $4 || echo $3)
         tmp=Temp-Plugins
         gitClone --depth=1 $link $tmp
-        replyLastMessage "\tInstalando Requisitos ..."
+        replyLastMessage "\tInstalling Requirements..."
         upgradePip
         installReq $tmp
         path=$(tr "[:upper:]" "[:lower:]" <<< $1)
@@ -141,12 +141,12 @@ _setupPlugins() {
         rm -rf $tmp/
         deleteLastMessage
     else
-        editLastMessage "$1 Plugins Desativados !"
+        editLastMessage "$1 Disabled Plugins !"
     fi
 }
 
 _checkUnoffPlugins() {
-    _setupPlugins Xtra true $LOAD_UNOFFICIAL_PLUGINS https://github.com/thegreatfoxxgoddess/paimon-Plugins.git
+    _setupPlugins Xtra true $LOAD_UNOFFICIAL_PLUGINS https://github.com/thegreatfoxxgoddess/Paimon-Plugins.git
 }
 
 _checkCustomPlugins() {
