@@ -34,7 +34,7 @@ from paimon.utils import (
     sublists,
 )
 
-from ..misc.uploads import upload
+from ..misc.upload import upload
 
 LOGGER = paimon.getLogger(__name__)
 BASE_YT_URL = "https://www.youtube.com/watch?v="
