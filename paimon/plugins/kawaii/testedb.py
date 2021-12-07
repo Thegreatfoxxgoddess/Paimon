@@ -12,7 +12,7 @@ async def _init():
         ALIVE_MEDIA = link["link"]
 
 
-@cdnnax.on_cmd(
+@paimon.on_cmd(
     "settest",
     about={
         "header": "apenas teste",
