@@ -8,7 +8,7 @@
 
 import aiohttp
 
-from paimon import Config, Message, logging, pool, paimon
+from paimon import Config, Message, logging, paimon, pool
 
 PASTY_URL = "https://pasty.lus.pm/"
 
