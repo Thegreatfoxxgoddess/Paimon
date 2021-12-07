@@ -3,7 +3,7 @@ aiohttp[speedups]>=3.7.3
 asyncurban>=0.3.3
 beautifulsoup4>=4.9.1
 covid>=2.4.0
-cowpy>=1.1.0
+cowpy>=1.1.1
 dnspython>=2.0.0
 gitpython>=3.1.11
 gdshortener
