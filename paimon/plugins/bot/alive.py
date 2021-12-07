@@ -237,7 +237,7 @@ class Bot_Alive:
     def alive_info() -> str:
         alive_info_ = f"""
 ㅤㅤㅤㅤㅤㅤㅤ
-  💕   hey, paimon is awake 
+  💕   hey, paimon is awake
   🦋   how are you doing today
 """
         return alive_info_
@@ -282,6 +282,4 @@ class Bot_Alive:
         return bool(FileId.decode(file_id).file_type in PHOTO_TYPES)
 
 
-FRASES = (
-    "you're beautiful",
-)
+FRASES = ("you're beautiful",)
