@@ -60,29 +60,38 @@ REPO_X = InlineQueryResultArticle(
     input_message_content=InputTextMessageContent(
         "**Repositorio e ultilitarios do paimon**"
     ),
-    url="https://github.com/Thegreatfoxxgoddess/Paimon",
+    url="https://github.com/thegreatfoxxgoddess/Paimon",
     description="Configure o seu próprio",
     thumb_url="https://telegra.ph//file/c6d95e3f661dc15bf0df7.jpg",
     reply_markup=InlineKeyboardMarkup(
         [
             [
                 InlineKeyboardButton(
-                    "🔥 paimon Repo", url="https://github.com/Thegreatfoxxgoddess/Paimon"
+                    "🔥 paimon Repo", url="https://github.com/thegreatfoxxgoddess/Paimon"
                 ),
                 InlineKeyboardButton(
                     "🚀 Deploy Heroku",
-                    url="https://heroku.com/deploy?template=https://github.com/fnixdev/paimon-Deploy",
+                    url="https://heroku.com/deploy?template=https://github.com/thegreatfoxxgoddess/paimon-Deploy",
                 ),
             ],
         ]
     ),
 )
 
+media_, alive_media, media_type = None, None, None
+
 
 async def _init() -> None:
     data = await SAVED_SETTINGS.find_one({"_id": "CURRENT_CLIENT"})
     if data:
         Config.USE_USER_FOR_CLIENT_CHECKS = bool(data["is_user"])
+    media_ = await SAVED_SETTINGS.find_one({"_id": "ALIVE_MEDIA"})
+    if media_:
+        Config.NEW_ALIVE_MEDIA = media_["url"]
+        Config.ALIVE_MEDIA_TYPE = media_["type"]
+    else:
+        Config.NEW_ALIVE_MEDIA = "https://telegra.ph/file/4e956ef52c931570fb110.png"
+        Config.ALIVE_MEDIA_TYPE = "photo"
 
 
 @paimon.on_cmd(
@@ -209,7 +218,7 @@ if paimon.has_bot:
             await callback_query.answer("you are in main menu", show_alert=True)
             return
         if len(pos_list) == 2:
-            text = " 𝐤𝐚𝐧𝐧𝐚𝐱 𝐦𝐞𝐧𝐮 "
+            text = " paimon menu "
             buttons = main_menu_buttons()
         elif len(pos_list) == 3:
             text, buttons = category_data(cur_pos)
@@ -261,7 +270,7 @@ if paimon.has_bot:
     @check_owner
     async def callback_mm(callback_query: CallbackQuery):
         await callback_query.edit_message_text(
-            " 𝐤𝐚𝐧𝐧𝐚𝐱 𝐦𝐞𝐧𝐮 ",
+            " paimon menu ",
             reply_markup=InlineKeyboardMarkup(main_menu_buttons()),
         )
 
@@ -501,7 +510,7 @@ if paimon.has_bot:
                 owner = [
                     [
                         InlineKeyboardButton(
-                            text="🧙🏻‍♂️  ᴄᴏɴᴛᴀᴛᴏ", url="https://t.me/fnixdev"
+                            text="🧙🏻‍♂️  ᴄᴏɴᴛᴀᴛᴏ", url="https://t.me/thegreatfoxxgoddess"
                         ),
                         InlineKeyboardButton(
                             text="💭  sᴛᴀᴛᴜs", callback_data="status_alive"
@@ -629,77 +638,25 @@ if paimon.has_bot:
                     return
 
             if string == "alive":
-                alive_info = Bot_Alive.alive_info()
+                await paimon.get_me()
+                alive_info = await Bot_Alive.alive_info()
                 buttons = Bot_Alive.alive_buttons()
-                if not Config.ALIVE_MEDIA:
+                if Config.ALIVE_MEDIA_TYPE == "photo":
                     results.append(
-                        InlineQueryResultAnimation(
-                            animation_url=Bot_Alive.alive_default_imgs(),
+                        InlineQueryResultPhoto(
+                            photo_url=Config.NEW_ALIVE_MEDIA,
                             caption=alive_info,
                             reply_markup=buttons,
                         )
                     )
-                else:
-                    if Config.ALIVE_MEDIA.lower().strip() == "false":
-                        results.append(
-                            InlineQueryResultArticle(
-                                title="paimon",
-                                input_message_content=InputTextMessageContent(
-                                    alive_info, disable_web_page_preview=True
-                                ),
-                                description="ALIVE",
-                                reply_markup=buttons,
-                            )
+                elif Config.ALIVE_MEDIA_TYPE == "gif" or "video":
+                    results.append(
+                        InlineQueryResultAnimation(
+                            animation_url=Config.NEW_ALIVE_MEDIA,
+                            caption=alive_info,
+                            reply_markup=buttons,
                         )
-                    else:
-                        _media_type, _media_url = await Bot_Alive.check_media_link(
-                            Config.ALIVE_MEDIA
-                        )
-                        if _media_type == "url_gif":
-                            results.append(
-                                InlineQueryResultAnimation(
-                                    animation_url=_media_url,
-                                    caption=alive_info,
-                                    reply_markup=buttons,
-                                )
-                            )
-                        elif _media_type == "url_image":
-                            results.append(
-                                InlineQueryResultPhoto(
-                                    photo_url=_media_url,
-                                    caption=alive_info,
-                                    reply_markup=buttons,
-                                )
-                            )
-                        elif _media_type == "tg_media":
-                            c_file_id = Bot_Alive.get_bot_cached_fid()
-                            if c_file_id is None:
-                                try:
-                                    c_file_id = get_file_id(
-                                        await paimon.bot.get_messages(
-                                            _media_url[0], _media_url[1]
-                                        )
-                                    )
-                                except Exception as b_rr:
-                                    await CHANNEL.log(str(b_rr))
-                            if Bot_Alive.is_photo(c_file_id):
-                                results.append(
-                                    InlineQueryResultCachedPhoto(
-                                        file_id=c_file_id,
-                                        caption=alive_info,
-                                        reply_markup=buttons,
-                                    )
-                                )
-                            else:
-                                results.append(
-                                    InlineQueryResultCachedDocument(
-                                        title="paimon",
-                                        file_id=c_file_id,
-                                        caption=alive_info,
-                                        description="ALIVE",
-                                        reply_markup=buttons,
-                                    )
-                                )
+                    )
 
             if string == "geass":
                 results.append(
@@ -868,7 +825,7 @@ if paimon.has_bot:
                         ),
                         InlineKeyboardButton(
                             "🚀 Deploy Heroku",
-                            url="https://heroku.com/deploy?template=https://github.com/fnixdev/paimon-Deploy",
+                            url="https://heroku.com/deploy?template=https://github.com/thegreatfoxxgoddess/paimon-Deploy",
                         ),
                     ],
                 ]
@@ -887,7 +844,7 @@ if paimon.has_bot:
                 buttons = [
                     [
                         InlineKeyboardButton(
-                            "REPL", url="https://replit.com/@fnixdev/StringSessionKX"
+                            "REPL", url="https://replit.com/@thegreatfoxxgoddess/StringSessionKX"
                         ),
                         InlineKeyboardButton(
                             "Pyrogram Bot", url="https://t.me/genStr_Bot"
@@ -1136,18 +1093,18 @@ if paimon.has_bot:
                 if str_x[0].lower() == "secret":
                     c_data = f"secret_{key_}"
                     i_m_content = f"📩 <b>Mensagem Secreta</b> para <b>{r_name}</b>. Só ele/ela pode abrir."
-                    i_l_des = f"Enviar mensagem secreta para: {r_name}"
-                    title = "Enviar mensagem secreta"
+                    i_l_des = f"Send secret message to: {r_name}"
+                    title = "send secret message"
                     thumb_img = "https://telegra.ph/file/8db040d03e6c5ba2cfd08.png"
                 else:
                     c_data = f"troll_{key_}"
                     i_m_content = (
-                        f"😈 Apenas <b>{r_name}</b> não pode ver esta mensagem. UwU"
+                        f"Only <b>{r_name}</b> cannot see this message. UwU"
                     )
-                    i_l_des = f"Mensagem Oculta de {r_name}"
-                    title = "😈 Troll"
+                    i_l_des = f"Message hidden from {r_name}"
+                    title = "Troll"
                     thumb_img = "https://i.imgur.com/0vg5B0A.png"
-                buttons = [[InlineKeyboardButton("🔐  Mostrar", callback_data=c_data)]]
+                buttons = [[InlineKeyboardButton("view", callback_data=c_data)]]
                 results.append(
                     InlineQueryResultArticle(
                         title=title,
@@ -1180,11 +1137,11 @@ if paimon.has_bot:
                                 ],
                                 [
                                     InlineKeyboardButton(
-                                        text="📜  List all",
+                                        text="List all",
                                         callback_data=f"ytdl_listall_{key_}_1",
                                     ),
                                     InlineKeyboardButton(
-                                        text="⬇️  Download",
+                                        text="Download",
                                         callback_data=f'ytdl_download_{outdata[1]["video_id"]}_0',
                                     ),
                                 ],
@@ -1201,7 +1158,7 @@ if paimon.has_bot:
                         InlineQueryResultPhoto(
                             photo_url=photo,
                             title=link,
-                            description="⬇️ Clique para fazer o download",
+                            description="Click to download",
                             caption=caption,
                             reply_markup=buttons,
                         )
@@ -1211,16 +1168,16 @@ if paimon.has_bot:
                         InlineQueryResultArticle(
                             title="not Found",
                             input_message_content=InputTextMessageContent(
-                                f"Nenhum resultado encontrado para `{str_y[1]}`"
+                                f"No results found for `{str_y[1]}`"
                             ),
                             description="INVALID",
                         )
                     )
 
             MAIN_MENU = InlineQueryResultArticle(
-                title="Abrir menu inline",
-                input_message_content=InputTextMessageContent(" 𝐤𝐚𝐧𝐧𝐚𝐱 𝐦𝐞𝐧𝐮 "),
-                url="https://github.com/Thegreatfoxxgoddess/Paimon",
+                title="open inline menu",
+                input_message_content=InputTextMessageContent(" paimon menu "),
+                url="https://github.com/thegreatfoxxgoddess/Paimon",
                 description="paimon Menu",
                 thumb_url="https://telegra.ph/file/d768df44c2d9b02e0f0ca.jpg",
                 reply_markup=InlineKeyboardMarkup(main_menu_buttons()),
@@ -1238,6 +1195,6 @@ if paimon.has_bot:
             await inline_query.answer(
                 results=results,
                 cache_time=1,
-                switch_pm_text=f"Apenas meu mestre pode acessar isso",
+                switch_pm_text=f"Only my master can access this",
                 switch_pm_parameter="start",
             )
