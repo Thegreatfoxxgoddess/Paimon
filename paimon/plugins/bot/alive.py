@@ -187,9 +187,9 @@ if paimon.has_bot:
             except BadRequest:
                 pass
             ping = "ping : {} ᴍs\n"
-            
+
         alive_s = "PLUGINS + : {}\n".format(_parse_arg(Config.LOAD_UNOFFICIAL_PLUGINS))
-        
+
         alive_s += f"👥 ᵃⁿᵗᶦˢᵖᵃᵐ : {_parse_arg(Config.SUDO_ENABLED)}\n"
         alive_s += f"🚨 ᵃⁿᵗᶦˢᵖᵃᵐ : {_parse_arg(Config.ANTISPAM_SENTRY)}\n"
         if Config.HEROKU_APP and Config.RUN_DYNO_SAVER:
