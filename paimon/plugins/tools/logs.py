@@ -10,7 +10,7 @@ import aiohttp
 
 from paimon import Config, Message, logging, paimon, pool
 
-PASTY_URL = "https://pasty.lus.pm/"
+PASTY_URL = "https://pastebin.com/"
 
 _LEVELS = {
     "debug": logging.DEBUG,
