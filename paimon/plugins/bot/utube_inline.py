@@ -23,7 +23,7 @@ from wget import download
 from youtube_dl.utils import DownloadError, ExtractorError, GeoRestrictedError
 from youtubesearchpython import VideosSearch
 
-from paimon import Config, Message, pool, paimon
+from paimon import Config, Message, paimon, pool
 from paimon.utils import (
     check_owner,
     get_file_id,
