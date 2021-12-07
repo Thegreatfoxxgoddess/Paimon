@@ -93,9 +93,9 @@ async def send_alive_message(message: Message) -> None:
         reply_markup = None
         file_id = _USER_CACHED_MEDIA
         caption += (
-            f"\n⚡️  <a href={Config.UPSTREAM_REPO}><b>ʀᴇᴘᴏꜱɪᴛᴏʀɪᴏ</b></a>"
+            f"\n⚡️  <a href={Config.UPSTREAM_REPO}><b>REPOSITORY</b></a>"
             "    <code>|</code>    "
-            "👥  <a href='https://t.me/fnixdev'><b>ꜱᴜᴘᴏʀᴛᴇ</b></a>"
+            "👥  <a href='https://t.me/eightbituwu><b>meh</b></a>"
         )
     if not Config.ALIVE_MEDIA:
         await client.send_animation(
@@ -186,17 +186,17 @@ if paimon.has_bot:
                 await asyncio.sleep(e.x)
             except BadRequest:
                 pass
-            ping = "🏓 ᴘɪɴɢ : {} ᴍs\n"
-        alive_s = "➕ ᴘʟᴜɢɪɴs + : {}\n".format(
+            ping = "ping : {} ᴍs\n"
+        alive_s = "PLUGINS + : {}\n".format(
             _parse_arg(Config.LOAD_UNOFFICIAL_PLUGINS)
         )
-        alive_s += f"👥 ᴀɴᴛɪsᴘᴀᴍ : {_parse_arg(Config.SUDO_ENABLED)}\n"
-        alive_s += f"🚨 ᴀɴᴛɪsᴘᴀᴍ : {_parse_arg(Config.ANTISPAM_SENTRY)}\n"
+        alive_s += f"👥 Antispam : {_parse_arg(Config.SUDO_ENABLED)}\n"
+        alive_s += f"🚨 Antispam : {_parse_arg(Config.ANTISPAM_SENTRY)}\n"
         if Config.HEROKU_APP and Config.RUN_DYNO_SAVER:
-            alive_s += "⛽️ ᴅʏɴᴏ :  ᴀᴛɪᴠᴀᴅᴏ\n"
-        alive_s += f"💬 ʙᴏᴛ ꜰᴡᴅ : {_parse_arg(Config.BOT_FORWARDS)}\n"
-        alive_s += f"🛡 ᴘᴍ ʙʟᴏᴄᴋ : {_parse_arg(not Config.ALLOW_ALL_PMS)}\n"
-        alive_s += f"📝 ʟᴏɢ ᴘᴍ : {_parse_arg(Config.PM_LOGGING)}"
+            alive_s += "⛽️ DYNO : ACTIVATED \n"
+        alive_s += f"💬 BOT FORWARD : {_parse_arg(Config.BOT_FORWARDS)}\n"
+        alive_s += f"🛡 PM BLOCK : {_parse_arg(not Config.ALLOW_ALL_PMS)}\n"
+        alive_s += f"📝 PM LOG  : {_parse_arg(Config.PM_LOGGING)}"
         if allow:
             end = datetime.now()
             m_s = (end - start).microseconds / 1000
@@ -207,7 +207,7 @@ if paimon.has_bot:
 
 
 def _parse_arg(arg: bool) -> str:
-    return "ᴀᴛɪᴠᴀᴅᴏ" if arg else "ᴅᴇsᴀᴛɪᴠᴀᴅᴏ"
+    return "ACTIVATED" if arg else "DEACTIVATED"
 
 
 class Bot_Alive:
@@ -239,6 +239,7 @@ class Bot_Alive:
 ㅤㅤㅤㅤㅤㅤㅤ
   💕   hey, paimon is awake
   🦋   how are you doing today
+ㅤㅤㅤㅤㅤㅤㅤ
 """
         return alive_info_
 
