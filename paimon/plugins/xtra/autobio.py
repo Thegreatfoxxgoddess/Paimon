@@ -8,7 +8,7 @@ import time
 from pyrogram.errors import FloodWait
 
 from paimon import Message, get_collection, paimon
-from resources.quotes import ENGLISH_QUOTES, HINDI_QUOTES
+from resources.quotes import ENGLISH_QUOTES
 
 BIO_UPDATION = False
 AUTOBIO_TIMEOUT = 300
