@@ -49,10 +49,32 @@ async def rename_(message: Message):
 
 
 @paimon.on_cmd(
+    "convert",
+    about={
+        "header": "Convert telegram files",
+        "usage": "reply {tr}convert to any media",
+    },
+    del_pre=True,
+    check_downpath=True,
+)
+async def convert_(message: Message):
+    """convert telegram files"""
+    await message.edit("`Trying to Convert ...`")
+    if message.reply_to_message and message.reply_to_message.media:
+        message.text = "" if message.reply_to_message.document else ". -d"
+        await _handle_message(message)
+    else:
+        await message.edit("Please read `.help convert`", del_in=5)
+
+
+@paimon.on_cmd(
     "upload",
     about={
         "header": "Upload files to telegram",
-        "flags": {"-d": "upload as document", "-wt": "without thumb"},
+        "flags": {
+            "-d": "upload as document",
+            "-wt": "without thumb",
+        },
         "usage": "{tr}upload [flags] [file or folder path | link]",
         "examples": [
             "{tr}upload -d https://speed.hetzner.de/100MB.bin | test.bin",
@@ -64,10 +86,20 @@ async def rename_(message: Message):
 )
 async def upload_to_tg(message: Message):
     """upload to telegram"""
-    path_ = message.filtered_input_str
-    if not path_:
-        await message.edit("invalid input!, check `.help .upload`", del_in=5)
+    input = message.filtered_input_str
+    if not input:
+        await message.edit("invalid input!, check `{tr}help upload`", del_in=5)
         return
+    try:
+        path_ = input.replace("/", " ").split()[0]
+        cmd_str = Config.CMD_TRIGGER + path_
+        plugin_name = paimon.manager.commands[cmd_str].plugin_name
+        plugin_loc = ("/" + paimon.manager.plugins[plugin_name].parent).replace(
+            "/plugins", ""
+        )
+        path_ = f"paimon/plugins{plugin_loc}/{plugin_name}.py"
+    except BaseException:
+        path_ = input
     is_url = re.search(r"(?:https?|ftp)://[^|\s]+\.[^|\s]+", path_)
     del_path = False
     if is_url:
