@@ -1,12 +1,16 @@
-# Copyright (C) 2020 by UsergeTeam@Github, < https://github.com/UsergeTeam >.
+# Copyright (C) 2020 by paimonTeam@Github, < https://github.com/paimonTeam >.
 #
-# Edited by Alicia
+# This file is part of < https://github.com/paimonTeam/paimon > project,
+# and is released under the "GNU v3.0 License Agreement".
+# Please see < https://github.com/uaudith/paimon/blob/master/LICENSE >
+#
+# All rights reserved.
 
 import aiohttp
 
-from paimon import Config, Message, logging, paimon, pool
+from paimon import Config, Message, logging, pool, paimon
 
-NEKOBIN_URL = "https://nekobin.com/"
+PASTY_URL = "https://pasty.lus.pm/"
 
 _LEVELS = {
     "debug": logging.DEBUG,
@@ -20,7 +24,7 @@ _LEVELS = {
 @paimon.on_cmd(
     "logs",
     about={
-        "header": "check paimon logs",
+        "header": "check paimon-X logs",
         "flags": {
             "-d": "get logs in document",
             "-h": "get heroku logs",
@@ -46,32 +50,42 @@ async def check_logs(message: Message):
             text = d_f.read()
         async with aiohttp.ClientSession() as ses:
             async with ses.post(
-                NEKOBIN_URL + "api/documents", json={"content": text}
+                PASTY_URL + "api/v2/pastes/", json={"content": text}
             ) as resp:
                 if resp.status == 201:
-                    response = await resp.json()
-                    key = response["result"]["key"]
-                    file_ext = ".txt"
-                    final_url = NEKOBIN_URL + key + file_ext
-                    final_url_raw = f"{NEKOBIN_URL}raw/{key}{file_ext}"
-                    reply_text = "**Here Are Your Logs** :\n"
-                    reply_text += (
-                        f"• [NEKO]({final_url})            • [RAW]({final_url_raw})"
+                    try:
+                        response = await resp.json()
+                        key = response["result"]["key"]
+                        file_ext = ".txt"
+                        final_url = PASTY_URL + key + file_ext
+                        final_url_raw = f"{PASTY_URL}raw/{key}{file_ext}"
+                        reply_text = "**Here Are Your Logs** :\n"
+                        reply_text += (
+                            f"• [NEKO]({final_url})            • [RAW]({final_url_raw})"
+                        )
+                        await message.edit(reply_text, disable_web_page_preview=True)
+                        pasty_ = True
+                    except BaseException as e:
+                        await paimon.send_message(
+                            Config.LOG_CHANNEL_ID,
+                            f"Failed to load <b>logs</b> in PastyLus,\n<b>ERROR</b>:`{e}`",
+                        )
+                        pasty_ = False
+                if resp.status != 201 or not pasty_:
+                    await message.edit(
+                        "`Failed to reach PastyLus! Sending as document...`", del_in=5
                     )
-                    await message.edit(reply_text, disable_web_page_preview=True)
-                else:
-                    await message.edit("Failed to reach Nekobin !")
                     await message.client.send_document(
                         chat_id=message.chat.id,
                         document="logs/paimon.log",
-                        caption="**paimon Logs**",
+                        caption="**paimon-X Logs**",
                     )
     else:
         await message.delete()
         await message.client.send_document(
             chat_id=message.chat.id,
             document="logs/paimon.log",
-            caption="**paimon Logs**",
+            caption="**paimon-X Logs**",
         )
 
 
