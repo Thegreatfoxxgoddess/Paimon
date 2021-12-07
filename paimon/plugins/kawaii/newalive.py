@@ -1,11 +1,11 @@
-# new alive plugin for paimon by @eightbituwu
+# new alive plugin for paimon edited by @eightbituwu
 
-"""novo alive para paimon"""
+"""new alive for paimon"""
 
 from telegraph import upload_file
 
 from paimon import Message, get_collection, get_version, paimon
-from paimon.plugins.bot.ialive import Bot_Alive
+from paimon.plugins.bot.alive import Bot_Alive
 from paimon.utils import rand_array
 from paimon.versions import __python_version__
 
