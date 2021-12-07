@@ -94,10 +94,7 @@ async def view_del_ani(message: Message):
     else:
         mmsg = _findamsg.get("data")
     media = _findpma.get("link")
-    msg = "  💕   <b> paimon</b>
-  🦋  <b> User      :</b>    Alicia
-                                  <b>`{paimon.uptime}`</b>
-"
+    msg = "hey there, paimon is here 💕💕"
     alive_msg = f"""
 {msg}
 
@@ -108,7 +105,7 @@ async def view_del_ani(message: Message):
 • **Bot Version**  :  `v{get_version()}`
 • **Python Version**  :  `v{__python_version__}`
 
-    ✨ [magic](https://t.me/eightbituwu) | 👾 [ʀᴇᴘᴏ](https://github.com/Thegreatfoxxgoddess/Paimon)
+    ✨ [magic](https://t.me/eightbituwu) | 👾 [repo](https://github.com/Thegreatfoxxgoddess/Paimon)
 """
     if media.endswith((".gif", ".mp4")):
         await message.client.send_animation(
