@@ -1,7 +1,5 @@
 """ Download Youtube Video / Audio in a User friendly interface """
-# --------------------------- #
-#   Modded ytdl by code-rgb   #
-# --------------------------- #
+
 
 import glob
 import os
@@ -25,7 +23,7 @@ from wget import download
 from youtube_dl.utils import DownloadError, ExtractorError, GeoRestrictedError
 from youtubesearchpython import VideosSearch
 
-from paimon import Config, Message, paimon, pool
+from paimon import Config, Message, pool, paimon
 from paimon.utils import (
     check_owner,
     get_file_id,
@@ -36,7 +34,7 @@ from paimon.utils import (
     sublists,
 )
 
-from ..misc.upload import upload
+from ..misc.uploads import upload
 
 LOGGER = paimon.getLogger(__name__)
 BASE_YT_URL = "https://www.youtube.com/watch?v="
@@ -103,7 +101,7 @@ async def iytdl_inline(message: Message):
             input_url = reply.caption
     if not input_url:
         return await message.err("Input or reply to a valid youtube URL", del_in=5)
-    await message.edit(f"🔎 Searching Youtube for: <code>'{input_url}'</code>")
+    await message.edit(f"Searching Youtube for: <code>'{input_url}'</code>")
     input_url = input_url.strip()
     if message.client.is_bot:
         link = get_yt_video_id(input_url)
@@ -126,11 +124,11 @@ async def iytdl_inline(message: Message):
                     ],
                     [
                         InlineKeyboardButton(
-                            text="📜  List all",
+                            text="List all",
                             callback_data=f"ytdl_listall_{key_}_1",
                         ),
                         InlineKeyboardButton(
-                            text="⬇️  Download",
+                            text="Download",
                             callback_data=f'ytdl_download_{outdata[1]["video_id"]}_0',
                         ),
                     ],
@@ -170,7 +168,7 @@ if paimon.has_bot:
         if str(choice_id).isdigit():
             choice_id = int(choice_id)
             if choice_id == 0:
-                await c_q.answer("🔄  Processing...", show_alert=False)
+                await c_q.answer("Processing...", show_alert=False)
                 await c_q.edit_message_reply_markup(
                     reply_markup=(await download_button(yt_code))
                 )
@@ -185,7 +183,7 @@ if paimon.has_bot:
         yt_url = BASE_YT_URL + yt_code
         await c_q.edit_message_text(
             text=(
-                f"**⬇️ Downloading {media_type} ...**"
+                f"**Downloading {media_type} ...**"
                 f"\n\n🔗  [<b>Link</b>]({yt_url})\n🆔  <b>Format Code</b> : {disp_str}"
             ),
         )
@@ -515,10 +513,10 @@ def download_button(vid: str, body: bool = False):
     buttons = [
         [
             InlineKeyboardButton(
-                "⭐️ BEST - 📹 MKV", callback_data=f"ytdl_download_{vid}_mkv_v"
+                "BEST - 📹 MKV", callback_data=f"ytdl_download_{vid}_mkv_v"
             ),
             InlineKeyboardButton(
-                "⭐️ BEST - 📹 WebM/MP4",
+                "BEST - 📹 WebM/MP4",
                 callback_data=f"ytdl_download_{vid}_mp4_v",
             ),
         ]
@@ -542,7 +540,7 @@ def download_button(vid: str, body: bool = False):
             if bitrrate != 0:
                 audio_dict[
                     bitrrate
-                ] = f"🎵 {bitrrate}Kbps ({humanbytes(fr_size) or 'N/A'})"
+                ] = f"{bitrrate}Kbps ({humanbytes(fr_size) or 'N/A'})"
 
     video_btns = []
     for frmt in qual_list:
@@ -552,7 +550,7 @@ def download_button(vid: str, body: bool = False):
             frmt_size = humanbytes(frmt_dict.get(frmt_id)) or "N/A"
             video_btns.append(
                 InlineKeyboardButton(
-                    f"📹 {frmt} ({frmt_size})",
+                    f"video{frmt} ({frmt_size})",
                     callback_data=f"ytdl_download_{vid}_{frmt_id}_v",
                 )
             )
@@ -560,7 +558,7 @@ def download_button(vid: str, body: bool = False):
     buttons += [
         [
             InlineKeyboardButton(
-                "⭐️ BEST - 🎵 320Kbps - MP3", callback_data=f"ytdl_download_{vid}_mp3_a"
+                "BEST - 320Kbps - MP3", callback_data=f"ytdl_download_{vid}_mp3_a"
             )
         ]
     ]
