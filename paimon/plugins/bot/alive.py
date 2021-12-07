@@ -93,7 +93,7 @@ async def send_alive_message(message: Message) -> None:
         reply_markup = None
         file_id = _USER_CACHED_MEDIA
         caption += (
-            f"\n⚡️  <a href={Config.UPSTREAM_REPO}><b>REPOSITORY</b></a>"
+            f"\n⚡️  <a href={Config.UPSTREAM_REPO}><b>repo</b></a>"
             "    <code>|</code>    "
             "👥  <a href='https://t.me/eightbituwu><b>meh</b></a>"
         )
@@ -187,14 +187,16 @@ if paimon.has_bot:
             except BadRequest:
                 pass
             ping = "ping : {} ᴍs\n"
+            
         alive_s = "PLUGINS + : {}\n".format(_parse_arg(Config.LOAD_UNOFFICIAL_PLUGINS))
-        alive_s += f"👥 Antispam : {_parse_arg(Config.SUDO_ENABLED)}\n"
-        alive_s += f"🚨 Antispam : {_parse_arg(Config.ANTISPAM_SENTRY)}\n"
+        
+        alive_s += f"👥 ᵃⁿᵗᶦˢᵖᵃᵐ : {_parse_arg(Config.SUDO_ENABLED)}\n"
+        alive_s += f"🚨 ᵃⁿᵗᶦˢᵖᵃᵐ : {_parse_arg(Config.ANTISPAM_SENTRY)}\n"
         if Config.HEROKU_APP and Config.RUN_DYNO_SAVER:
-            alive_s += "⛽️ DYNO : ACTIVATED \n"
-        alive_s += f"💬 BOT FORWARD : {_parse_arg(Config.BOT_FORWARDS)}\n"
-        alive_s += f"🛡 PM BLOCK : {_parse_arg(not Config.ALLOW_ALL_PMS)}\n"
-        alive_s += f"📝 PM LOG  : {_parse_arg(Config.PM_LOGGING)}"
+            alive_s += "⛽️ ᵈʸⁿᵒ : ACTIVATED \n"
+        alive_s += f"💬 ᵇᵒᵗ ᶠᵒʳʷᵃʳᵈ : {_parse_arg(Config.BOT_FORWARDS)}\n"
+        alive_s += f"🛡 ᵖᵐ ᵇˡᵒᶜᵏ : {_parse_arg(not Config.ALLOW_ALL_PMS)}\n"
+        alive_s += f"📝 ᵖᵐ ˡᵒᵍ  : {_parse_arg(Config.PM_LOGGING)}"
         if allow:
             end = datetime.now()
             m_s = (end - start).microseconds / 1000
@@ -205,7 +207,7 @@ if paimon.has_bot:
 
 
 def _parse_arg(arg: bool) -> str:
-    return "ACTIVATED" if arg else "DEACTIVATED"
+    return "ᵃᶜᵗᶦᵛᵃᵗᵉᵈ" if arg else "ᵈᵉᵃᶜᵗᶦᵛᵃᵗᵉᵈ"
 
 
 class Bot_Alive:
@@ -262,13 +264,22 @@ class Bot_Alive:
     @staticmethod
     def alive_default_imgs() -> str:
         alive_imgs = [
-            "https://telegra.ph/file/4ae6e1ce6a10ba89940fd.gif",
-            "https://telegra.ph/file/505c324dd185c6e5ddc69.gif",
-            "https://telegra.ph/file/8e99348c3ecdbd23c7a40.gif",
-            "https://telegra.ph/file/c64de99e926b05c80eaa6.gif",
-            "https://telegra.ph/file/1b0209fcfe45afe2f5f44.gif",
-            "https://telegra.ph/file/5e2ae141d3f7d1e303ddf.gif",
-            "https://telegra.ph/file/a5f304555673c0b9911a5.gif",
+            "https://www.icegif.com/wp-content/uploads/genshin-impact-icegif.gif",
+            "https://www.icegif.com/wp-content/uploads/genshin-impact-icegif-2.gif",
+            "https://www.icegif.com/wp-content/uploads/genshin-impact-icegif-6.gif",
+            "https://www.icegif.com/wp-content/uploads/genshin-impact-icegif-13.gif",
+            "https://www.icegif.com/wp-content/uploads/genshin-impact-icegif-4.gif",
+            "https://www.icegif.com/wp-content/uploads/genshin-impact-icegif-11.gif",
+            "https://www.icegif.com/wp-content/uploads/genshin-impact-genshin-impact-is-a-free-to-play-action-role-playing-game-developed-and-published-by-mihoyo-the-game-features-a-fantasy-open-world-environment-and-action-based-ba-icegif.gif",
+            "https://www.icegif.com/wp-content/uploads/genshin-impact-icegif-5.gif",
+            "https://www.icegif.com/wp-content/uploads/genshin-impact-icegif-6.gif",
+            "https://www.icegif.com/wp-content/uploads/genshin-impact-icegif-13.gif",
+            "https://www.icegif.com/wp-content/uploads/genshin-impact-icegif-8.gif",
+            "https://www.icegif.com/wp-content/uploads/genshin-impact-icegif-9.gif",
+            "https://www.icegif.com/wp-content/uploads/genshin-impact-icegif-7.gif",
+            "https://www.icegif.com/wp-content/uploads/genshin-impact-icegif-10.gif",
+            "https://www.icegif.com/wp-content/uploads/genshin-impact-icegif-11.gif",
+            "https://www.icegif.com/wp-content/uploads/icegif-188.gif",
         ]
         return rand_array(alive_imgs)
 
