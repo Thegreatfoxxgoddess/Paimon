@@ -55,3 +55,4 @@ feedparser>=6.0.2
 youtube_dl
 PyDictionary
 deezloader
+google_trans_new
