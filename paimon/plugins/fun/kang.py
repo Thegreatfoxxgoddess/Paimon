@@ -125,9 +125,7 @@ async def kang_(message: Message):
                         packname += "_anim"
                         packnick += " (Animated)"
                     await message.edit(
-                        "`Switching to "
-                        + str(pack)
-                        + " due to insufficient space`"
+                        "`Switching to " + str(pack) + " due to insufficient space`"
                     )
                     await conv.send_message(packname)
                     msg = await conv.get_response(mark_read=True)
@@ -269,9 +267,7 @@ def resize_photo(photo: str) -> io.BytesIO:
     return resized_photo
 
 
-KANGING_STR = (
-    "me kanging this sticker uwu",
-)
+KANGING_STR = ("me kanging this sticker uwu",)
 
 
 # Based on:
