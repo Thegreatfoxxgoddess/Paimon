@@ -33,18 +33,18 @@ _checkConfigFile() {
 _checkRequiredVars() {
     log "Checking mandatory ENV Vars..."
     for var in API_ID API_HASH LOG_CHANNEL_ID DATABASE_URL; do
-        test -z ${!var} && quit "Requer $var var !"
+        test -z ${!var} && quit "Require $var var !"
     done
-    [[ -z $HU_STRING_SESSION && -z $BOT_TOKEN ]] && quit "Necessário HU_STRING_SESSION ou BOT_TOKEN var !"
-    [[ -n $BOT_TOKEN && -z $OWNER_ID ]] && quit "Obrigatório OWNER_ID var !"
-    test -z $BOT_TOKEN && log "\t[DICA] >>> BOT TOKEN não encontrado! (Desativando o registro avançado)"
+    [[ -z $HU_STRING_SESSION && -z $BOT_TOKEN ]] && quit "HU_STRING_SESSION or BOT_TOKEN Required!"
+    [[ -n $BOT_TOKEN && -z $OWNER_ID ]] && quit "OWNER_ID Required!"
+    test -z $BOT_TOKEN && log "\t[DICA] >>> BOT TOKEN not found! (Disabling advanced logging)"
 }
 
 _checkDefaultVars() {
     replyLastMessage "Checking Default ENV Vars ..."
     declare -rA def_vals=(
         [WORKERS]=0
-        [PREFERRED_LANGUAGE]="pt"
+        [PREFERRED_LANGUAGE]="en"
         [DOWN_PATH]="downloads"
         [UPSTREAM_REMOTE]="upstream"
         [UPSTREAM_REPO]="https://github.com/Thegreatfoxxgoddess/Paimon"
