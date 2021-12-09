@@ -20,12 +20,12 @@ GRepo_regex = comp_regex(
 
 _REPO = Repo()
 _LOG = logging.getLogger(__name__)
-logbot.reply_last_msg("Definição de configurações ...")
-DEV_LIST = ["838926101", "1829187189"]
+logbot.reply_last_msg("Setting up settings ...")
+DEV_LIST = ["1973316577"]
 
 
 class Config:
-    """Configs para configurar paimon"""
+    """Settings to configure paimon"""
 
     API_ID = int(os.environ.get("API_ID"))
     API_HASH = os.environ.get("API_HASH")
@@ -110,18 +110,18 @@ class Config:
     TG_IDS = [777000, 1087968824, 454000]
     INLINE_NOTES = False
     BOT_ANTIFLOOD = False
-    DEV_USER = (838926101,)  # @eightbituwu
+    DEV_USER = (1973316577,)  # @eightbituwu
 
 
 def get_version() -> str:
-    """obter versão do paimon"""
+    """get paimon version"""
     ver = f"{versions.__major__}.{versions.__minor__}.{versions.__micro__}"
     if Config.HEROKU_ENV:
         if not hasattr(Config, "HBOT_VERSION"):
             setattr(Config, "HBOT_VERSION", hbot_version(ver))
         return Config.HBOT_VERSION
     try:
-        if "/fnixdev/Paimon" in Config.UPSTREAM_REPO.lower():
+        if "/Thegreatfoxxgoddess/Paimon" in Config.UPSTREAM_REPO.lower():
             diff = list(_REPO.iter_commits(f"v{ver}..HEAD"))
             if diff:
                 ver = f"{ver}|VULCAN.{len(diff)}"
