@@ -12,7 +12,9 @@ from requests import get
 async def reported_user_image(u_name: str):
     """reported user"""
     text1 = "Block " + u_name
-    text2 = f"do you want to stop {u_name} from sending messages and call you on Telegram?"
+    text2 = (
+        f"do you want to stop {u_name} from sending messages and call you on Telegram?"
+    )
     in_memory = BytesIO(
         get("https://telegra.ph/file/886e00818c68f53d24f92.jpg").content
     )
