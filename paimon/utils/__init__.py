@@ -12,7 +12,7 @@ from .functions import (
     rand_key,
     thumb_from_audio,
 )
-from .kanna_utils import (
+from .paimon_utils import (
     capitaled,
     full_name,
     get_response_,
