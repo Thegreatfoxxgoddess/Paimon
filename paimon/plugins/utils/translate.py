@@ -8,7 +8,7 @@ from json import dumps
 
 from googletrans import LANGUAGES, Translator
 
-from paimon import Config, Message, pool, paimon
+from paimon import Config, Message, paimon, pool
 from paimon.utils.functions import get_emoji_regex
 
 
