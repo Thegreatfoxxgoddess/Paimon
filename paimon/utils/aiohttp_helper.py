@@ -128,5 +128,5 @@ class AioHttp:
                 return headers_
             text = ""
             for key, value in headers_.items():
-                text += f"🏷 <i>{key}</i>: <code>{value}</code>\n\n"
+                text += f"<i>{key}</i>: <code>{value}</code>\n\n"
             return f"<b>URl:</b> {link}\n\n<b>HEADERS:</b>\n\n{text}"
