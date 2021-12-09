@@ -51,10 +51,10 @@ async def progress(
         progress_str = (
             "__{}__ : `{}`\n"
             + "```[{}{}]```\n"
-            + "**Progresso** : `{}%`\n"
-            + "**Completado** : `{}`\n"
+            + "**Progress** : `{}%`\n"
+            + "**Completed** : `{}`\n"
             + "**Total** : `{}`\n"
-            + "**Velocidade** : `{}/s`\n"
+            + "**Speed** : `{}/s`\n"
             + "**ETA** : `{}`"
         )
         progress_str = progress_str.format(
