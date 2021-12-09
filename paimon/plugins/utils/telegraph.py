@@ -25,7 +25,7 @@ async def telegraph_(message: Message):
     if not link:
         return
     await message.edit(
-        f"**[Aqui, seu link Telegra.ph!](https://telegra.ph{link})**",
+        f"**[your telegraph link](https://telegra.ph{link})**",
         disable_web_page_preview=True,
     )
 
@@ -50,14 +50,14 @@ async def upload_media_(message: Message):
     ):
         await message.err("not supported!")
         return
-    await message.edit("`processando...`")
+    await message.edit("`processing...`")
     dl_loc = await message.client.download_media(
         message=message.reply_to_message,
         file_name=Config.DOWN_PATH,
         progress=progress,
-        progress_args=(message, "tentando fazer download"),
+        progress_args=(message, "trying to download"),
     )
-    await message.edit("`fazendo upload no telegraph...`")
+    await message.edit("`uploading to the telegraph...`")
     try:
         response = upload_file(dl_loc)
     except Exception as t_e:
