@@ -1,4 +1,5 @@
-# modulo feito por @yusukesy | tg @NoteZV
+# module by @yusukesy | tg @NoteZV
+# kanged by Alicia dark | tg @eightbituwu
 
 import json
 import os
@@ -66,21 +67,21 @@ def down_video(link, filename):
     "song",
     about={
         "header": "Music Downloader",
-        "description": "Baixe músicas usando o pytube. ;-;",
-        "usage": "{tr}song [nome - cantor / reply msg / link]",
+        "description": "Download music using pytube.",
+        "usage": "{tr}song [name - artist / reply msg / link]",
     },
 )
 async def song(message: Message):
     music = message.input_or_reply_str
     if not music:
-        await message.edit("`Vou baixar o vento?!`")
+        await message.edit("`am i supposed to air swing it?!`")
         time.sleep(2)
         await message.delete()
         return
-    await message.edit("`Processando...`")
+    await message.edit("`Processing...`")
     result = search_music(music)
     if result is None:
-        await message.edit("`Não foi possível encontrar a música.`")
+        await message.edit("`could not find the song.`")
         time.sleep(2)
         await message.delete()
         return
@@ -91,16 +92,16 @@ async def song(message: Message):
     try:
         down_song(link, filename)
     except Exception as e:
-        await message.edit("`Não foi possível baixar a música.`")
+        await message.edit("`unable to download the música.`")
         print(str(e))
         time.sleep(2)
         await message.delete()
     else:
         if os.path.exists(f"./paimon/xcache/{thumb}"):
             caption = f"""
-**Título:** __[{result[0]['title']}]({link})__
-**Duração:** __{duration}__
-**Views:** __{result[0]['viewCount']["text"]}__
+Title: __[{result[0]['title']}]({link})__
+Duration: __{duration}__
+Views: __{result[0]['viewCount']["text"]}__
 """
             try:
                 await message.reply_audio(
@@ -111,7 +112,7 @@ async def song(message: Message):
                     duration=dur,
                 )
             except Exception as e:
-                await message.edit("`Não foi possível enviar a música.`")
+                await message.edit("`Unable to send the song.`")
                 print(str(e))
                 time.sleep(2)
                 await message.delete()
@@ -125,21 +126,21 @@ async def song(message: Message):
     "video",
     about={
         "header": "Video Downloader",
-        "description": "Baixe vídeos usando o pytube. ;-;",
-        "usage": "{tr}video [nome / reply msg / link]",
+        "description": "Download videos using pytube. ;-;",
+        "usage": "{tr}video [name / reply msg / link]",
     },
 )
 async def video(message: Message):
     video = message.input_or_reply_str
     if not video:
-        await message.edit("`Vou baixar o vento?!`")
+        await message.edit("`am i supposed to air swing it?!`")
         time.sleep(2)
         await message.delete()
         return
-    await message.edit("`Processando...`")
+    await message.edit("`Processing...`")
     result = search_video(video)
     if result is None:
-        await message.edit("`Não foi possível encontrar o vídeo.`")
+        await message.edit("`Unable to send the video.`")
         time.sleep(2)
         await message.delete()
         return
@@ -148,19 +149,19 @@ async def video(message: Message):
     try:
         down_video(link, filename)
     except Exception as e:
-        await message.edit("`Não foi possível baixar o video.`")
+        await message.edit("`unable to download the video.`")
         time.sleep(2)
         await message.delete()
         print(str(e))
     else:
-        caption = f"**Título ➠** __[{result[0]['title']}]({link})__\n**Canal ➠** __{result[0]['channel']}__"
+        caption = f"**Title ➠** __[{result[0]['title']}]({link})__\n**Channel ➠** __{result[0]['channel']}__"
         try:
             await message.reply_video(
                 video=f"./paimon/xcache/{filename}",
                 caption=caption,
             )
         except Exception as e:
-            await message.reply("`Não foi possível enviar o vídeo.`")
+            await message.reply("`Unable to upload the video.`")
             print(str(e))
             time.sleep(2)
             await message.delete()
