@@ -33,3 +33,9 @@ ENGLISH_QUOTES = [
     "The way to get started is to quit talking and begin doing. ",
     "Your time is limited, so don't waste it living someone else's life. ",
     "That which does not kill us makes us stronger. "]
+
+
+HINDI_QUOTES = [
+     
+    "Now Playing : you're mine - Kina | t.me/my_thingsuwu",
+    "Now Playing : Good 4 you - Olivia Rodriguez | t.me/my_thingsuwu"]
