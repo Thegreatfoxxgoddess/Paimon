@@ -151,7 +151,7 @@ class paimon(_Abstractpaimon):
         _LOG.info(_LOG_STR, "starting paimon")
         await super().start()
         if self._bot is not None:
-            _LOG.info(_LOG_STR, "Iniciando X-Bot")
+            _LOG.info(_LOG_STR, "starting X-Bot")
             await self._bot.start()
         await self._load_plugins()
 
@@ -198,7 +198,7 @@ class paimon(_Abstractpaimon):
         self.loop.run_until_complete(self.start())
         for task in self._tasks:
             running_tasks.append(self.loop.create_task(task()))
-        logbot.edit_last_msg("paimon foi iniciado com sucesso !")
+        logbot.edit_last_msg("paimon started successfully!")
         logbot.end()
         mode = "[DUAL]" if RawClient.DUAL_MODE else "[BOT]" if Config.BOT_TOKEN else "[USER]"
         try:
