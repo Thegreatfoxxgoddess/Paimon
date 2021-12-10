@@ -1,11 +1,7 @@
 
 # pylint: disable=missing-module-docstring
 #
-# Copyright (C) 2020-2021 by paimonTeam@Github, < https://github.com/paimonTeam >.
-#
-# This file is part of < https://github.com/paimonTeam/paimon > project,
-# and is released under the "GNU v3.0 License Agreement".
-# Please see < https://github.com/paimonTeam/paimon/blob/master/LICENSE >
+# Copyright (C) 2020-2021 by UsergeTeam@Github, < https://github.com/UsergeTeam >.
 #
 # All rights reserved.
 
@@ -80,7 +76,7 @@ class _Abstractpaimon(Methods, RawClient):
     async def _load_plugins(self) -> None:
         _IMPORTED.clear()
         _INIT_TASKS.clear()
-        logbot.edit_last_msg("Importando todos os plugins", _LOG.info, _LOG_STR)
+        logbot.edit_last_msg("Importing all plugins", _LOG.info, _LOG_STR)
         for name in get_all_plugins():
             try:
                 await self.load_plugin(name)
@@ -110,7 +106,7 @@ class _Abstractpaimon(Methods, RawClient):
 class paimonBot(_Abstractpaimon):
     """ paimon Bot """
     def __init__(self, **kwargs) -> None:
-        _LOG.info(_LOG_STR, "Definindo configurações")
+        _LOG.info(_LOG_STR, "configuring settings")
         super().__init__(session_name=":memory:", **kwargs)
 
     @property
@@ -125,7 +121,7 @@ class paimon(_Abstractpaimon):
     has_bot = bool(Config.BOT_TOKEN)
 
     def __init__(self, **kwargs) -> None:
-        _LOG.info(_LOG_STR, "Configurando paimon")
+        _LOG.info(_LOG_STR, "setting up paimon")
         kwargs = {
             'api_id': Config.API_ID,
             'api_hash': Config.API_HASH,
@@ -152,7 +148,7 @@ class paimon(_Abstractpaimon):
 
     async def start(self) -> None:
         """ start client and bot """
-        _LOG.info(_LOG_STR, "Iniciando paimon")
+        _LOG.info(_LOG_STR, "starting paimon")
         await super().start()
         if self._bot is not None:
             _LOG.info(_LOG_STR, "Iniciando X-Bot")
@@ -162,9 +158,9 @@ class paimon(_Abstractpaimon):
     async def stop(self) -> None:  # pylint: disable=arguments-differ
         """ stop client and bot """
         if self._bot is not None:
-            _LOG.info(_LOG_STR, "Parando X-Bot")
+            _LOG.info(_LOG_STR, "Stopping X-Bot")
             await self._bot.stop()
-        _LOG.info(_LOG_STR, "Parando paimon")
+        _LOG.info(_LOG_STR, "stopping paimon")
         await super().stop()
         _close_db()
         pool._stop()  # pylint: disable=protected-access
@@ -191,7 +187,7 @@ class paimon(_Abstractpaimon):
 
         async def _shutdown(_sig: signal.Signals) -> None:
             global _SEND_SIGNAL  # pylint: disable=global-statement
-            _LOG.info(_LOG_STR, f"Received Stop Signal [{_sig.name}], Desligandi paimon ...")
+            _LOG.info(_LOG_STR, f"Received Stop Signal [{_sig.name}], disconnecting paimon ...")
             await _finalize()
             if _sig == _sig.SIGUSR1:
                 _SEND_SIGNAL = True
