@@ -6,8 +6,8 @@ import asyncio
 import time
 
 from pyrogram.errors import FloodWait
-from paimon import Message, get_collection, paimon
 
+from paimon import Message, get_collection, paimon
 from resources.quotes import NOW_PLAYING
 
 BIO_UPDATION = False
@@ -38,7 +38,7 @@ async def _init() -> None:
     },
 )
 async def auto_bio(msg: Message):
-    """ Auto Update Your Bio """
+    """Auto Update Your Bio"""
     global BIO_UPDATION, BIO_QUOTES  # pylint: disable=global-statement
     if BIO_UPDATION:
         if isinstance(BIO_UPDATION, asyncio.Task):
@@ -71,7 +71,7 @@ async def auto_bio(msg: Message):
     },
 )
 async def set_bio_timeout(message: Message):
-    """ set auto bio timeout """
+    """set auto bio timeout"""
     global AUTOBIO_TIMEOUT  # pylint: disable=global-statement
     t_o = int(message.input_str)
     if t_o < 60:
@@ -87,7 +87,7 @@ async def set_bio_timeout(message: Message):
 
 @paimon.on_cmd("vtbio", about={"header": "View auto bio timeout"})
 async def view_bio_timeout(message: Message):
-    """ view bio timeout """
+    """view bio timeout"""
     await message.edit(
         f"`Profile picture will be updated after {AUTOBIO_TIMEOUT} seconds!`", del_in=5
     )
