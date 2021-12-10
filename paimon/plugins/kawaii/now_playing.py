@@ -31,7 +31,7 @@ async def _init() -> None:
 
 
 @paimon.on_cmd(
-    "autobio",
+    "nbio",
     about={
         "header": "Auto Updates your Profile Bio with 2 languages.",
         "usage": "{tr}autobio",
@@ -63,7 +63,7 @@ async def auto_bio(msg: Message):
 
 
 @paimon.on_cmd(
-    "sabto",
+    "tbio",
     about={
         "header": "Set auto bio timeout",
         "usage": "{tr}sabto [timeout in seconds]",
@@ -85,7 +85,7 @@ async def set_bio_timeout(message: Message):
     await message.edit(f"`Set auto bio timeout as {t_o} seconds!`", del_in=5)
 
 
-@paimon.on_cmd("vabto", about={"header": "View auto bio timeout"})
+@paimon.on_cmd("vtbio", about={"header": "View auto bio timeout"})
 async def view_bio_timeout(message: Message):
     """ view bio timeout """
     await message.edit(
