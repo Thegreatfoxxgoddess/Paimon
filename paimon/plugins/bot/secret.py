@@ -31,7 +31,7 @@ if paimon.has_bot:
         sender_name = f"{sender.first_name} {sender.last_name or ''}".strip()
         u_id = c_q.from_user.id
         # Fit name in one line
-        msg = f"🔓 𝗠𝗲𝘀𝘀𝗮𝗴𝗲 𝗳𝗿𝗼𝗺: {sender_name}"
+        msg = f"𝗠𝗲𝘀𝘀𝗮𝗴𝗲 𝗳𝗿𝗼𝗺: {sender_name}"
         adjust = len(msg) - 55
         if adjust > 0:
             msg = msg[: adjust * -1]
@@ -48,7 +48,7 @@ if paimon.has_bot:
             else:
                 await c_q.answer("This Message is Confidential", show_alert=True)
                 return
-            msg_body = f"📩 <b>Secret Msg</b> for <b>{receiver_name}</b>. Only he/she can open it."
+            msg_body = f"<b>Secret Msg</b> for <b>{receiver_name}</b>. Only he/she can open it."
             msg_b_data = f"secret_{key_}"
         else:  # Troll
             if u_id != receiver_id:
@@ -59,7 +59,7 @@ if paimon.has_bot:
                     show_alert=True,
                 )
                 return
-            msg_body = f"😈 Only <b>{receiver_name}</b> can't view this message."
+            msg_body = f"only <b>{receiver_name}</b> can't view this message."
             msg_b_data = f"troll_{key_}"
         # Views
         if u_id not in Config.OWNER_ID:
@@ -75,9 +75,9 @@ if paimon.has_bot:
                     return
                 view_data["views"] = views.append(u_id)
             buttons = InlineKeyboardMarkup(
-                [[InlineKeyboardButton("🔐  SHOW", callback_data=msg_b_data)]]
+                [[InlineKeyboardButton("SHOW", callback_data=msg_b_data)]]
             )
-            msg_body += f"\n\n👁 **Views:** {v_count + 1}"
+            msg_body += f"\n\n views : {v_count + 1}"
             try:
                 await c_q.edit_message_text(
                     text=msg_body, disable_web_page_preview=True, reply_markup=buttons
