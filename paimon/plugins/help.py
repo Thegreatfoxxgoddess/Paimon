@@ -100,7 +100,9 @@ async def _init() -> None:
 async def helpme(message: Message) -> None:
     plugins = paimon.manager.enabled_plugins
     if not message.input_str:
-        out_str = f"""<b><u>(<code>{len(plugins)}</code>) Plugin(s) Available</u></b>\n\n"""
+        out_str = (
+            f"""<b><u>(<code>{len(plugins)}</code>) Plugin(s) Available</u></b>\n\n"""
+        )
         cat_plugins = paimon.manager.get_plugins()
         for cat in sorted(cat_plugins):
             if cat == "plugins":
@@ -111,7 +113,9 @@ async def helpme(message: Message) -> None:
                 + "</code>    <code>".join(sorted(cat_plugins[cat]))
                 + "</code>\n\n"
             )
-        out_str += f"""📕 <mb>Use:</b>  <code>{Config.CMD_TRIGGER}help [plugin name]</code>"""
+        out_str += (
+            f"""📕 <mb>Use:</b>  <code>{Config.CMD_TRIGGER}help [plugin name]</code>"""
+        )
     else:
         key = message.input_str
         if (
@@ -162,9 +166,7 @@ if paimon.has_bot:
                 try:
                     await func(c_q)
                 except MessageNotModified:
-                    await c_q.answer(
-                        "Nothing found to update 🤷‍♂️", show_alert=True
-                    )
+                    await c_q.answer("Nothing found to update 🤷‍♂️", show_alert=True)
                 except MessageIdInvalid:
                     await c_q.answer(
                         "I do not have permission to edit this 😔",
