@@ -58,16 +58,16 @@ SAVED_SETTINGS = get_collection("CONFIGS")
 REPO_X = InlineQueryResultArticle(
     title="Repo",
     input_message_content=InputTextMessageContent(
-        "**Repositorio e ultilitarios do paimon**"
+        "**Paimon repository and utilities**"
     ),
     url="https://github.com/thegreatfoxxgoddess/Paimon",
-    description="Configure o seu próprio",
-    thumb_url="https://telegra.ph//file/c6d95e3f661dc15bf0df7.jpg",
+    description="set up your own",
+    thumb_url="https://telegra.ph/file/ab8827aefcf2559a0eacb.png",
     reply_markup=InlineKeyboardMarkup(
         [
             [
                 InlineKeyboardButton(
-                    "🔥 paimon Repo", url="https://github.com/thegreatfoxxgoddess/Paimon"
+                    "paimon repo", url="https://github.com/thegreatfoxxgoddess/Paimon"
                 ),
                 InlineKeyboardButton(
                     "🚀 Deploy Heroku",
@@ -90,17 +90,17 @@ async def _init() -> None:
         Config.NEW_ALIVE_MEDIA = media_["url"]
         Config.ALIVE_MEDIA_TYPE = media_["type"]
     else:
-        Config.NEW_ALIVE_MEDIA = "https://telegra.ph/file/4e956ef52c931570fb110.png"
+        Config.NEW_ALIVE_MEDIA = "https://telegra.ph/file/f22d48bae5cf0c003d665.png"
         Config.ALIVE_MEDIA_TYPE = "photo"
 
 
 @paimon.on_cmd(
-    "help", about={"header": "Guia para usar os comandos paimon"}, allow_channels=False
+    "help", about={"header": "Guide to using paimon commands"}, allow_channels=False
 )
 async def helpme(message: Message) -> None:
     plugins = paimon.manager.enabled_plugins
     if not message.input_str:
-        out_str = f"""⚒ <b><u>(<code>{len(plugins)}</code>) Plugin(s) Disponivel</u></b>\n\n"""
+        out_str = f"""<b><u>(<code>{len(plugins)}</code>) Plugin(s) Available</u></b>\n\n"""
         cat_plugins = paimon.manager.get_plugins()
         for cat in sorted(cat_plugins):
             if cat == "plugins":
@@ -111,7 +111,7 @@ async def helpme(message: Message) -> None:
                 + "</code>    <code>".join(sorted(cat_plugins[cat]))
                 + "</code>\n\n"
             )
-        out_str += f"""📕 <mb>Uso:</b>  <code>{Config.CMD_TRIGGER}help [nome do plugin]</code>"""
+        out_str += f"""📕 <mb>Use:</b>  <code>{Config.CMD_TRIGGER}help [plugin name]</code>"""
     else:
         key = message.input_str
         if (
@@ -124,16 +124,16 @@ async def helpme(message: Message) -> None:
             )
         ):
             commands = plugins[key].enabled_commands
-            out_str = f"""<b><u>(<code>{len(commands)}</code>) Comando(s)</u></b>
+            out_str = f"""<b><u>(<code>{len(commands)}</code>) Command(s)</u></b>
 
 <b>Plugin:</b>  <code>{key}</code>
-<b>Descrição:</b>  <code>{plugins[key].doc}</code>\n\n"""
+<b>Description:</b>  <code>{plugins[key].doc}</code>\n\n"""
             for i, cmd in enumerate(commands, start=1):
                 out_str += (
                     f"    ▪️ <b>cmd:</b>  <code>{cmd.name}</code>\n"
                     f"    ▪️ <b>info:</b>  <i>{cmd.doc}</i>\n\n"
                 )
-            out_str += f"""📕 <b>Uso:</b>  <code>{Config.CMD_TRIGGER}help [nome do comando]</code>"""
+            out_str += f"""📕 <b>Use:</b>  <code>{Config.CMD_TRIGGER}help [command name]</code>"""
         else:
             commands = paimon.manager.enabled_commands
             key = key.lstrip(Config.CMD_TRIGGER)
@@ -143,7 +143,7 @@ async def helpme(message: Message) -> None:
             elif key_ in commands:
                 out_str = f"<code>{key_}</code>\n\n{commands[key_].about}"
             else:
-                out_str = f"<i>Nenhum módulo ou comando encontrado para</i>: <code>{message.input_str}</code>"
+                out_str = f"<i>No modules or commands found for</i>: <code>{message.input_str}</code>"
     await message.edit(
         out_str, del_in=0, parse_mode="html", disable_web_page_preview=True
     )
@@ -163,17 +163,17 @@ if paimon.has_bot:
                     await func(c_q)
                 except MessageNotModified:
                     await c_q.answer(
-                        "Nada foi encontrado para atualizar 🤷‍♂️", show_alert=True
+                        "Nothing found to update 🤷‍♂️", show_alert=True
                     )
                 except MessageIdInvalid:
                     await c_q.answer(
-                        "Não tenho permissão para editar isto 😔",
+                        "I do not have permission to edit this 😔",
                         show_alert=True,
                     )
             else:
                 user_dict = await paimon.bot.get_user_dict(Config.OWNER_ID[0])
                 await c_q.answer(
-                    f"Apenas {user_dict['flname']} Pode acessar isso ...! Instale o paimon",
+                    f"Only {user_dict['flname']} Can access this...! deploy your own",
                     show_alert=True,
                 )
 
@@ -334,11 +334,11 @@ if paimon.has_bot:
             pairs = pairs[current_page * rows : (current_page + 1) * rows] + [
                 [
                     InlineKeyboardButton(
-                        "⏪ Anterior",
+                        "⏪ Previous",
                         callback_data=f"({cur_pos})prev({current_page})".encode(),
                     ),
                     InlineKeyboardButton(
-                        "⏩ Proximo",
+                        "⏩ Next",
                         callback_data=f"({cur_pos})next({current_page})".encode(),
                     ),
                 ],
@@ -368,14 +368,14 @@ if paimon.has_bot:
                 )
                 tmp_btns.append(
                     InlineKeyboardButton(
-                        "🔄 Atualizar", callback_data=f"refresh({cur_pos})".encode()
+                        "Update", callback_data=f"refresh({cur_pos})".encode()
                     )
                 )
         else:
-            cur_clnt = "👤 USER" if Config.USE_USER_FOR_CLIENT_CHECKS else "⚙️ BOT"
+            cur_clnt = "USER" if Config.USE_USER_FOR_CLIENT_CHECKS else "BOT"
             tmp_btns.append(
                 InlineKeyboardButton(
-                    f"🔩 Client para Checks e Sudos : {cur_clnt}",
+                    f"🔩 client for checks and sudo : {cur_clnt}",
                     callback_data="chgclnt",
                 )
             )
@@ -386,7 +386,7 @@ if paimon.has_bot:
         plugins = paimon.manager.get_all_plugins()[pos_list[1]]
         text = (
             f"**(`{len(plugins)}`) Plugin(s) Under : "
-            f"`{_CATEGORY.get(pos_list[1], '📁')} {pos_list[1]}`  Categoria**"
+            f"`{_CATEGORY.get(pos_list[1], '📁')} {pos_list[1]}`  Category**"
         )
         buttons = parse_buttons(0, "|".join(pos_list[:2]), lambda x: f"🔹 {x}", plugins)
         return text, buttons
@@ -396,26 +396,26 @@ if paimon.has_bot:
         plg = paimon.manager.plugins[pos_list[2]]
         text = f"""🔹 <u><b>Plugin Status<b></u> 🔹
 
-🎭 **Categoria** : `{pos_list[1]}`
-🔖 **Nome** : `{plg.name}`
+🎭 **Category** : `{pos_list[1]}`
+🔖 **Name** : `{plg.name}`
 📝 **Doc** : `{plg.doc}`
-◾️ **Comandos** : `{len(plg.commands)}`
+◾️ **commands** : `{len(plg.commands)}`
 ⚖ **Filters** : `{len(plg.filters)}`
-✅ **Carregado** : `{plg.is_loaded}`
-➕ **Habilitado** : `{plg.is_enabled}`
+✅ **Loaded** : `{plg.is_loaded}`
+➕ **Enabled** : `{plg.is_enabled}`
 """
         tmp_btns = []
         if plg.is_loaded:
             tmp_btns.append(
                 InlineKeyboardButton(
-                    "❎ Descarregar",
+                    "❎ Unload",
                     callback_data=f"unload({'|'.join(pos_list[:3])})".encode(),
                 )
             )
         else:
             tmp_btns.append(
                 InlineKeyboardButton(
-                    "✅ Carregar",
+                    "✅ Load",
                     callback_data=f"load({'|'.join(pos_list[:3])})".encode(),
                 )
             )
@@ -429,7 +429,7 @@ if paimon.has_bot:
         else:
             tmp_btns.append(
                 InlineKeyboardButton(
-                    "➕ Habilitar",
+                    "➕ Enable",
                     callback_data=f"enable({'|'.join(pos_list[:3])})".encode(),
                 )
             )
@@ -448,7 +448,7 @@ if paimon.has_bot:
         flts = {flt.name: flt for flt in plg.commands + plg.filters}
         flt = flts[pos_list[-1]]
         flt_data = f"""
-🔖 **Nome** : `{flt.name}`
+🔖 **Name** : `{flt.name}`
 📝 **Doc** : `{flt.doc}`
 🤖 **Via Bot** : `{flt.allow_via_bot}`
 ✅ **Carregado** : `{flt.is_loaded}`
@@ -467,25 +467,25 @@ if paimon.has_bot:
         if flt.is_loaded:
             tmp_btns.append(
                 InlineKeyboardButton(
-                    "❎ Descarregar", callback_data=f"unload({cur_pos})".encode()
+                    "❎ Unload", callback_data=f"unload({cur_pos})".encode()
                 )
             )
         else:
             tmp_btns.append(
                 InlineKeyboardButton(
-                    "✅ Carregar", callback_data=f"load({cur_pos})".encode()
+                    "✅ Load", callback_data=f"load({cur_pos})".encode()
                 )
             )
         if flt.is_enabled:
             tmp_btns.append(
                 InlineKeyboardButton(
-                    "➖ Desativar", callback_data=f"disable({cur_pos})".encode()
+                    "➖ Disable", callback_data=f"disable({cur_pos})".encode()
                 )
             )
         else:
             tmp_btns.append(
                 InlineKeyboardButton(
-                    "➕ Habilitar", callback_data=f"enable({cur_pos})".encode()
+                    "➕ Enable", callback_data=f"enable({cur_pos})".encode()
                 )
             )
         buttons = [tmp_btns] + buttons
@@ -510,8 +510,8 @@ if paimon.has_bot:
                 owner = [
                     [
                         InlineKeyboardButton(
-                            text="🧙🏻‍♂️  ᴄᴏɴᴛᴀᴛᴏ",
-                            url="https://t.me/thegreatfoxxgoddess",
+                            text="Contact",
+                            url="https://t.me/mystuffuwu",
                         ),
                         InlineKeyboardButton(
                             text="💭  sᴛᴀᴛᴜs", callback_data="status_alive"
@@ -521,7 +521,7 @@ if paimon.has_bot:
                 results.append(
                     InlineQueryResultPhoto(
                         photo_url="https://telegra.ph/file/0b88699cba8863ce42541.jpg",
-                        caption="I am fnix, 21y pynto dev",
+                        caption="I'm alicia",
                         reply_markup=InlineKeyboardMarkup(owner),
                     )
                 )
@@ -530,11 +530,11 @@ if paimon.has_bot:
                 buttons = [
                     [
                         InlineKeyboardButton(
-                            text="Sim, tenho mais de 18 anos",
+                            text="Yes, I am over 18 years old",
                             callback_data="age_verification_true",
                         ),
                         InlineKeyboardButton(
-                            text="Não, eu não sou",
+                            text="No, I'm not",
                             callback_data="age_verification_false",
                         ),
                     ]
@@ -542,7 +542,7 @@ if paimon.has_bot:
                 results.append(
                     InlineQueryResultPhoto(
                         photo_url="https://telegra.ph/file/93c720cb55da5b0d6767c.png",
-                        caption="**VOCÊ ESTÁ VELHO O SUFICIENTE PARA ISSO?**",
+                        caption="**YOU ARE OLD ENOUGH FOR THIS?**",
                         reply_markup=InlineKeyboardMarkup(buttons),
                     )
                 )
@@ -582,7 +582,7 @@ if paimon.has_bot:
                                 input_message_content=InputTextMessageContent(
                                     f"**Error Code: {code}**\n`{code_message}`"
                                 ),
-                                description="Digite um nome de subreddit válido!",
+                                description="Digite um Name de subreddit válido!",
                                 thumb_url="https://i.imgur.com/7a7aPVa.png",
                             )
                         )
@@ -598,16 +598,16 @@ if paimon.has_bot:
                                 upvote = post["ups"]
                                 captionx = f"<b>{title}</b>\n"
                                 captionx += f"`Posted by u/{author}`\n"
-                                captionx += f"↕️ <code>{upvote}</code>\n"
+                                captionx += f"<code>{upvote}</code>\n"
                                 thumbnail = reddit_thumb_link(post["preview"])
                                 if post["spoiler"]:
-                                    captionx += "⚠️ Post marcado como SPOILER\n"
+                                    captionx += "⚠️ Post marked as SPOILER\n"
                                 if post["nsfw"]:
-                                    captionx += "🔞 Post marcado como Adulto \n"
+                                    captionx += "🔞 Post marked as Adult \n"
                                 buttons = [
                                     [
                                         InlineKeyboardButton(
-                                            f"Fonte: r/{subreddit}", url=postlink
+                                            f"Source: r/{subreddit}", url=postlink
                                         )
                                     ]
                                 ]
@@ -633,7 +633,7 @@ if paimon.has_bot:
                         results=results,
                         cache_time=1,
                         is_gallery=bool_is_gallery,
-                        switch_pm_text="Comandos Disponíveis",
+                        switch_pm_text="Available Commands",
                         switch_pm_parameter="inline",
                     )
                     return
@@ -662,8 +662,8 @@ if paimon.has_bot:
             if string == "geass":
                 results.append(
                     InlineQueryResultAnimation(
-                        animation_url="https://telegra.ph/file/7b2cca848cc29586bd70b.png",
-                        caption="Para derrotar o mal, devo me tornar um mal maior",
+                        animation_url="https://telegra.ph/file/4981d62d914c2c22909c8.png",
+                        caption="To defeat evil I must become a greater evil",
                     )
                 )
 
@@ -725,7 +725,7 @@ if paimon.has_bot:
                         input_message_content=InputTextMessageContent(
                             "[\u200c](https://i.imgur.com/BZBMrfn.jpg) **Ultimos Gapps arm64 Android 11**"
                         ),
-                        description="Obtenha os links de download mais recentes do GApps",
+                        description="Get the latest GApps download links",
                         thumb_url="https://i.imgur.com/Npzw8Ph.png",
                         reply_markup=InlineKeyboardMarkup(buttons),
                     )
@@ -833,10 +833,10 @@ if paimon.has_bot:
                 results.append(
                     InlineQueryResultPhoto(
                         title="Repo",
-                        thumb_url="https://telegra.ph//file/c6d95e3f661dc15bf0df7.jpg",
-                        photo_url="https://telegra.ph/file/067bf96031b0588652a82.png",
-                        caption="**Repositorio e ultilitarios do paimon**",
-                        description="Configure o seu próprio",
+                        thumb_url="https://telegra.ph/file/ab8827aefcf2559a0eacb.png",
+                        photo_url="https://telegra.ph/file/f2def650516a681c3adfe.png",
+                        caption="**Paimon repository and utilities**",
+                        description="set up your own",
                         reply_markup=InlineKeyboardMarkup(buttons),
                     )
                 )
@@ -846,7 +846,7 @@ if paimon.has_bot:
                     [
                         InlineKeyboardButton(
                             "REPL",
-                            url="https://replit.com/@thegreatfoxxgoddess/StringSessionKX",
+                            url="https://replit.com/finxdev/StringSessionKX",
                         ),
                         InlineKeyboardButton(
                             "Pyrogram Bot", url="https://t.me/genStr_Bot"
@@ -856,8 +856,8 @@ if paimon.has_bot:
                 results.append(
                     InlineQueryResultPhoto(
                         title="Session",
-                        thumb_url="https://telegra.ph//file/c6d95e3f661dc15bf0df7.jpg",
-                        photo_url="https://telegra.ph/file/067bf96031b0588652a82.png",
+                        thumb_url="https://telegra.ph/file/ab8827aefcf2559a0eacb.png",
+                        photo_url="https://telegra.ph/file/d49e67b94606cc0d65aa1.jpg",
                         caption="**Gere sua SessionString pyrogram**",
                         description="Session String",
                         reply_markup=InlineKeyboardMarkup(buttons),
@@ -891,25 +891,25 @@ if paimon.has_bot:
                 if not os.path.exists(f"{Config.CACHE_PATH}/spoiler_db.json"):
                     results.append(
                         InlineQueryResultArticle(
-                            title="Nenhum spoiler encontrado",
+                            title="No spoilers found",
                             input_message_content=InputTextMessageContent(
-                                "Nenhum spoiler encontrado !\nVamos adicionar alguns 😈"
+                                "No spoilers found!\n let's add some ꒰⑅ᵕ༚ᵕ꒱˖♡"
                             ),
-                            description="Veja .help para mais informações",
+                            description="See .help for more information.",
                         )
                     )
                 else:
                     bot_name = (await paimon.bot.get_me()).username
                     if len(str_y) == 2:
                         link = f"https://t.me/{bot_name}?start=spoiler_{str_y[1]}"
-                        buttons = [[InlineKeyboardButton(text="Ver Spoiler", url=link)]]
+                        buttons = [[InlineKeyboardButton(text="See spoiler", url=link)]]
                         results.append(
                             InlineQueryResultArticle(
                                 title="Spoiler",
                                 input_message_content=InputTextMessageContent(
-                                    "<b>Clique para ver o spoiler !</b>"
+                                    "<b>Click to see spoiler !</b>"
                                 ),
-                                description="Clique para enviar",
+                                description="Click to send",
                                 thumb_url="https://telegra.ph/file/ee3a6439494463acd1a3a.jpg",
                                 reply_markup=InlineKeyboardMarkup(buttons),
                             )
@@ -923,7 +923,7 @@ if paimon.has_bot:
                                 buttons = [
                                     [
                                         InlineKeyboardButton(
-                                            text="Ver Spoiler",
+                                            text="See spoiler",
                                             url=f"https://t.me/{bot_name}?start=spoiler_{spoilerr}",
                                         )
                                     ]
@@ -936,7 +936,7 @@ if paimon.has_bot:
                                     InlineQueryResultArticle(
                                         title=f"#{numm}  Spoiler",
                                         input_message_content=InputTextMessageContent(
-                                            "<b>Clique para ver o spoiler !</b>"
+                                            "<b>Click to see spoiler !</b>"
                                         ),
                                         description=f"Criado em: {savetime}",
                                         thumb_url="https://telegra.ph/file/ee3a6439494463acd1a3a.jpg",
@@ -1056,7 +1056,7 @@ if paimon.has_bot:
                 await inline_query.answer(
                     results=results,
                     cache_time=1,
-                    switch_pm_text="Comandos Disponiveis",
+                    switch_pm_text="Available Commands",
                     switch_pm_parameter="inline",
                 )
                 return
@@ -1094,10 +1094,10 @@ if paimon.has_bot:
                     ujson.dump(view_data, r, indent=4)
                 if str_x[0].lower() == "secret":
                     c_data = f"secret_{key_}"
-                    i_m_content = f"📩 <b>Mensagem Secreta</b> para <b>{r_name}</b>. Só ele/ela pode abrir."
+                    i_m_content = f"<b>secret message</b> for <b>{r_name}</b>. Only he/she can open it."
                     i_l_des = f"Send secret message to: {r_name}"
                     title = "send secret message"
-                    thumb_img = "https://telegra.ph/file/8db040d03e6c5ba2cfd08.png"
+                    thumb_img = "https://telegra.ph/file/70defa1a75b353f8386d9.jpg"
                 else:
                     c_data = f"troll_{key_}"
                     i_m_content = f"Only <b>{r_name}</b> cannot see this message. UwU"
@@ -1179,7 +1179,7 @@ if paimon.has_bot:
                 input_message_content=InputTextMessageContent(" paimon menu "),
                 url="https://github.com/thegreatfoxxgoddess/Paimon",
                 description="paimon Menu",
-                thumb_url="https://telegra.ph/file/d768df44c2d9b02e0f0ca.jpg",
+                thumb_url="https://telegra.ph/file/98c61eea0388cf08e199f.jpg",
                 reply_markup=InlineKeyboardMarkup(main_menu_buttons()),
             )
             results.append(MAIN_MENU)
@@ -1187,7 +1187,7 @@ if paimon.has_bot:
                 await inline_query.answer(
                     results=results,
                     cache_time=1,
-                    switch_pm_text="Comandos Inline",
+                    switch_pm_text="Inline Commands",
                     switch_pm_parameter="inline",
                 )
         else:
