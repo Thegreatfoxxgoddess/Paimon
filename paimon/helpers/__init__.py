@@ -1,6 +1,7 @@
-# for jutsu_tools
+# for paimon_tools
+# kanged by Alicia dark uwu
 
-from .jutsu_tools import (
+from .paimon_tools import (
     capitaled,
     report_user,
     time_date_diff,
