@@ -2,6 +2,7 @@
 # before porting please ask to Kakashi
 
 
+
 from paimon import Config, Message, paimon
 from paimon.helpers import capitaled
 
@@ -72,7 +73,7 @@ async def flac_bot(message: Message):
 )
 async def flac_quality(message: Message):
     """set quality of flacbot"""
-    bot_ = "rFlacStoreBot"
+    bot_ = "FlacStoreBot"
     if "-c" in message.flags:
         async with paimon.conversation(bot_) as conv:
             await conv.send_message("/settings")
@@ -105,7 +106,7 @@ async def flac_quality(message: Message):
         try:
             await conv.send_message("/settings")
         except BaseException:
-            return await message.edit("`Unblock` @rFlacStoreBot `first.`", del_in=5)
+            return await message.edit("`Unblock` @FlacStoreBot `first.`", del_in=5)
         resp_one = await conv.get_response(mark_read=True)
         await resp_one.click()
         resp_two = await conv.get_response(mark_read=True)
