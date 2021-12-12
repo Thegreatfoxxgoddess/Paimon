@@ -5,7 +5,7 @@ from time import time
 from git import Repo
 from git.exc import GitCommandError
 
-from paimon import Config, Message, get_collection, pool, paimon
+from paimon import Config, Message, get_collection, paimon, pool
 from paimon.utils import runcmd
 
 LOG = paimon.getLogger(__name__)
@@ -104,9 +104,7 @@ async def check_update(message: Message):
         if out:
             await message.edit(f"`New update found for [{branch}], Now pulling...`")
             await _pull_from_repo(repo, branch)
-            await CHANNEL.log(
-                f"PULLED update from [{branch}]:\n\n CHANGELOG \n\n{out}"
-            )
+            await CHANNEL.log(f"PULLED update from [{branch}]:\n\n CHANGELOG \n\n{out}")
             if not push_to_heroku:
                 await message.edit(
                     "**Paimon Successfully Updated!**\n"
@@ -137,7 +135,9 @@ def _get_updates(repo: Repo, branch: str) -> str:
     out = ""
     upst = Config.UPSTREAM_REPO.rstrip("/")
     for i in repo.iter_commits(f"HEAD..{Config.UPSTREAM_REMOTE}/{branch}"):
-        out += f"🔨 **#{i.count()}** : [{i.summary}]({upst}/commit/{i})  __{i.author}__\n\n"
+        out += (
+            f"🔨 **#{i.count()}** : [{i.summary}]({upst}/commit/{i})  __{i.author}__\n\n"
+        )
     return out
 
 
@@ -149,7 +149,9 @@ def _get_updates_pr(git_u_n: str, branch: str) -> str:
     out = ""
     upst = pr_up.rstrip("/")
     for i in repo.iter_commits(f"HEAD..{pr_up}/{branch}"):
-        out += f" **#{i.count()}** : [{i.summary}]({upst}/commit/{i})  __{i.author}__\n\n"
+        out += (
+            f" **#{i.count()}** : [{i.summary}]({upst}/commit/{i})  __{i.author}__\n\n"
+        )
     return out
 
 
