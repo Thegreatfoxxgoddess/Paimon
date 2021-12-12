@@ -2,7 +2,6 @@
 # before porting please ask to Kakashi
 
 
-
 from paimon import Config, Message, paimon
 from paimon.helpers import capitaled
 
