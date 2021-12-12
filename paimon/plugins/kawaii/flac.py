@@ -1,4 +1,4 @@
-# plugin made for paimon-X by @Kakashi_HTK(TG)/@ashwinstr(GH)
+# plugin made for Paimon by @Kakashi_HTK(TG)/@ashwinstr(GH) Edited by Alicia
 # before porting please ask to Kakashi
 
 
@@ -21,7 +21,7 @@ async def flac_bot(message: Message):
         return await message.edit("`Provide input to search...`", del_in=5)
     query_ = capitaled(query_)
     await message.edit(f"Searching <b>{query_}</b> on deezer...")
-    bot_ = "FlacStoreBot"
+    bot_ = "rrFlacStoreBot"
     results = await paimon.get_inline_bot_results(bot_, query_)
     if not results:
         return await message.edit("`Results not found...`", del_in=5)
@@ -72,7 +72,7 @@ async def flac_bot(message: Message):
 )
 async def flac_quality(message: Message):
     """set quality of flacbot"""
-    bot_ = "FlacStoreBot"
+    bot_ = "rFlacStoreBot"
     if "-c" in message.flags:
         async with paimon.conversation(bot_) as conv:
             await conv.send_message("/settings")
@@ -105,7 +105,7 @@ async def flac_quality(message: Message):
         try:
             await conv.send_message("/settings")
         except BaseException:
-            return await message.edit("`Unblock` @FlacStoreBot `first.`", del_in=5)
+            return await message.edit("`Unblock` @rFlacStoreBot `first.`", del_in=5)
         resp_one = await conv.get_response(mark_read=True)
         await resp_one.click()
         resp_two = await conv.get_response(mark_read=True)
