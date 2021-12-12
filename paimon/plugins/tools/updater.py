@@ -5,7 +5,7 @@ from time import time
 from git import Repo
 from git.exc import GitCommandError
 
-from paimon import Config, Message, get_collection, paimon, pool
+from paimon import Config, Message, get_collection, pool, paimon
 from paimon.utils import runcmd
 
 LOG = paimon.getLogger(__name__)
@@ -17,23 +17,23 @@ FROZEN = get_collection("FROZEN")
 async def _init():
     start = paimon.uptime
     if start == "0h, 0m, 1s":
-        await CHANNEL.log("Bot iniciado...")
+        await CHANNEL.log("Bot started...")
 
 
 @paimon.on_cmd(
     "update",
     about={
-        "header": "Verifica se há atualizações",
+        "header": "Check Updates or Update paimon",
         "flags": {
             "-pull": "pull updates",
-            "-branch": "Padrão é -master",
-            "-pr": "Verifica att dos Plugins Xtras",
-            "-prp": "Faz pull das atts do Xtra Plugins",
+            "-branch": "Default is -alpha",
+            "-pr": "Paimon-Plugins repo updates",
+            "-prp": "Paimon-Plugins repo pull updates",
         },
         "usage": (
-            "{tr}update : verificar atualizações do branch padrão\n"
-            "{tr}update -[branch_name] : verifique as atualizações de qualquer branch\n"
-            "use -pull para atualizar\n"
+            "{tr}update : check updates from default branch\n"
+            "{tr}update -[branch_name] : check updates from any branch\n"
+            "add -pull if you want to pull updates\n"
         ),
         "examples": "{tr}update -pull",
     },
@@ -42,17 +42,17 @@ async def _init():
 )
 async def check_update(message: Message):
     """check or do updates"""
-    await message.edit("`Verificando atualizações, por favor aguarde....`")
+    await message.edit("`Checking for updates, please wait....`")
     if Config.HEROKU_ENV:
         await message.edit(
-            "__Hey hey, me parece que você esta usando Heroku, as atulizações por aqui foram desativadas por questões de segurança__\n"
-            "__Nâo se precoupe, seu bot será atualizado automaticamente quando o Heroku reiniciar__"
+            "**Heroku App detected !**, Updates have been disabled for Safety.\n"
+            "Your Bot Will Auto Update when Heroku restart"
         )
         return
     flags = list(message.flags)
     pull_from_repo = False
     push_to_heroku = False
-    branch = "master"
+    branch = "alpha"
     u_repo = Config.UPSTREAM_REPO
     u_repo = u_repo.replace("/", " ")
     git_u_n = u_repo.split()[2]
@@ -61,7 +61,7 @@ async def check_update(message: Message):
         flags.remove("pull")
     if "push" in flags:
         if not Config.HEROKU_APP:
-            await message.err("HEROKU APP : Não foi encontrado!")
+            await message.err("HEROKU APP : could not be found !")
             return
         # push_to_heroku = True
         # flags.remove("push")
@@ -69,7 +69,7 @@ async def check_update(message: Message):
         branch = "master"
         out = _get_updates_pr(git_u_n, branch)
     if "prp" in flags:
-        await message.edit("`Atualizando o os Plugins...`", log=__name__)
+        await message.edit("Updating <b><u>Paimon-Plugins</u></b>...", log=__name__)
         await runcmd("bash run")
         asyncio.get_event_loop().create_task(paimon.restart())
     if len(flags) == 1:
@@ -91,23 +91,26 @@ async def check_update(message: Message):
             return
     if not (pull_from_repo or push_to_heroku):
         if out:
-            change_log = f"**Novas atualizações encontradas para paimon\nDigite `{Config.CMD_TRIGGER}update -pull` para atualizar\n\n✨ ALTERAÇÕES**\n\n"
+            change_log = (
+                f"**New UPDATE available for [{branch}]:\n\n📄 CHANGELOG 📄**\n\n"
+            )
             await message.edit_or_send_as_file(
                 change_log + out, disable_web_page_preview=True
             )
         else:
-            await message.edit(f"**Seu paimon ja esta atualizado**", del_in=5)
+            await message.edit(f"**Paimon is up-to-date with [{branch}]**", del_in=5)
         return
     if pull_from_repo:
         if out:
-            await message.edit(
-                f"`Novas atualizações encontradas para paimon, Atualizando...`"
-            )
+            await message.edit(f"`New update found for [{branch}], Now pulling...`")
             await _pull_from_repo(repo, branch)
-            await CHANNEL.log(f"**Atualização concluida.\n\n✨ ALTERAÇÕES**\n\n{out}")
+            await CHANNEL.log(
+                f"PULLED update from [{branch}]:\n\n CHANGELOG \n\n{out}"
+            )
             if not push_to_heroku:
                 await message.edit(
-                    "**paimon foi atualizado!**\n" "`Reiniciando... Aguarde um pouco!`",
+                    "**Paimon Successfully Updated!**\n"
+                    "`Now restarting... Wait for a while!`",
                 )
                 asyncio.get_event_loop().create_task(paimon.restart(True))
         elif push_to_heroku:
@@ -115,7 +118,7 @@ async def check_update(message: Message):
         else:
             active = repo.active_branch.name
             if active == branch:
-                await message.err(f"ja esta em [{branch}]!")
+                await message.err(f"already in [{branch}]!")
                 return
             await message.edit(
                 f"`Moving HEAD from [{active}] >>> [{branch}] ...`", parse_mode="md"
@@ -134,19 +137,19 @@ def _get_updates(repo: Repo, branch: str) -> str:
     out = ""
     upst = Config.UPSTREAM_REPO.rstrip("/")
     for i in repo.iter_commits(f"HEAD..{Config.UPSTREAM_REMOTE}/{branch}"):
-        out += f"**#{i.count()}** : [{i.summary}]({upst}/commit/{i}) 🧙🏻‍♂️ __{i.author}__\n\n"
+        out += f"🔨 **#{i.count()}** : [{i.summary}]({upst}/commit/{i})  __{i.author}__\n\n"
     return out
 
 
 def _get_updates_pr(git_u_n: str, branch: str) -> str:
-    pr_up = f"https://github.com/{git_u_n}/paimon-Plugins"
+    pr_up = f"https://github.com/{git_u_n}/Paimon-Plugins"
     repo = Repo()
     repo.remote(pr_up).fetch(branch)
     upst = pr_up.rstrip("/")
     out = ""
     upst = pr_up.rstrip("/")
     for i in repo.iter_commits(f"HEAD..{pr_up}/{branch}"):
-        out += f"**#{i.count()}** : [{i.summary}]({upst}/commit/{i}) 🧙🏻‍♂️ __{i.author}__\n\n"
+        out += f" **#{i.count()}** : [{i.summary}]({upst}/commit/{i})  __{i.author}__\n\n"
     return out
 
 
@@ -160,10 +163,10 @@ async def _pull_from_repo(repo: Repo, branch: str) -> None:
 
 async def _push_to_heroku(msg: Message, repo: Repo, branch: str) -> None:
     sent = await msg.edit(
-        f"`Enviando atualizações de [{branch}] para o heroku...\n"
-        "isso vai demorar até 5 min`\n\n"
-        f"* **Reiniciar** após 5 min usando `{Config.CMD_TRIGGER}restart -h`\n\n"
-        "* Depois de reiniciado com sucesso, verifique as atualizações novamente :)"
+        f"`Now pushing updates from [{branch}] to heroku...\n"
+        "this will take upto 5 min`\n\n"
+        f"* **Restart** after 5 min using `{Config.CMD_TRIGGER}restart -h`\n\n"
+        "* After restarted successfully, check updates again :)"
     )
     try:
         await _heroku_helper(sent, repo, branch)
@@ -171,7 +174,7 @@ async def _push_to_heroku(msg: Message, repo: Repo, branch: str) -> None:
         LOG.exception(g_e)
     else:
         await sent.edit(
-            f"**HEROKU APP : {Config.HEROKU_APP.name} esta atualizado em [{branch}]**"
+            f"**HEROKU APP : {Config.HEROKU_APP.name} is up-to-date with [{branch}]**"
         )
 
 
