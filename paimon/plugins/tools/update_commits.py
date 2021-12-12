@@ -20,7 +20,7 @@ from paimon import Config, Message, paimon
 async def fetch_(message: Message):
     """check update commits"""
     repo = Repo()
-    branch = "alpha"
+    branch = "master"
     try:
         out = _get_updates(repo, branch)
     except GitCommandError as g_e:
@@ -35,7 +35,7 @@ async def fetch_(message: Message):
             change_log + out, disable_web_page_preview=True
         )
     else:
-        await message.edit(f"**paimon-X is up-to-date with [{branch}]**", del_in=5)
+        await message.edit(f"**Paimon is up-to-date with [{branch}]**", del_in=5)
 
 
 def _get_updates(repo: Repo, branch: str) -> str:
