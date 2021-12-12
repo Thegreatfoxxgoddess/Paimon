@@ -2,6 +2,9 @@
 #
 # Edited by Alicia
 
+#
+# All rights reserved.
+
 import asyncio
 import os
 import random
@@ -67,9 +70,12 @@ CARBON = "https://carbon.now.sh/?t={theme}&l={lang}&code={code}&bg={bg}"
     del_pre=True,
 )
 async def carbon_(message: Message):
-    replied = message.reply_to_message
     if Config.GOOGLE_CHROME_BIN is None:
-        text = replied.text if replied else message.text
+        replied = message.reply_to_message
+        if replied:
+            text = replied.text
+        else:
+            text = message.text
         if not text:
             await message.err("need input text!")
             return
@@ -100,6 +106,7 @@ async def carbon_(message: Message):
             )
     else:
         input_str = message.filtered_input_str
+        replied = message.reply_to_message
         theme = "seti"
         lang = "auto"
         red = message.flags.get("r", random.randint(0, 255))
@@ -152,7 +159,7 @@ async def carbon_(message: Message):
         if os.path.isfile(carbon_path):
             os.remove(carbon_path)
         url = CARBON.format(theme=theme, lang=lang, code=code, bg=bg_)
-        if len(url) > 2590:
+        if len(url) > 6969:
             await message.err("input too large!")
             return
         chrome_options = webdriver.ChromeOptions()
@@ -179,7 +186,12 @@ async def carbon_(message: Message):
         }
         driver.execute("send_command", params)
         # driver.find_element_by_xpath("//button[contains(text(),'Export')]").click()
-        driver.find_element_by_css_selector('[data-cy="quick-export-button"]').click()
+        driver.find_element_by_id("export-menu").click()
+        await asyncio.sleep(1)
+        await message.edit("`Processing... 60%`")
+        driver.find_element_by_xpath("//button[contains(text(),'4x')]").click()
+        await asyncio.sleep(1)
+        driver.find_element_by_id("export-png").click()
         await message.edit("`Processing... 80%`")
         while not os.path.isfile(carbon_path):
             await asyncio.sleep(0.5)
@@ -187,9 +199,9 @@ async def carbon_(message: Message):
         await message.edit("`Uploading Carbon...`")
         await asyncio.gather(
             message.delete(),
-            message.client.send_photo(
+            message.client.send_document(
                 chat_id=message.chat.id,
-                photo=carbon_path,
+                document=carbon_path,
                 reply_to_message_id=message_id,
             ),
         )
