@@ -1,12 +1,12 @@
 """ setup AFK mode """
 
 import asyncio
-from paimon.utils.functions import rand_array
 import time
 from random import choice, randint
 
 from paimon import Config, Message, filters, get_collection, paimon
 from paimon.utils import time_formatter
+from paimon.utils.functions import rand_array
 
 CHANNEL = paimon.getCLogger(__name__)
 SAVED_SETTINGS = get_collection("CONFIGS")
@@ -27,8 +27,7 @@ async def _init() -> None:
         REASON = data["data"]
         TIME = data["time"] if "time" in data else 0
     async for _user in AFK_COLLECTION.find():
-        USERS.update(
-            {_user["_id"]: [_user["pcount"], _user["gcount"], _user["men"]]})
+        USERS.update({_user["_id"]: [_user["pcount"], _user["gcount"], _user["men"]]})
 
 
 @paimon.on_cmd(
@@ -51,7 +50,8 @@ async def active_afk(message: Message) -> None:
     await asyncio.gather(
         CHANNEL.log(f"afk.\n <i>{REASON}</i>"),
         message.edit(
-            f"<a href={going_sleep}>\u200c</a>🥱 going away, see you later.", del_in=0),
+            f"<a href={going_sleep}>\u200c</a>🥱 going away, see you later.", del_in=0
+        ),
         AFK_COLLECTION.drop(),
         SAVED_SETTINGS.update_one(
             {"_id": "AFK"},
@@ -89,14 +89,11 @@ async def handle_afk_incomming(message: Message) -> None:
     user_dict = await message.client.get_user_dict(user_id)
     afk_time = time_formatter(round(time.time() - TIME))
     coro_list = []
-    sleeping = rand_array(AFK_SLEEPING)
+    rand_array(AFK_SLEEPING)
     if user_id in USERS:
         if not (USERS[user_id][0] + USERS[user_id][1]) % randint(2, 4):
             if REASON:
-                out_str = (
-                    f"▸ heyy, I'm afk {afk_time}.\n"
-                    f"▸ reason: <i>{REASON}</i>"
-                )
+                out_str = f"▸ heyy, I'm afk {afk_time}.\n" f"▸ reason: <i>{REASON}</i>"
             else:
                 out_str = choice(AFK_REASONS)
             await message.reply(out_str)
@@ -106,10 +103,7 @@ async def handle_afk_incomming(message: Message) -> None:
             USERS[user_id][1] += 1
     else:
         if REASON:
-            out_str = (
-                f"▸ heyy, I'm afk {afk_time}.\n"
-                f"▸ reason: <i>{REASON}</i>"
-            )
+            out_str = f"▸ heyy, I'm afk {afk_time}.\n" f"▸ reason: <i>{REASON}</i>"
         else:
             afkout = rand_array(AFK_REASONS)
             out_str = f"<i>{afkout}</i>"
@@ -121,7 +115,8 @@ async def handle_afk_incomming(message: Message) -> None:
     if chat.type == "private":
         coro_list.append(
             CHANNEL.log(
-                f"#PRIVATE\n{user_dict['mention']} you sent messages\n\n" f"Message: <i>{message.text}</i>"
+                f"#PRIVATE\n{user_dict['mention']} you sent messages\n\n"
+                f"Message: <i>{message.text}</i>"
             )
         )
     else:
@@ -198,6 +193,7 @@ async def handle_afk_outgoing(message: Message) -> None:
         )
     )
     await asyncio.gather(*coro_list)
+
 
 AFK_SLEEPING = [
     "https://telegra.ph/file/ef265a6287049e9bf6824.gif",
