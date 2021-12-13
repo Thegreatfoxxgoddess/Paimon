@@ -1,12 +1,12 @@
 """ setup AFK mode """
 
 import asyncio
+from paimon.utils.functions import rand_array
 import time
 from random import choice, randint
 
 from paimon import Config, Message, filters, get_collection, paimon
 from paimon.utils import time_formatter
-from paimon.utils.functions import rand_array
 
 CHANNEL = paimon.getCLogger(__name__)
 SAVED_SETTINGS = get_collection("CONFIGS")
@@ -27,32 +27,31 @@ async def _init() -> None:
         REASON = data["data"]
         TIME = data["time"] if "time" in data else 0
     async for _user in AFK_COLLECTION.find():
-        USERS.update({_user["_id"]: [_user["pcount"], _user["gcount"], _user["men"]]})
+        USERS.update(
+            {_user["_id"]: [_user["pcount"], _user["gcount"], _user["men"]]})
 
 
 @paimon.on_cmd(
     "afk",
     about={
-        "header": "Definir para o modo AFK",
-        "description": "Define seu status como AFK. Responde a qualquer pessoa que te marcar/PM's.\n"
-        "Desliga o AFK quando você digita alguma coisa.",
-        "usage": "{tr}afk or {tr}afk [motivo]",
+        "header": "Set to AFK mode",
+        "description": "Sets its status to AFK. Respond to anyone who marks you/PM's.\n"
+        "Turn off AFK when you type something.",
+        "usage": "{tr}afk or {tr}afk [reason]",
     },
     allow_channels=False,
 )
 async def active_afk(message: Message) -> None:
-    """liga ou desliga o modo ausente"""
+    """turn on or off away mode"""
     global REASON, IS_AFK, TIME  # pylint: disable=global-statement
     IS_AFK = True
     TIME = time.time()
     REASON = message.input_str
     going_sleep = rand_array(GOING_SLEEP)
     await asyncio.gather(
-        CHANNEL.log(f"Ficando ausente.\n <i>{REASON}</i>"),
+        CHANNEL.log(f"afk.\n <i>{REASON}</i>"),
         message.edit(
-            f"<a href={going_sleep}>\u200c</a>🥱 Ficando ausente, ate mais tarde.",
-            del_in=0,
-        ),
+            f"<a href={going_sleep}>\u200c</a>🥱 going away, see you later.", del_in=0),
         AFK_COLLECTION.drop(),
         SAVED_SETTINGS.update_one(
             {"_id": "AFK"},
@@ -82,7 +81,7 @@ async def active_afk(message: Message) -> None:
     allow_via_bot=False,
 )
 async def handle_afk_incomming(message: Message) -> None:
-    """lida com ad mensagens recebidas quando você esta ausente"""
+    """handles ad messages received when you are away"""
     if not message.from_user:
         return
     user_id = message.from_user.id
@@ -95,11 +94,12 @@ async def handle_afk_incomming(message: Message) -> None:
         if not (USERS[user_id][0] + USERS[user_id][1]) % randint(2, 4):
             if REASON:
                 out_str = (
-                    f"▸ Oi, estou ausente a {afk_time}.\n" f"▸ Motivo: <i>{REASON}</i>"
+                    f"▸ heyy, I'm afk {afk_time}.\n"
+                    f"▸ reason: <i>{REASON}</i>"
                 )
             else:
                 out_str = choice(AFK_REASONS)
-            await message.reply_animation(animation=sleeping, caption=out_str)
+            await message.reply(out_str)
         if chat.type == "private":
             USERS[user_id][0] += 1
         else:
@@ -107,12 +107,13 @@ async def handle_afk_incomming(message: Message) -> None:
     else:
         if REASON:
             out_str = (
-                f"▸ Oi, estou ausente a {afk_time}.\n" f"▸ Motivo: <i>{REASON}</i>"
+                f"▸ heyy, I'm afk {afk_time}.\n"
+                f"▸ reason: <i>{REASON}</i>"
             )
         else:
             afkout = rand_array(AFK_REASONS)
             out_str = f"<i>{afkout}</i>"
-        await message.reply_animation(animation=sleeping, caption=out_str)
+        await message.reply(out_str)
         if chat.type == "private":
             USERS[user_id] = [1, 0, user_dict["mention"]]
         else:
@@ -120,15 +121,14 @@ async def handle_afk_incomming(message: Message) -> None:
     if chat.type == "private":
         coro_list.append(
             CHANNEL.log(
-                f"#PRIVADO\n{user_dict['mention']} lhe enviou mensagens\n\n"
-                f"Mensagem: <i>{message.text}</i>"
+                f"#PRIVATE\n{user_dict['mention']} you sent messages\n\n" f"Message: <i>{message.text}</i>"
             )
         )
     else:
         coro_list.append(
             CHANNEL.log(
                 "#GRUPO\n"
-                f"{user_dict['mention']} mencionou você em [{chat.title}](http://t.me/{chat.username})\n\n"
+                f"{user_dict['mention']} mentioned you in [{chat.title}](http://t.me/{chat.username})\n\n"
                 f"<i>{message.text}</i>\n\n"
                 f"[Ver Mensagem](https://t.me/c/{str(chat.id)[4:]}/{message.message_id})"
             )
@@ -151,11 +151,11 @@ async def handle_afk_incomming(message: Message) -> None:
 
 @paimon.on_filters(IS_AFK_FILTER & filters.outgoing, group=-1, allow_via_bot=False)
 async def handle_afk_outgoing(message: Message) -> None:
-    """lida com as mensagens de saida quando esta ausente"""
+    """handle outgoing messages when afk"""
     global IS_AFK  # pylint: disable=global-statement
     IS_AFK = False
     afk_time = time_formatter(round(time.time() - TIME))
-    replied: Message = await message.reply("`Não estou mais ausente!`", log=__name__)
+    replied: Message = await message.reply("`I'm no longer afk!`", log=__name__)
     coro_list = []
     if USERS:
         p_msg = ""
@@ -171,19 +171,19 @@ async def handle_afk_outgoing(message: Message) -> None:
                 g_count += gcount
         coro_list.append(
             replied.edit(
-                f"`Você recebeu {p_count + g_count} mensagens enquanto você estava fora.`"
-                f"`Verifique o log para obter mais detalhes.\n\nTempo ausente: {afk_time}`",
+                f"`You received {p_count + g_count} messages while you were away.`"
+                f"`Please check the log for more details.\n\nTimeout: {afk_time}`",
                 del_in=3,
             )
         )
         out_str = (
-            f"`Você recebeu {p_count + g_count} mensagens` "
-            + f"`de {len(USERS)} usuários enquanto você estava fora!\nTempo ausente: {afk_time}`\n"
+            f"`You have received {p_count + g_count} messages` "
+            + f"`in {len(USERS)} users while you were away!\nafk time: {afk_time}`\n"
         )
         if p_count:
-            out_str += f"\n**{p_count} Mensagens Privadas:**\n\n{p_msg}"
+            out_str += f"\n**{p_count} Private Messages:**\n\n{p_msg}"
         if g_count:
-            out_str += f"\n**{g_count} Mensagens de Grupo:**\n\n{g_msg}"
+            out_str += f"\n**{g_count} Group Messages:**\n\n{g_msg}"
         coro_list.append(CHANNEL.log(out_str))
         USERS.clear()
     else:
@@ -198,7 +198,6 @@ async def handle_afk_outgoing(message: Message) -> None:
         )
     )
     await asyncio.gather(*coro_list)
-
 
 AFK_SLEEPING = [
     "https://telegra.ph/file/ef265a6287049e9bf6824.gif",
@@ -222,20 +221,32 @@ GOING_SLEEP = [
 ]
 
 AFK_REASONS = (
-    "Agora estou ocupado. Por favor, fale em uma bolsa e quando eu voltar você pode apenas me dar a bolsa!",
-    "Estou fora agora. Se precisar de alguma coisa, deixe mensagem após o beep:\n`beeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeep`!",
-    "Volto em alguns minutos e se não ..,\nespere mais um pouco.",
-    "Não estou aqui agora, então provavelmente estou em outro lugar.",
-    "Sei que quer falar comigo, mas estou ocupado salvando o mundo agora.",
-    "Às vezes, vale a pena esperar pelas melhores coisas da vida…\nEstou ausente então espere por mim.",
-    "Olá, seja bem-vindo à minha mensagem de ausência, como posso ignorá-lo hoje?",
-    "Estou mais longe que 7 mares e 7 países,\n7 águas e 7 continentes,\n7 montanhas e 7 colinas,\n7 planícies e 7 montes,\n7 piscinas e 7 lagos,\n7 nascentes e 7 prados,\n7 cidades e 7 bairros,\n7 quadras e 7 casas...\n\nOnde nem mesmo suas mensagens podem me alcançar!",
-    "Estou ausente no momento, mas se você gritar alto o suficiente na tela, talvez eu possa ouvir você.",
-    "Por favor, deixe uma mensagem e me faça sentir ainda mais importante do que já sou.",
-    "Eu não estou aqui então pare de escrever para mim,\nou então você se verá com uma tela cheia de suas próprias mensagens.",
-    "Se eu estivesse aqui,\nEu te diria onde estou.\n\nMas eu não estou,\nentão me pergunte quando eu voltar...",
-    "Não estou disponível agora, por favor, deixe seu nome, número e endereço e eu irei persegui-lo mais tarde. ",
-    "Desculpe, eu não estou aqui agora.\nSinta-se à vontade para falar com meu userbot pelo tempo que desejar.\nEu respondo mais tarde.",
-    "A vida é tão curta, há tantas coisas para fazer ...\nEstou ausente fazendo uma delas ..",
-    "Eu não estou aqui agora ...\nmas se estivesse...\n\nisso não seria incrível?",
+    "I'm busy right now. Please talk in a bag and when I come back you can just give me the bag!",
+    "I'm away right now. If you need anything, leave a message after the beep: \
+`beeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeep!`",
+    "You missed me, next time aim better.",
+    "I'll be back in a few minutes and if I'm not...,\nwait longer.",
+    "I'm not here right now, so I'm probably somewhere else.",
+    "Roses are red,\nViolets are blue,\nLeave me a message,\nAnd I'll get back to you.",
+    "Sometimes the best things in life are worth waiting for…\nI'll be right back.",
+    "I'll be right back,\nbut if I'm not right back,\nI'll be back later.",
+    "If you haven't figured it out already,\nI'm not here.",
+    "I'm away over 7 seas and 7 countries,\n7 waters and 7 continents,\n7 mountains and 7 hills,\
+7 plains and 7 mounds,\n7 pools and 7 lakes,\n7 springs and 7 meadows,\
+7 cities and 7 neighborhoods,\n7 blocks and 7 houses...\
+    Where not even your messages can reach me!",
+    "I'm away from the keyboard at the moment, but if you'll scream loud enough at your screen,\
+    I might just hear you.",
+    "I went that way\n>>>>>",
+    "I went this way\n<<<<<",
+    "Please leave a message and make me feel even more important than I already am.",
+    "If I were here,\nI'd tell you where I am.\n\nBut I'm not,\nso ask me when I return...",
+    "I am away!\nI don't know when I'll be back!\nHopefully a few minutes from now!",
+    "I'm not available right now so please leave your name, number, \
+    and address and I will stalk you later. :P",
+    "Sorry, I'm not here right now.\nFeel free to talk to my userbot as long as you like.\
+I'll get back to you later.",
+    "I bet you were expecting an away message!",
+    "Life is so short, there are so many things to do...\nI'm away doing one of them..",
+    "I am not here right now...\nbut if I was...\n\nwouldn't that be awesome?",
 )
