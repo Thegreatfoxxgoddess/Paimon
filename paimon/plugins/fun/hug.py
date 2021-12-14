@@ -10,6 +10,7 @@ from .nsfw import age_verification
 
 client = NekosLifeClient()
 
+
 @paimon.on_cmd(
     "hug",
     about={
