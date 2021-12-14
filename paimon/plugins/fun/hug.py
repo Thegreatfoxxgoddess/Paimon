@@ -10,6 +10,17 @@ from .nsfw import age_verification
 
 client = NekosLifeClient()
 
+NSFW = [x for x in dir(NSFWImageTags) if not x.startswith("__")]
+SFW = [z for z in dir(SFWImageTags) if not z.startswith("__")]
+
+
+neko_help = "<b>NSFW</b> :  "
+for i in NSFW:
+    neko_help += f"<code>{i.lower()}</code>   "
+neko_help += "\n\n<b>SFW</b> :  "
+for m in SFW:
+    neko_help += f"<code>{m.lower()}</code>   "
+
 
 @paimon.on_cmd(
     "hug",
@@ -21,7 +32,7 @@ client = NekosLifeClient()
     },
 )
 async def neko_life(message: Message):
-    choice = "hug"
+    choice = hug
     if "-nsfw" in message.flags:
         if await age_verification(message):
             return
