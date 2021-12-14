@@ -32,7 +32,7 @@ for m in SFW:
     },
 )
 async def neko_life(message: Message):
-    choice = hug
+    choice = "hug"
     if "-nsfw" in message.flags:
         if await age_verification(message):
             return
