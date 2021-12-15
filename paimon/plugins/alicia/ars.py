@@ -6,7 +6,7 @@ from aiohttp import ClientSession
 from paimon import Message
 
 
-@paimonx.on_cmd(
+@paimon.on_cmd(
     "ars",
     about={
         "header": "Anime Reverse Search",
