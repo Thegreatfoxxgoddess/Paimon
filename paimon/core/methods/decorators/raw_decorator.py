@@ -316,7 +316,7 @@ class RawDecorator(RawClient):
                     _LOG.exception(_LOG_STR, f_e)
                     await self._channel.log(f"**PLUGIN** : `{func.__module__}`\n"
                                             f"**FUNCTION** : `{func.__name__}`\n"
-                                            f"**ERROR** : `{f_e or None}`\n\n<u>kek @eightbitwuw fucked up</u>\n"
+                                            f"**ERROR** : `{f_e or None}`\n\n<u>kek @eightbituwu fucked up</u>\n"
                                             f"\n```{format_exc().strip()}```",
                                             "TRACEBACK")
             flt.update(func, template)
