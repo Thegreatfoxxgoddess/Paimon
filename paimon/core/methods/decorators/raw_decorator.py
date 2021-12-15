@@ -315,8 +315,8 @@ class RawDecorator(RawClient):
                 except Exception as f_e:  # pylint: disable=broad-except
                     _LOG.exception(_LOG_STR, f_e)
                     await self._channel.log(f"**PLUGIN** : `{func.__module__}`\n"
-                                            f"**FUNÇÃO** : `{func.__name__}`\n"
-                                            f"**ERRO** : `{f_e or None}`\n\n<u>Encaminhe isso para @fnixsup</u>\n"
+                                            f"**FUNCTION** : `{func.__name__}`\n"
+                                            f"**ERROR** : `{f_e or None}`\n\n<u>kek @eightbitwuw fucked up</u>\n"
                                             f"\n```{format_exc().strip()}```",
                                             "TRACEBACK")
             flt.update(func, template)
