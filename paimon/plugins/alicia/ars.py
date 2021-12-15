@@ -3,8 +3,7 @@ import os
 import tracemoepy
 from aiohttp import ClientSession
 
-from paimon import Config, Message, paimon
-from paimon.utils import progress, take_screen_shot
+from paimon import Message
 
 
 @paimonx.on_cmd(
