@@ -1,7 +1,9 @@
 import os
-from Paimon import paimon
+
 import tracemoepy
 from aiohttp import ClientSession
+
+from Paimon import paimon
 from paimon import Message
 
 
