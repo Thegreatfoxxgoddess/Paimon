@@ -1,23 +1,17 @@
 import os
-
-import tracemoepy
 from aiohttp import ClientSession
-
-from paimon import Config, Message, paimon
+from paimon import paimon, Message, get_collection, Config
 from paimon.utils import progress, take_screen_shot
+import tracemoepy
 
 
-@paimon.on_cmd(
-    "ars",
-    about={
-        "header": "Anime Reverse Search",
-        "description": "Reverse Search any anime by providing "
-        "a snap, or short clip of anime.",
-        "usage": "{tr}ars [reply to Photo/Gif/Video]",
-    },
-)
+@paimon.on_cmd("ars", about={
+    'header': "Anime Reverse Search",
+    'description': "Reverse Search any anime by providing "
+                   "a snap, or short clip of anime.",
+    'usage': "{tr}ars [reply to Photo/Gif/Video]"})
 async def trace_bek(message: Message):
-    """Reverse Search Anime Clips/Photos"""
+    """ Reverse Search Anime Clips/Photos """
     replied = message.reply_to_message
     if not replied:
         await message.edit("Ara Ara... Reply to a Media Senpai")
@@ -32,7 +26,7 @@ async def trace_bek(message: Message):
         message=message.reply_to_message,
         file_name=Config.DOWN_PATH,
         progress=progress,
-        progress_args=(message, "Downloading Media"),
+        progress_args=(message, "Downloading Media")
     )
     dls_loc = os.path.join(Config.DOWN_PATH, os.path.basename(dls))
     if replied.animation or replied.video:
@@ -48,9 +42,11 @@ async def trace_bek(message: Message):
             tracemoe = tracemoepy.AsyncTrace(session=session)
             try:
                 search = await tracemoe.search(dls_loc, upload_file=True)
+            except ServerError:
                 try:
                     search = await tracemoe.search(dls_loc, upload_file=True)
-                    await message.reply("Couldnt parse results!!!")
+                except ServerError:
+                    await message.reply('Couldnt parse results!!!')
                     return
             result = search["result"][0]
             caption_ = (
@@ -60,6 +56,6 @@ async def trace_bek(message: Message):
                 f"\n**Similarity**: `{(str(result['similarity']*100))[:5]}`"
                 f"\n**Episode**: `{result['episode']}`"
             )
-            preview = result["video"]
+            preview = result['video']
         await message.reply_video(preview, caption=caption_)
         await message.delete()
