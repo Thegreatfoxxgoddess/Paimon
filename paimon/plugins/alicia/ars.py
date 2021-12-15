@@ -48,10 +48,8 @@ async def trace_bek(message: Message):
             tracemoe = tracemoepy.AsyncTrace(session=session)
             try:
                 search = await tracemoe.search(dls_loc, upload_file=True)
-            except ServerError:
                 try:
                     search = await tracemoe.search(dls_loc, upload_file=True)
-                except ServerError:
                     await message.reply("Couldnt parse results!!!")
                     return
             result = search["result"][0]
