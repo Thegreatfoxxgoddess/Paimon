@@ -54,6 +54,7 @@ _CATEGORY = {
     "kawaii": "🔹",
 }
 # Database
+SEEN_BY=get_collection("SEEN_BY")
 SAVED_SETTINGS = get_collection("CONFIGS")
 REPO_X = InlineQueryResultArticle(
     title="Repo",
