@@ -1,3 +1,6 @@
+# Copyright (C) 2020 BY - GitHub.com/code-rgb [TG - @deleteduser420]
+# All rights reserved.
+
 """Module that handles Inline Help"""
 
 from asyncio import gather
@@ -14,14 +17,14 @@ OwnerFilter = filters.user(list(Config.OWNER_ID))
 _COMMANDS = {
     "secret": {
         "help_txt": "**Send a secret message to a user**\n (only the entered user and you can view the message)\n\n>>>  `secret @username [text]`",
-        "i_q": "secret @eightbituwu This is a secret message",
+        "i_q": "secret @DeletedUser420 This is a secret message",
     },
     "troll": {
         "help_txt": "**Troll to a user**\n (everyone can view the message except the entered user)\n\n>>>  `troll @username [text]`",
-        "i_q": "troll @eightbituwu Lostboy can view this message",
+        "i_q": "troll @Lostb053 Lostboy can view this message",
     },
     "alive": {
-        "help_txt": "**Alive Command for paimon-X**\nHere You can view Uptime, Setting and Versions of your bot and when you change settings they are updated in Real-time UwU\n\n>>>  `alive`",
+        "help_txt": "**Alive Command for paimon**\nHere You can view Uptime, Setting and Versions of your bot and when you change settings they are updated in Real-time UwU\n\n>>>  `alive`",
         "i_q": "alive",
     },
     "opinion": {
@@ -29,7 +32,7 @@ _COMMANDS = {
         "i_q": "op Are Cats Cute ?",
     },
     "repo": {
-        "help_txt": "**Your paimon-X Github repo**\nwith direct deploy button\n\n>>>  `repo`",
+        "help_txt": "**Your paimon Github repo**\nwith direct deploy button\n\n>>>  `repo`",
         "i_q": "repo",
     },
     "gapps": {
@@ -50,7 +53,7 @@ _COMMANDS = {
     },
     "stylish": {
         "help_txt": "**Write it in Style**\nplugin to decorate text with unicode fonts.\n\n>>>  `stylish [text]`",
-        "i_q": "stylish paimon-X",
+        "i_q": "stylish paimon",
     },
     "ytdl": {
         "help_txt": f"**Download YouTube Videos or Audio with Buttons**\nTo Download Video / Audio from youtube with desired quality.\n\n>>>  `ytdl [URL or Text]\n   Non-Inline: {Config.CMD_TRIGGER}iytdl [URL / Text] or [Reply to URL / Text]`",
@@ -67,6 +70,18 @@ _COMMANDS = {
     "anime": {
         "help_txt": "**Anime Downloader**\nSearch Anime via inline bot and then choose episodes number and desired quality\n\n>>> `anime [Query]`",
         "i_q": "anime Naruto",
+    },
+    "voting": {
+        "help_txt": "**Voting buttons**\nGive content through inline and add buttons to it for voting.\n\n>>> `voting [Query]|[telegraph link]`",
+        "i_q": "voting Do you like this inline command?",
+    },
+    "anonymous voting": {
+        "help_txt": "**Anonymous voting buttons**\nGive content through inline and add buttons to it for voting. No one can see the votes.\n\n>>> `anon_vote [Query]|[telegraph link]`",
+        "i_q": "anon_vote Do you like hentai?",
+    },
+    "attention/notice": {
+        "help_txt": "**Notice or content for attention in gorup**\nSee who has seen your notice.\n\n>>> `attent [content]`",
+        "i_q": "attent Anyone interested in trying my bot?",
     },
 }
 
@@ -88,7 +103,7 @@ if paimon.has_bot:
 
     inline_help_txt = (
         " <u><b>INLINE COMMANDS</b></u>\n\nHere is a list of all available inline commands."
-        "\nChoose a command and for usage see:\n**EXAMPLE**"
+        "\nChoose a command and for usage see:\n**  EXAMPLE**"
     )
 
     @paimon.bot.on_message(
