@@ -288,7 +288,8 @@ class RawDecorator(RawClient):
                                     await _raise("`required permisson [pin_messages]`")
                                 return
                 if RawClient.DUAL_MODE and (flt.check_client or (
-                        r_m.from_user and r_m.from_user.id in Config.SUDO_USERS)):
+                        r_m.from_user and (r_m.from_user.id in Config.SUDO_USERS or r_m.from_user.id in Config.TRUSTED_SUDO_USERS))):
+hjjj
                     cond = True
                     async with await _get_lock(str(flt)):
                         if flt.only_admins:
