@@ -1042,60 +1042,6 @@ if paimon.has_bot:
                                     )
                                 )
 
-             if str_y[0] == "attent" and len(str_y) == 2:
-                notice = str_y[-1]
-                rnd_id = paimon.rnd_id()
-                btn_ = InlineKeyboardMarkup(
-                    [
-                        [
-                            InlineKeyboardButton(
-                                text="What is it!!?", callback_data=f"notice_{rnd_id}"
-                            ),
-                            InlineKeyboardButton(
-                                text="Seen by.", callback_data=f"noticeseen_{rnd_id}"
-                            ),
-                        ],
-                    ]
-                )
-
-                attention = os.path.join(Config.CACHE_PATH, "notice.json")
-                notice_data = {
-                    rnd_id: {
-                        "sender": iq_user_id,
-                        "notice": notice,
-                        "seen": [],
-                        "user_first_names": [],
-                    }
-                }
-                if os.path.exists(attention):
-                    with open(attention) as outfile:
-                        view_data = ujson.load(outfile)
-                    view_data.update(notice_data)
-                else:
-                    view_data = notice_data
-                with open(attention, "w") as r:
-                    ujson.dump(view_data, r, indent=4)
-                await SEEN_BY.insert_one(
-                    {
-                        "_id": rnd_id,
-                        "seen": view_data[rnd_id]["seen"],
-                        "notice": view_data[rnd_id]["notice"],
-                        "user_first_names": view_data[rnd_id]["user_first_names"],
-                        "sender": view_data[rnd_id]["sender"],
-                    }
-                )
-                results.append(
-                    InlineQueryResultArticle(
-                        title="Attention please!",
-                        input_message_content=InputTextMessageContent(
-                            "Attention message sent by my owner."
-                        ),
-                        description="Attention everyone!!!",
-                        thumb_url="https://telegra.ph/file/1e389fef521a6cc86cfdf.jpg",
-                        reply_markup=btn_,
-                    )
-                )
-
             if str_y[0].lower() == "stylish" and len(str_y) == 2:
                 results = []
                 for f_name in Styled.font_choice:
