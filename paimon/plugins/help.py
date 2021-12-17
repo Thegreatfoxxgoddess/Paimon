@@ -60,7 +60,7 @@ REPO_X = InlineQueryResultArticle(
     input_message_content=InputTextMessageContent(
         "**Paimon repository and utilities**"
     ),
-    SEEN_BY = get_collection("SEEN_BY"),
+    SEEN_BY=get_collection("SEEN_BY"),
     url="https://github.com/thegreatfoxxgoddess/Paimon",
     description="set up your own",
     thumb_url="https://telegra.ph/file/ab8827aefcf2559a0eacb.png",
