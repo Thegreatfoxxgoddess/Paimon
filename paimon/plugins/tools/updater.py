@@ -26,7 +26,7 @@ async def _init():
         "header": "Check Updates or Update paimon",
         "flags": {
             "-pull": "pull updates",
-            "-branch": "Default is -alpha",
+            "-branch": "Default is -master",
             "-pr": "Paimon-Plugins repo updates",
             "-prp": "Paimon-Plugins repo pull updates",
         },
@@ -52,7 +52,7 @@ async def check_update(message: Message):
     flags = list(message.flags)
     pull_from_repo = False
     push_to_heroku = False
-    branch = "alpha"
+    branch = "master"
     u_repo = Config.UPSTREAM_REPO
     u_repo = u_repo.replace("/", " ")
     git_u_n = u_repo.split()[2]
