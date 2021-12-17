@@ -4,7 +4,7 @@
 
 from asyncio import gather
 
-from paimon import paimon, Message
+from paimon import Message, paimon
 from paimon.config import Config
 
 
@@ -26,7 +26,7 @@ async def jio_music(message: Message):
         log_ = await paimon.send_inline_bot_result(
             Config.LOG_CHANNEL_ID,
             query_id=result.query_id,
-            result_id=result.results[0].id
+            result_id=result.results[0].id,
         )
         await gather(
             paimon.copy_message(
