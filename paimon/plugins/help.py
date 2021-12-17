@@ -1167,7 +1167,7 @@ if paimon.has_bot:
                             "Attention message sent by my owner."
                         ),
                         description="Attention everyone!!!",
-                        thumb_url="https://telegra.ph/file/1e389fef521a6cc86cfdf.jpg",
+                        thumb_url="https://telegra.ph/file/07007ac6bfc63ea81ac80.jpg",
                         reply_markup=btn_,
                     )
                 )
