@@ -1,8 +1,10 @@
 """ kang stickers """
 
-# Copyright (C) 2020 by UsergeTeam@Github, < https://github.com/UsergeTeam >.
-#
+# Copyright (C) 2020 by paimonTeam@Github, < https://github.com/paimonTeam >.
+
 # Edited by Alicia
+
+# All rights reserved.
 
 import io
 import os
@@ -16,16 +18,16 @@ from pyrogram.raw.functions.messages import GetStickerSet
 from pyrogram.raw.types import InputStickerSetShortName
 
 from paimon import Config, Message, paimon
-from paimon.utils import get_response, media_to_image
+from paimon.utils import get_response
 
 
 @paimon.on_cmd(
     "kang",
     about={
-        "header": "steal stickers or create new ones",
-        "flags": {"-s": "no link", "-d": "silent kang"},
-        "usage": "reply {tr}kang [emoji('s)] [numero do pack] a um sticker ou "
-        "an image to put it in your userbot package.",
+        "header": "kangs stickers or creates new ones",
+        "flags": {"-s": "without link", "-d": "without trace"},
+        "usage": "Reply {tr}kang [emoji('s)] [pack number] to a sticker or "
+        "an image to kang it to your userbot pack.",
         "examples": [
             "{tr}kang",
             "{tr}kang -s",
@@ -42,6 +44,8 @@ async def kang_(message: Message):
     """kang a sticker"""
     user = await paimon.get_me()
     replied = message.reply_to_message
+    await message.edit("`Kanging in log channel...`", del_in=1)
+    kang_msg = await paimon.send_message(Config.LOG_CHANNEL_ID, "`Processing...`")
     photo = None
     emoji_ = None
     is_anim = False
@@ -55,19 +59,19 @@ async def kang_(message: Message):
             is_anim = True
         elif replied.sticker:
             if not replied.sticker.file_name:
-                await message.edit("`sticker has no name!`")
+                await kang_msg.edit("`Sticker has no Name!`")
                 return
             emoji_ = replied.sticker.emoji
             is_anim = replied.sticker.is_animated
             if not replied.sticker.file_name.endswith(".tgs"):
                 resize = True
         else:
-            await message.edit("`Unsupported file!`")
+            await kang_msg.edit("`Unsupported File!`")
             return
-        await message.edit(f"`{random.choice(KANGING_STR)}`")
+        await kang_msg.edit(f"`{random.choice(KANGING_STR)}`")
         photo = await paimon.download_media(message=replied, file_name=Config.DOWN_PATH)
     else:
-        await message.edit("`i can't steal this...`")
+        await kang_msg.edit("`I can't kang that...`")
         return
     if photo:
         args = message.filtered_input_str.split()
@@ -89,9 +93,9 @@ async def kang_(message: Message):
 
         u_name = user.username
         u_name = "@" + u_name if u_name else user.first_name or user.id
-        packname = f"a{user.id}_by_x_{pack}"
+        packname = f"a{user.id}_by_{user.username}_{pack}"
         custom_packnick = Config.CUSTOM_PACK_NAME or f"{u_name}'s kang pack"
-        packnick = f"{custom_packnick} Vol.{pack}"
+        packnick = f"{custom_packnick} vol.{pack}"
         cmd = "/newpack"
         if resize:
             photo = resize_photo(photo)
@@ -111,7 +115,7 @@ async def kang_(message: Message):
                 try:
                     await conv.send_message("/addsticker")
                 except YouBlockedUser:
-                    await message.edit("first **unblock** @Stickers")
+                    await kang_msg.edit("first **unblock** @Stickers")
                     return
                 await conv.get_response(mark_read=True)
                 await conv.send_message(packname)
@@ -124,12 +128,14 @@ async def kang_(message: Message):
                     if is_anim:
                         packname += "_anim"
                         packnick += " (Animated)"
-                    await message.edit(
-                        "`Switching to " + str(pack) + " due to insufficient space`"
+                    await kang_msg.edit(
+                        "`Switching to Pack "
+                        + str(pack)
+                        + " due to insufficient space`"
                     )
                     await conv.send_message(packname)
                     msg = await conv.get_response(mark_read=True)
-                    if msg.text == "Pacote inválido selecionado.":
+                    if msg.text == "Invalid pack selected.":
                         await conv.send_message(cmd)
                         await conv.get_response(mark_read=True)
                         await conv.send_message(packnick)
@@ -147,22 +153,19 @@ async def kang_(message: Message):
                         await conv.get_response(mark_read=True)
                         await conv.send_message(packname)
                         await conv.get_response(mark_read=True)
-                        if "-d" in message.flags:
-                            await message.delete()
-                        else:
-                            out = (
-                                "__kanged__"
-                                if "-s" in message.flags
-                                else f"[Kanged](t.me/addstickers/{packname})"
-                            )
-                            await message.edit(
-                                f"**Sticker** {out} __in a different package__**!**"
-                            )
+                        out = (
+                            "__kanged__"
+                            if "-s" in message.flags
+                            else f"[kanged](t.me/addstickers/{packname})"
+                        )
+                        await kang_msg.edit(
+                            f"**Sticker** {out} __in a Different Pack__**!**"
+                        )
                         return
                 await conv.send_document(photo)
                 rsp = await conv.get_response(mark_read=True)
                 if "Sorry, the file type is invalid." in rsp.text:
-                    await message.edit(
+                    await kang_msg.edit(
                         "`Failed to add sticker, use` @Stickers "
                         "`bot to add the sticker manually.`"
                     )
@@ -172,12 +175,12 @@ async def kang_(message: Message):
                 await conv.send_message("/done")
                 await conv.get_response(mark_read=True)
         else:
-            await message.edit("`Preparing a new pack...`")
+            await kang_msg.edit("`Brewing a new Pack...`")
             async with paimon.conversation("Stickers") as conv:
                 try:
                     await conv.send_message(cmd)
                 except YouBlockedUser:
-                    await message.edit("primeiro **desbloqueie** @Stickers")
+                    await kang_msg.edit("first **unblock** @Stickers")
                     return
                 await conv.get_response(mark_read=True)
                 await conv.send_message(packnick)
@@ -185,7 +188,7 @@ async def kang_(message: Message):
                 await conv.send_document(photo)
                 rsp = await conv.get_response(mark_read=True)
                 if "Sorry, the file type is invalid." in rsp.text:
-                    await message.edit(
+                    await kang_msg.edit(
                         "`Failed to add sticker, use` @Stickers "
                         "`bot to add the sticker manually.`"
                     )
@@ -201,15 +204,12 @@ async def kang_(message: Message):
                 await conv.get_response(mark_read=True)
                 await conv.send_message(packname)
                 await conv.get_response(mark_read=True)
-        if "-d" in message.flags:
-            await message.delete()
-        else:
-            out = (
-                "__kanged__"
-                if "-s" in message.flags
-                else f"[kanged](t.me/addstickers/{packname})"
-            )
-            await message.edit(f"**Sticker** {out}**!**")
+        out = (
+            "__kanged__"
+            if "-s" in message.flags
+            else f"[kanged](t.me/addstickers/{packname})"
+        )
+        await kang_msg.edit(f"**Sticker** {out}**!**")
         if os.path.exists(str(photo)):
             os.remove(photo)
 
@@ -217,20 +217,20 @@ async def kang_(message: Message):
 @paimon.on_cmd(
     "stkrinfo",
     about={
-        "header": "get sticker pack information",
+        "header": "get sticker pack info",
         "usage": "reply {tr}stkrinfo to any sticker",
     },
 )
 async def sticker_pack_info_(message: Message):
-    """get sticker pack information"""
+    """get sticker pack info"""
     replied = message.reply_to_message
     if not replied:
-        await message.edit("`I can't get information out of nothing, can i?!`")
+        await message.edit("`I can't fetch info from nothing, can I ?!`")
         return
     if not replied.sticker:
-        await message.edit("`Reply to a sticker for package details`")
+        await message.edit("`Reply to a sticker to get the pack details`")
         return
-    await message.edit("`getting details of the sticker pack, please wait...`")
+    await message.edit("`Fetching details of the sticker pack, please wait..`")
     get_stickerset = await message.client.send(
         GetStickerSet(
             stickerset=InputStickerSetShortName(short_name=replied.sticker.set_name)
@@ -241,20 +241,20 @@ async def sticker_pack_info_(message: Message):
         if document_sticker.emoticon not in pack_emojis:
             pack_emojis.append(document_sticker.emoticon)
     out_str = (
-        f"**Sticker title:** `{get_stickerset.set.title}\n`"
-        f"**Sticker short name:** `{get_stickerset.set.short_name}`\n"
+        f"**Sticker Title:** `{get_stickerset.set.title}\n`"
+        f"**Sticker Short Name:** `{get_stickerset.set.short_name}`\n"
         f"**Archived:** `{get_stickerset.set.archived}`\n"
         f"**Official:** `{get_stickerset.set.official}`\n"
         f"**Masks:** `{get_stickerset.set.masks}`\n"
         f"**Animated:** `{get_stickerset.set.animated}`\n"
-        f"**stickers in the pack:** `{get_stickerset.set.count}`\n"
-        f"**Emojis in the pack:**\n{' '.join(pack_emojis)}"
+        f"**Stickers In Pack:** `{get_stickerset.set.count}`\n"
+        f"**Emojis In Pack:**\n{' '.join(pack_emojis)}"
     )
     await message.edit(out_str)
 
 
 def resize_photo(photo: str) -> io.BytesIO:
-    """Resize the photo provided to 512x512"""
+    """Resize the given photo to 512x512"""
     image = Image.open(photo)
     maxsize = 512
     scale = maxsize / max(image.width, image.height)
@@ -267,16 +267,18 @@ def resize_photo(photo: str) -> io.BytesIO:
     return resized_photo
 
 
-KANGING_STR = ("me kanging this sticker uwu",)
+KANGING_STR = (
+    "stealing this sticker.... uwu",
+)
 
 
 # Based on:
 # https://github.com/AnimeKaizoku/SaitamaRobot/blob/10291ba0fc27f920e00f49bc61fcd52af0808e14/SaitamaRobot/modules/stickers.py#L42
 @paimon.on_cmd(
-    "stickers",
+    "sticker",
     about={
-        "header": "Search for sticker packs",
-        "usage": "Reply {tr}stickers or " "{tr}stickers [text]",
+        "header": "Search Sticker Packs",
+        "usage": "Reply {tr}sticker or " "{tr}sticker [text]",
     },
 )
 async def sticker_search(message: Message):
@@ -290,12 +292,11 @@ async def sticker_search(message: Message):
 
     if not query_:
         return message.err(
-            "responder a um usuário ou fornecer texto para pesquisar pacotes de adesivos",
-            del_in=3,
+            "reply to a user or provide text to search sticker packs", del_in=3
         )
 
-    await message.edit(f'Looking for "`{query_}`"...')
-    titlex = f'<b>Sticker packs for:</b> "<u>{query_}</u>"\n'
+    await message.edit(f'Searching for "`{query_}`"...')
+    titlex = f'<b>Sticker Packs For:</b> "<u>{query_}</u>"\n'
     sticker_pack = ""
     try:
         text = await get_response.text(
@@ -303,7 +304,7 @@ async def sticker_search(message: Message):
         )
     except ValueError:
         return await message.err(
-            "A resposta não foi 200!, Api está tendo alguns problemas\nTente novamente mais tarde.",
+            "Response was not 200!, Api is having some issues\n Please try again later.",
             del_in=5,
         )
     soup = bs(text, "lxml")
@@ -314,30 +315,5 @@ async def sticker_search(message: Message):
             link_ = (pack.a).get("href")
             sticker_pack += f"\n• [{title_}]({link_})"
     if not sticker_pack:
-        sticker_pack = "`Not found!`"
+        sticker_pack = "`Not Found!`"
     await message.edit((titlex + sticker_pack), disable_web_page_preview=True)
-
-
-# import from oub-remix to ux by Itachi_HTK/ashwinstr
-
-
-@paimon.on_cmd(
-    "imgs",
-    about={
-        "header": "convert things to image",
-        "description": "convert GIF/sticker/vídeo/thumbnail of music in image in jpg format",
-        "usage": "{tr}imgs [respond to a media]",
-    },
-)
-async def img(message: Message):
-    if not message.reply_to_message:
-        await message.edit("reply to a media...", del_in=5)
-        return
-    reply_to = message.reply_to_message.message_id
-    await message.edit("converting...", del_in=5)
-    file_name = "paimon_convert.jpg"
-    down_file = os.path.join(Config.DOWN_PATH, file_name)
-    if os.path.isfile(down_file):
-        os.remove(down_file)
-    image = await media_to_image(message)
-    await message.reply_photo(image, reply_to_message_id=reply_to)
