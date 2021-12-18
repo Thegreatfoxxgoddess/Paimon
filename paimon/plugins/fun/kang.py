@@ -267,9 +267,7 @@ def resize_photo(photo: str) -> io.BytesIO:
     return resized_photo
 
 
-KANGING_STR = (
-    "stealing this sticker.... uwu",
-)
+KANGING_STR = ("stealing this sticker.... uwu",)
 
 
 # Based on:
