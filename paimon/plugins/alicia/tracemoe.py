@@ -34,7 +34,7 @@ TRACE_MOE = {}
 
 
 @paimon.on_cmd(
-    "ars",
+    "animers",
     about={
         "header": "Anime Reverse Search",
         "description": "Reverse Search any anime by providing "
