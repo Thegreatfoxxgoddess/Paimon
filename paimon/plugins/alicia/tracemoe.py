@@ -20,6 +20,11 @@ from pyrogram.types import (
     Message,
 )
 from tracemoepy.errors import ServerError
+from .. import BOT_NAME, TRIGGERS as trg, paimon
+from ..utils.helper import check_user, control_user, media_to_image, rand_key
+from ..utils.data_parser import check_if_adult
+from ..utils.db import get_collection
+from .anilist import no_pic
 
 SFW_GRPS = get_collection("SFW_GROUPS")
 DC = get_collection("DISABLED_CMDS")
