@@ -1,4 +1,4 @@
-# anime reverse search 
+# anime reverse search
 
 import os
 
