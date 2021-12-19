@@ -40,8 +40,12 @@ DC = get_collection("DISABLED_CMDS")
 TRACE_MOE = {}
 
 
-@paimon.on_message(filters.command(["reverse", f"reverse{BOT_NAME}"], prefixes=trg))
-@control_user
+@paimon.on_cmd("ars", about={
+    'header': "Anime Reverse Search",
+    'description': "Reverse Search any anime by providing "
+                   "a snap, or short clip of anime.",
+    'usage': "{tr}ars [reply to Photo/Gif/Video]"})
+
 async def trace_bek(client: paimon, message: Message, mdata: dict):
     """Reverse Search Anime Clips/Photos"""
     gid = mdata["chat"]["id"]
