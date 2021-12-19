@@ -24,10 +24,15 @@ from tracemoepy.errors import ServerError
 from .paimon.plugins.alicia import BOT_NAME
 from .paimon.plugins.alicia import TRIGGERS as trg
 from .paimon.plugins.alicia import paimon
+from .paimon.plugins.alicia.anilist import no_pic
 from .paimon.plugins.alicia.utils.data_parser import check_if_adult
 from .paimon.plugins.alicia.utils.db import get_collection
-from .paimon.plugins.alicia.utils.helper import check_user, control_user, media_to_image, rand_key
-from .paimon.plugins.alicia.anilist import no_pic
+from .paimon.plugins.alicia.utils.helper import (
+    check_user,
+    control_user,
+    media_to_image,
+    rand_key,
+)
 
 SFW_GRPS = get_collection("SFW_GROUPS")
 DC = get_collection("DISABLED_CMDS")
