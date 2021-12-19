@@ -8,7 +8,7 @@ from paimon import Message, paimon
 @paimon.on_cmd(
     "neko",
     about={
-        "header": "Obtenha nekos de nekos.life",
+        "header": "Get stuff from nekos.life",
         "usage": "{tr}neko",
     },
 )
@@ -33,7 +33,7 @@ async def random_neko(message: Message):
 @paimon.on_cmd(
     "cat",
     about={
-        "header": "Obtenha gatinhos",
+        "header": "get kittens",
         "usage": "{tr}cat",
     },
 )
@@ -54,7 +54,7 @@ async def random_cat(message: Message):
 @paimon.on_cmd(
     "dog",
     about={
-        "header": "Obtenha doguinhos",
+        "header": "get puppies",
         "usage": "{tr}dog",
     },
 )
