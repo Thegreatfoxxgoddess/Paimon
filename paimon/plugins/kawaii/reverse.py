@@ -1,4 +1,4 @@
-# Author: @Luska1331 and @samuel_ks portado para paimon
+# Author: @Luska1331 and @samuel_ks ported for paimon
 
 import os
 import re
@@ -39,7 +39,7 @@ def GRS(path_to_file):
     headers["sec-ch-ua-mobile"] = "?0"
     headers[
         "Accept-Language"
-    ] = "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7,zh-TW;q=0.6,zh;q=0.5"
+    ] = "en-US;q=0.8,en;q=0.7,pt-BR,pt;q=0.9,zh-TW;q=0.6,zh;q=0.5"
     resp = requests.get(url, headers=headers)
     regex = re.findall('value="(.*?)" aria-label="Pesquisar"', resp.text)
     return fetchUrl, regex[0]
@@ -49,7 +49,7 @@ def GRS(path_to_file):
     "reverse",
     about={
         "header": "Reverse Search",
-        "description": "Faça uma busca a partir de uma imagem",
+        "description": "Reverse Search an image",
         "usage": "{tr}reverse [reply photo or sticker]",
     },
 )
@@ -66,7 +66,7 @@ async def reverse_search(message: Message):
                 reverse = GRS(media)
             except BaseException as error:
                 return await texto.edit_text(f"ERROR: {error}")
-            text = "Resultados da pesauisa: "
+            text = "Search results: "
             if reverse:
                 text += f"[{reverse[1]}]({reverse[0]})"
             else:
@@ -74,10 +74,10 @@ async def reverse_search(message: Message):
             await texto.edit_text(text, parse_mode="md", disable_web_page_preview=True)
         else:
             await texto.edit_text(
-                "Midia não suportada, tente novamente com outro arquivo"
+                "Unsupported media, try again with another file"
             )
         os.remove(media)
     else:
         await message.reply(
-            "Por favor, responda a uma foto ou video para que eu possa pesquisar"
+            "Please reply to a photo or video"
         )
