@@ -87,8 +87,8 @@ class Config:
     ANTISPAM_SENTRY = False
     SPAM_PROTECTION = False
     RUN_DYNO_SAVER = False
-    IMDB_API_ONE_URL = "http://betterimdbot.herokuapp.com/search.php?_={paimon}"
-    IMDB_API_TWO_URL = "http://betterimdbot.herokuapp.com/?tt={imdbttid}"
+    API_ONE_URL = "http://betterimdbot.herokuapp.com/search.php?_={paimon}"
+    API_TWO_URL = "http://betterimdbot.herokuapp.com/?tt={imdbttid}"
     HEROKU_ENV = bool(int(os.environ.get("HEROKU_ENV", "0")))
     HEROKU_APP = (
         heroku3.from_key(HEROKU_API_KEY).apps()[HEROKU_APP_NAME]
