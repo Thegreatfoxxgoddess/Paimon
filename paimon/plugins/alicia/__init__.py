@@ -1,4 +1,5 @@
 import os
+
 from pyrogram import Client
 
 TRIGGERS = os.environ.get("TRIGGERS", "/ !").split()
@@ -8,18 +9,29 @@ BOT_NAME = os.environ.get("BOT_NAME")
 DB_URL = os.environ.get("DATABASE_URL")
 ANILIST_CLIENT = os.environ.get("ANILIST_CLIENT")
 ANILIST_SECRET = os.environ.get("ANILIST_SECRET")
-ANILIST_REDIRECT_URL = os.environ.get("ANILIST_REDIRECT_URL", "https://anilist.co/api/v2/oauth/pin")
+ANILIST_REDIRECT_URL = os.environ.get(
+    "ANILIST_REDIRECT_URL", "https://anilist.co/api/v2/oauth/pin"
+)
 API_ID = int(os.environ.get("API_ID"))
 LOG_CHANNEL_ID = int(os.environ.get("LOG_CHANNEL_ID"))
-OWNER = list(filter(lambda x: x, map(int, os.environ.get("OWNER_ID", "1005170481 972029825").split())))  ## sudos can be included
+OWNER = list(
+    filter(
+        lambda x: x,
+        map(int, os.environ.get("OWNER_ID", "1005170481 972029825").split()),
+    )
+)  # sudos can be included
 
 DOWN_PATH = "paimon/downloads/"
 HELP_DICT = dict()
 
 plugins = dict(root="paimon/plugins")
-paimon = Client("paimon", bot_token=BOT_TOKEN, api_id=API_ID, api_hash=API_HASH, plugins=plugins)
+paimon = Client(
+    "paimon", bot_token=BOT_TOKEN, api_id=API_ID, api_hash=API_HASH, plugins=plugins
+)
 
-HELP_DICT['Misc'] = '''
+HELP_DICT[
+    "Misc"
+] = """
 Group based commands:
 
 /settings - Toggle stuff like whether to allow 18+ stuff in group or whether to notify about aired animes
@@ -31,9 +43,11 @@ Group based commands:
 `/enable anime anilist me user`
 
 /disabled - List out disabled cmds
-'''
+"""
 
-HELP_DICT["Additional"] = """Use /reverse cmd to get reverse search via tracemoepy API
+HELP_DICT[
+    "Additional"
+] = """Use /reverse cmd to get reverse search via tracemoepy API
 __Note: This works best on uncropped anime pic,
 when used on cropped media, you may get result but it might not be too reliable__
 
@@ -44,7 +58,9 @@ Use /watch cmd to get watch order of searched anime
 Use /fillers cmd to get a list of fillers for an anime
 """
 
-HELP_DICT["Anilist"] = """
+HELP_DICT[
+    "Anilist"
+] = """
 Below is the list of basic anilist cmds for info on anime, character, manga, etc.
 
 /anime - Use this cmd to get info on specific anime using keywords (anime name) or Anilist ID
@@ -65,7 +81,9 @@ Below is the list of basic anilist cmds for info on anime, character, manga, etc
 /user - Use this cmd to get info on an anilist user
 """
 
-HELP_DICT["Oauth"] = """
+HELP_DICT[
+    "Oauth"
+] = """
 This includes advanced anilist features
 
 Use /auth or !auth cmd to get details on how to authorize your Anilist account with bot
