@@ -73,11 +73,7 @@ async def reverse_search(message: Message):
                 text += "\n\tLink has not found."
             await texto.edit_text(text, parse_mode="md", disable_web_page_preview=True)
         else:
-            await texto.edit_text(
-                "Unsupported media, try again with another file"
-            )
+            await texto.edit_text("Unsupported media, try again with another file")
         os.remove(media)
     else:
-        await message.reply(
-            "Please reply to a photo or video"
-        )
+        await message.reply("Please reply to a photo or video")
