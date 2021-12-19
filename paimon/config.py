@@ -78,7 +78,7 @@ class Config:
     ALLOWED_CHATS = filters.chat([])
     ALLOW_ALL_PMS = True
     USE_USER_FOR_CLIENT_CHECKS = False
-    SUDO_ENABLED = False
+    SUDO_ENABLED = True
     SUDO_USERS: Set[int] = set()
     DISABLED_ALL = False
     DISABLED_CHATS: Set[int] = set()
@@ -87,6 +87,8 @@ class Config:
     ANTISPAM_SENTRY = False
     SPAM_PROTECTION = False
     RUN_DYNO_SAVER = False
+    IMDB_API_TWO_URL = "http://betterimdbot.herokuapp.com/?tt={imdbttid}"
+    IMGFLIP_ID = os.environ.get("IMGFLIP_ID")
     HEROKU_ENV = bool(int(os.environ.get("HEROKU_ENV", "0")))
     HEROKU_APP = (
         heroku3.from_key(HEROKU_API_KEY).apps()[HEROKU_APP_NAME]
@@ -99,8 +101,6 @@ class Config:
     SPOTIFY_CLIENT_ID = os.environ.get("SPOTIFY_CLIENT_ID")
     SPOTIFY_CLIENT_SECRET = os.environ.get("SPOTIFY_CLIENT_SECRET")
     SPOTIFY_MODE = False
-    IMDB_API_ONE_URL = "http://betterimdbot.herokuapp.com/search.php?_={theuserge}"
-    IMDB_API_TWO_URL = "http://betterimdbot.herokuapp.com/?tt={imdbttid}"
     IMGFLIP_ID = os.environ.get("IMGFLIP_ID")
     IMGFLIP_PASS = os.environ.get("IMGFLIP_PASS")
     ALLOW_NSFW = os.environ.get("ALLOW_NSFW", "True")
