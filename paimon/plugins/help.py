@@ -411,14 +411,14 @@ if paimon.has_bot:
         if plg.is_loaded:
             tmp_btns.append(
                 InlineKeyboardButton(
-                    "❎ Unload",
+                    "Unload",
                     callback_data=f"unload({'|'.join(pos_list[:3])})".encode(),
                 )
             )
         else:
             tmp_btns.append(
                 InlineKeyboardButton(
-                    "✅ Load",
+                    "Load",
                     callback_data=f"load({'|'.join(pos_list[:3])})".encode(),
                 )
             )
@@ -439,7 +439,7 @@ if paimon.has_bot:
         buttons = parse_buttons(
             p_num,
             "|".join(pos_list[:3]),
-            lambda x: f"⚖ {x}" if is_filter(x) else f" {x}",
+            lambda x: f"{x}" if is_filter(x) else f" {x}",
             (flt.name for flt in plg.commands + plg.filters),
         )
         buttons = buttons[:-1] + [tmp_btns] + [buttons[-1]]
@@ -470,25 +470,25 @@ if paimon.has_bot:
         if flt.is_loaded:
             tmp_btns.append(
                 InlineKeyboardButton(
-                    "❎ Unload", callback_data=f"unload({cur_pos})".encode()
+                    "Unload", callback_data=f"unload({cur_pos})".encode()
                 )
             )
         else:
             tmp_btns.append(
                 InlineKeyboardButton(
-                    "✅ Load", callback_data=f"load({cur_pos})".encode()
+                    "Load", callback_data=f"load({cur_pos})".encode()
                 )
             )
         if flt.is_enabled:
             tmp_btns.append(
                 InlineKeyboardButton(
-                    "➖ Disable", callback_data=f"disable({cur_pos})".encode()
+                    "Disable", callback_data=f"disable({cur_pos})".encode()
                 )
             )
         else:
             tmp_btns.append(
                 InlineKeyboardButton(
-                    "➕ Enable", callback_data=f"enable({cur_pos})".encode()
+                    "Enable", callback_data=f"enable({cur_pos})".encode()
                 )
             )
         buttons = [tmp_btns] + buttons
@@ -824,11 +824,11 @@ if paimon.has_bot:
                 buttons = [
                     [
                         InlineKeyboardButton(
-                            "🔥 paimon Repo",
+                            "Paimon Repo 💕",
                             url="https://github.com/thegreatfoxxgoddess/Paimon",
                         ),
                         InlineKeyboardButton(
-                            "🚀 Deploy Heroku",
+                            "Deploy Heroku 🚀",
                             url="https://heroku.com/deploy?template=https://github.com/thegreatfoxxgoddess/paimon-Deploy",
                         ),
                     ],
