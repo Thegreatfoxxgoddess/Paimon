@@ -475,9 +475,7 @@ if paimon.has_bot:
             )
         else:
             tmp_btns.append(
-                InlineKeyboardButton(
-                    "Load", callback_data=f"load({cur_pos})".encode()
-                )
+                InlineKeyboardButton("Load", callback_data=f"load({cur_pos})".encode())
             )
         if flt.is_enabled:
             tmp_btns.append(
