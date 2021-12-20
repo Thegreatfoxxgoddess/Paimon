@@ -77,7 +77,7 @@ async def notice_(_, c_q: CallbackQuery):
             )
             try:
                 await c_q.edit_message_text(
-                    f"**Attention everyone!!!**\seen by:** {len(users_)} people.",
+                    f"Attention everyone!!!\nseen by :  {len(users_)} people.",
                     reply_markup=btn_,
                 )
             except MessageNotModified:
