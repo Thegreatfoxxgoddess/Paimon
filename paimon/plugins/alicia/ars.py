@@ -1,10 +1,9 @@
 # anime reverse search
 
 import os
-
 import tracemoepy
 from aiohttp import ClientSession
-
+from tracemoepy.errors import ServerError
 from paimon import Config, Message, paimon
 from paimon.utils import progress, take_screen_shot
 
