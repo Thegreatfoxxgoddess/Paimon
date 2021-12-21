@@ -14,8 +14,22 @@ NSFW = [x for x in dir(NSFWImageTags) if not x.startswith("__")]
 SFW = [z for z in dir(SFWImageTags) if not z.startswith("__")]
 
 
+neko_help = "<b>NSFW</b> :  "
+for i in NSFW:
+    neko_help += f"<code>{i.lower()}</code>   "
+neko_help += "\n\n<b>SFW</b> :  "
+for m in SFW:
+    neko_help += f"<code>{m.lower()}</code>   "
+
+
 @paimon.on_cmd(
     "kiss",
+    about={
+        "header": "Get NSFW / SFW stuff from nekos.life",
+        "flags": {"nsfw": "For random NSFW"},
+        "usage": "{tr}nekos\n{tr}nekos -nsfw\n{tr}nekos [Choice]",
+        "Choice": neko_help,
+    },
 )
 async def neko_life(message: Message):
     choice = "kiss"
@@ -31,7 +45,10 @@ async def neko_life(message: Message):
             if await age_verification(message):
                 return
             link = (await client.image(NSFWImageTags[input_choice])).url
-
+        else:
+            await message.err(
+                "Choose a valid Input !, See Help for more info.", del_in=5
+            )
             return
     else:
         link = (await client.random_image()).url
