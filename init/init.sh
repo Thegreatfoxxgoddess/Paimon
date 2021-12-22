@@ -15,9 +15,9 @@ trap 'echo hi' USR1
 initpaimon() {
     printLogo
     assertPrerequisites
-    sendMessage "Inicializando paimon ..."
+    sendMessage "Initializing paimon ..."
     assertEnvironment
-    editLastMessage "Iniciando paimon ..."
+    editLastMessage "Starting paimon ..."
     printLine
 }
 
@@ -27,18 +27,18 @@ startpaimon() {
 }
 
 stoppaimon() {
-    sendMessage "Finalizando paimon ..."
+    sendMessage "Finishing paimon ..."
     endLogBotPolling
 }
 
 handleSigTerm() {
-    log "Saindo com SIGTERM (143) ..."
+    log "logging out with SIGTERM (143) ..."
     stoppaimon
     exit 143
 }
 
 handleSigInt() {
-    log "Saindo com SIGINT (130) ..."
+    log "logging out with SIGINT (130) ..."
     stoppaimon
     exit 130
 }
