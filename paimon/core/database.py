@@ -17,26 +17,26 @@ from paimon import logging, Config, logbot
 _LOG = logging.getLogger(__name__)
 _LOG_STR = "$$$>>> %s <<<$$$"
 
-logbot.edit_last_msg("Conectando-se a Database ...", _LOG.info, _LOG_STR)
+logbot.edit_last_msg("Connecting to Database ...", _LOG.info, _LOG_STR)
 
 _MGCLIENT: AgnosticClient = AsyncIOMotorClient(Config.DB_URI)
 _RUN = asyncio.get_event_loop().run_until_complete
 
 if "paimon" in _RUN(_MGCLIENT.list_database_names()):
-    _LOG.info(_LOG_STR, "Banco de dados paimon encontrado :) => Agora logando nele...")
+    _LOG.info(_LOG_STR, "Paimon Database Found :) => Agora logando nele...")
 else:
-    _LOG.info(_LOG_STR, "Banco de dados paimon não encontrado :( => Criando nova Database...")
+    _LOG.info(_LOG_STR, "Paimon database not found :( => Creating new Database...")
 
 _DATABASE: AgnosticDatabase = _MGCLIENT["paimon"]
 _COL_LIST: List[str] = _RUN(_DATABASE.list_collection_names())
 
 
 def get_collection(name: str) -> AgnosticCollection:
-    """ Criar ou obter coleção de seu banco de dados """
+    """ Create or get collection from your database """
     if name in _COL_LIST:
-        _LOG.debug(_LOG_STR, f"{name} Coleção encontrada :) => Agora logando nela...")
+        _LOG.debug(_LOG_STR, f"{name} Found collection :) => now logging into it...")
     else:
-        _LOG.debug(_LOG_STR, f"{name} Coleção não encontrada :( => Criando nova coleção...")
+        _LOG.debug(_LOG_STR, f"{name} Collection not found :( => creating new collection...")
     return _DATABASE[name]
 
 
