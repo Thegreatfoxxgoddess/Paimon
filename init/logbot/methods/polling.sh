@@ -19,7 +19,7 @@ endLogBotPolling() {
 _polling() {
     local cmd func args
     _resetConnection
-    log "LogBot Polling Iniciado !"
+    log "LogBot Polling Started !"
     while true; do
         cmd="$(head -n 1 $_input 2> /dev/null && sed -i '1d' $_input)"
         test -z "$cmd" && _pollsleep && continue
@@ -39,7 +39,7 @@ _polling() {
         esac
         sleep 1
     done
-    log "LogBot Polling Finalizado !"
+    log "LogBot Polling Finished !"
     _resetConnection
     exit 0
 }
