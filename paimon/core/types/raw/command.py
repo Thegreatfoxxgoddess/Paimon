@@ -35,7 +35,7 @@ class Command(Filter):
         """ parse command """
         pattern = f"^(?:\\{trigger}|\\{Config.SUDO_TRIGGER}){command.lstrip('^')}" if trigger \
             else f"^{command.lstrip('^')}"
-        if [i for i in '^()[]+*.l\\|?:$' if i in command]:
+        if [i for i in '^()[]+*.\\|?:$' if i in command]:
             match = re.match("(\\w[\\w_]*)", command)
             cname = match.groups()[0] if match else ''
             cname = name or cname
