@@ -298,7 +298,7 @@ async def paste_(message: Message) -> None:
         else:
             await message.edit(
                 f"**{service.get_name().title()}** [URL]({url})",
-                disable_web_page_preview=True,
+                disable_web_page_preview=False,
             )
 
 
