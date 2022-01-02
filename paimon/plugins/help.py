@@ -159,8 +159,7 @@ if paimon.has_bot:
     def check_owner(func):
         async def wrapper(_, c_q: CallbackQuery):
             if c_q.from_user and (
-                c_q.from_user.id
-                in Config.OWNER_ID
+                c_q.from_user.id in Config.OWNER_ID
                 or c_q.from_user.id in Config.SUDO_USERS
             ):
                 await c_q.answer()
