@@ -186,17 +186,17 @@ if paimon.has_bot:
                 await asyncio.sleep(e.x)
             except BadRequest:
                 pass
-            ping = "ping : {} ᴍs\n"
+            ping = "ᵖᶦⁿᵍ✨ : {} ᴍs\n"
 
-        alive_s = "PLUGINS + : {}\n".format(_parse_arg(Config.LOAD_UNOFFICIAL_PLUGINS))
+        alive_s = "ᵖˡᵘᵍᶦⁿˢ🌿 + : {}\n".format(_parse_arg(Config.LOAD_UNOFFICIAL_PLUGINS))
 
-        alive_s += f"👥 ᵃⁿᵗᶦˢᵖᵃᵐ : {_parse_arg(Config.SUDO_ENABLED)}\n"
-        alive_s += f"🚨 ᵃⁿᵗᶦˢᵖᵃᵐ : {_parse_arg(Config.ANTISPAM_SENTRY)}\n"
+        alive_s += f"⚡ ᵃⁿᵗᶦˢᵖᵃᵐ : {_parse_arg(Config.SUDO_ENABLED)}\n"
+        alive_s += f"🌈 ᵃⁿᵗᶦˢᵖᵃᵐ : {_parse_arg(Config.ANTISPAM_SENTRY)}\n"
         if Config.HEROKU_APP and Config.RUN_DYNO_SAVER:
-            alive_s += "⛽️ ᵈʸⁿᵒ : ACTIVATED \n"
-        alive_s += f"💬 ᵇᵒᵗ ᶠᵒʳʷᵃʳᵈ : {_parse_arg(Config.BOT_FORWARDS)}\n"
-        alive_s += f"🛡 ᵖᵐ ᵇˡᵒᶜᵏ : {_parse_arg(not Config.ALLOW_ALL_PMS)}\n"
-        alive_s += f"📝 ᵖᵐ ˡᵒᵍ  : {_parse_arg(Config.PM_LOGGING)}"
+            alive_s += "🌊 ᵈʸⁿᵒ : ACTIVATED \n"
+        alive_s += f"🌳 ᵇᵒᵗ ᶠᵒʳʷᵃʳᵈ : {_parse_arg(Config.BOT_FORWARDS)}\n"
+        alive_s += f"🍂🛡 ᵖᵐ ᵇˡᵒᶜᵏ : {_parse_arg(not Config.ALLOW_ALL_PMS)}\n"
+        alive_s += f"🌸 ᵖᵐ ˡᵒᵍ  : {_parse_arg(Config.PM_LOGGING)}"
         if allow:
             end = datetime.now()
             m_s = (end - start).microseconds / 1000
@@ -255,8 +255,8 @@ class Bot_Alive:
     def alive_buttons() -> InlineKeyboardMarkup:
         buttons = [
             [
-                InlineKeyboardButton(text="💕  config", callback_data="settings_btn"),
-                InlineKeyboardButton(text="💭  status", callback_data="status_alive"),
+                InlineKeyboardButton(text="🍃  config", callback_data="settings_btn"),
+                InlineKeyboardButton(text="🍂  status", callback_data="status_alive"),
             ]
         ]
         return InlineKeyboardMarkup(buttons)
