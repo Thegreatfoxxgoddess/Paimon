@@ -1,18 +1,19 @@
-# plugin made for USERGE-X by @Kakashi_HTK(TG)/@ashwinstr(GH)
+# plugin made for paimon-X by @Kakashi_HTK(TG)/@ashwinstr(GH)
 # before porting please ask to Kakashi
 
 
 import asyncio
 
 from pyrogram.errors import FloodWait
-from userge import Message, userge
-from userge.helpers import admin_or_creator
 
-CHANNEL = userge.getCLogger(__name__)
+from paimon import Message, paimon
+from paimon.helpers import admin_or_creator
+
+CHANNEL = paimon.getCLogger(__name__)
 
 
-@userge.on_cmd(
-    "channelcpy",
+@paimon.on_cmd(
+    "copy_ch",
     about={
         "header": "copy your channel content",
         "description": "copy your channel content from one channel to another\nNOTE: it'll post in latest to older order",
@@ -22,14 +23,14 @@ CHANNEL = userge.getCLogger(__name__)
 async def copy_channel_(message: Message):
     """copy channel content"""
     await message.edit("`Checking channels...`")
-    me_ = await userge.get_me()
+    me_ = await paimon.get_me()
     input_ = message.input_str
     from_chann = input_.split()[0]
     to_chann = input_.split()[1]
     try:
         if from_chann.isdigit():
             from_chann = int(from_chann)
-        from_ = await userge.get_chat(from_chann)
+        from_ = await paimon.get_chat(from_chann)
     except BaseException:
         return await message.edit(
             f"`Given from_channel '{from_chann}' is invalid...`", del_in=5
@@ -37,7 +38,7 @@ async def copy_channel_(message: Message):
     try:
         if to_chann.isdigit():
             to_chann = int(to_chann)
-        to_ = await userge.get_chat(to_chann)
+        to_ = await paimon.get_chat(to_chann)
     except BaseException:
         return await message.edit(
             f"`Given to_channel '{to_chann}' is invalid...`", del_in=5
@@ -61,11 +62,11 @@ async def copy_channel_(message: Message):
     await message.edit(
         f"`Copying posts from `<b>{from_.title}</b>` to `<b>{to_.title}</b>..."
     )
-    async for post in userge.search_messages(from_.id):
+    async for post in paimon.search_messages(from_.id):
         total += 1
         try:
             # first posting, which'll be in reverse order of original posts
-            first_post = await userge.copy_messages(to_.id, from_.id, post.message_id)
+            first_post = await paimon.copy_messages(to_.id, from_.id, post.message_id)
             del_list.append(first_post.message_id)
         except FloodWait as e:
             await asyncio.sleep(e.x + 3)
@@ -75,11 +76,11 @@ async def copy_channel_(message: Message):
     for post_again in del_list:
         try:
             # second posting to correct the order
-            await userge.copy_messages(message.chat.id, message.chat.id, post_again)
+            await paimon.copy_messages(message.chat.id, message.chat.id, post_again)
         except FloodWait as e:
             await asyncio.sleep(e.x + 3)
     try:
-        await userge.delete_messages(del_list)
+        await paimon.delete_messages(del_list)
     except FloodWait as e:
         await asyncio.sleep(e.x + 3)
     out_ = f"`Forwarded `<b>{total}</b>` from `<b>{from_.title}</b>` to `<b>{to_.title}</b>`.`"
