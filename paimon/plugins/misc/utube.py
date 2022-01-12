@@ -36,7 +36,7 @@ LOGGER = paimon.getLogger(__name__)
 )
 async def ytinfo(message: Message):
     """get info from a link"""
-    await message.edit("Hold on \u23f3 ..")
+    await message.edit("`processing...`")
     _exracted = await _yt_getInfo(message.input_or_reply_str)
     if isinstance(_exracted, ytdl.utils.YoutubeDLError):
         await message.err(str(_exracted))
@@ -124,7 +124,7 @@ async def ytDown(message: Message):
                 )
             paimon.loop.create_task(message.edit(out))
 
-    await message.edit("Hold on \u23f3 ..")
+    await message.edit("`Processing...`")
     if bool(message.flags):
         desiredFormat1 = str(message.flags.get("a", ""))
         desiredFormat2 = str(message.flags.get("v", ""))
@@ -177,7 +177,7 @@ async def ytDown(message: Message):
 )
 async def ytdes(message: Message):
     """get description from a link"""
-    await message.edit("Hold on \u23f3 ..")
+    await message.edit("`Processing...`")
     description = await _yt_description(message.input_or_reply_str)
     if isinstance(description, ytdl.utils.YoutubeDLError):
         await message.err(str(description))
