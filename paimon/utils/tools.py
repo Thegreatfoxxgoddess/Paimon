@@ -56,7 +56,7 @@ def humanbytes(size: float) -> str:
 
 
 def import_ytdl():
-    """ import youtube_dl dynamically """
+    """import youtube_dl dynamically"""
     req_module = os.environ.get("YOUTUBE_DL_PATH", "youtube_dl")
     try:
         return importlib.import_module(req_module)
