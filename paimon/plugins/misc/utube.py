@@ -23,7 +23,6 @@ from paimon.utils import humanbytes, import_ytdl, time_formatter
 from .upload import upload
 
 LOGGER = paimon.getLogger(__name__)
-ytdl = import_ytdl()
 
 
 @paimon.on_cmd(
