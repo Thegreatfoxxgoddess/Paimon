@@ -18,7 +18,7 @@ import wget
 import youtube_dl as ytdl
 
 from paimon import Config, Message, paimon, pool
-from paimon.utils import humanbytes, import_ytdl, time_formatter
+from paimon.utils import humanbytes, time_formatter
 
 from .upload import upload
 
