@@ -55,6 +55,16 @@ def humanbytes(size: float) -> str:
     return "{:.2f} {}B".format(size, power_dict[t_n])
 
 
+def import_ytdl():
+    """ import youtube_dl dynamically """
+    req_module = os.environ.get("YOUTUBE_DL_PATH", "youtube_dl")
+    try:
+        return importlib.import_module(req_module)
+    except ModuleNotFoundError:
+        _LOG.warning(f"please fix your requirements.txt file [{req_module}]")
+        raise
+
+
 def time_formatter(seconds: float) -> str:
     """humanize time"""
     minutes, seconds = divmod(int(seconds), 60)
