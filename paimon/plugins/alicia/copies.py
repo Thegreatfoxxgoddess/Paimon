@@ -8,7 +8,7 @@ from pyrogram.errors import FloodWait, PeerIdInvalid
 
 from paimon import Config, Message, get_collection, paimon
 from paimon.helpers import admin_or_creator, msg_type
-from paimon.helpers.jutsu_tools import get_response
+from paimon.helpers.paimon_tools import get_response
 
 COPIED = get_collection("COPIED")
 
