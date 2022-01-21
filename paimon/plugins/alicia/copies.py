@@ -85,7 +85,7 @@ async def copy_channel_(message: Message):
         return await message.edit(
             "`Something went wrong, see log channel for error...`"
         )
-    out_ = f"`Forwarded `<b>{total}</b>` from `<b>{from_.title}</b>` to `<b>{to_.title}</b>`.`"
+    out_ = f"`Forwarded {total} from {from_.title} to <b>{to_.title}</b>.`"
     await message.edit(out_)
     await CHANNEL.log(out_)
 
