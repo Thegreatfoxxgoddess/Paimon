@@ -1,10 +1,9 @@
 import asyncio
 
-from pyrogram.errors import FloodWait, PeerIdInvalid
+from pyrogram.errors import FloodWait
 
-from paimon import Config, Message, get_collection, paimon
-from paimon.helpers import admin_or_creator, msg_type
-from paimon.helpers.paimon_tools import get_response
+from paimon import Message, get_collection, paimon
+from paimon.helpers import admin_or_creator
 
 COPIED = get_collection("COPIED")
 
@@ -76,13 +75,15 @@ async def copy_channel_(message: Message):
         for one_msg in list_:
             await paimon.copy_message(to_.id, from_.id, one_msg)
             total += 1
-    except FloodWait as e:
+    except FloodWait:
         await asyncio.sleep(delay)
     except Exception as e:
         await CHANNEL.log(f"ERROR: {str(e)}")
         return await message.edit(
             "`Something went wrong, see log channel for error...`"
         )
-    out_ = f"`Forwarded <b>{total}</b> from <b>{from_.title}</b> to <b>{to_.title}</b>`.`"
+    out_ = (
+        f"`Forwarded <b>{total}</b> from <b>{from_.title}</b> to <b>{to_.title}</b>`.`"
+    )
     await message.edit(out_)
     await CHANNEL.log(out_)
