@@ -53,16 +53,7 @@ async def copy_channel_(message: Message):
             f"`Given to_channel '{to_chann}' is invalid...`", del_in=5
         )
     if from_.type != "channel" or to_.type != "channel":
-        delay = split(" ", maxsplit=1)
-    try:
-        delay = float(delay) if "." in delay else int(delay)
-    except ValueError as e:
-        await message.edit(e)
-        await message.reply_sticker(
-            sticker="CAACAgIAAx0CW6USIQACCwVh62uAu8M5kiBQgKbj8R3s9xEtQQAC6AAD-H-lCtLIOj4Om6I7HgQ"
-        )
-        return
-    return await message.edit(
+        return await message.edit(
         "`One or both of the given chat is/are not channel...`", del_in=5
     )
     from_owner = await admin_or_creator(from_.id, me_.id)
