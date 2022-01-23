@@ -54,8 +54,8 @@ async def copy_channel_(message: Message):
         )
     if from_.type != "channel" or to_.type != "channel":
         return await message.edit(
-        "`One or both of the given chat is/are not channel...`", del_in=5
-    )
+            "`One or both of the given chat is/are not channel...`", del_in=5
+        )
     from_owner = await admin_or_creator(from_.id, me_.id)
     if not from_owner["is_admin"] and not from_owner["is_creator"]:
         return await message.edit(
