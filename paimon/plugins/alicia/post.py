@@ -56,7 +56,7 @@ async def copy_channel_(message: Message):
         )
     if from_.type != "channel" or to_.type != "channel":
       delay = split(" ", maxsplit=1)
-    try
+    try:
       delay = float(delay) if "." in delay else int(delay)
     except ValueError as e:
             await message.edit(e)
