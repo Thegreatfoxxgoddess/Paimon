@@ -63,6 +63,15 @@ async def copy_channel_(message: Message):
         )
     to_admin = await admin_or_creator(to_.id, me_.id)
     if not to_admin["is_admin"] and not to_admin["is_creator"]:
+        delay = split(" ", maxsplit=1)
+    try:
+        delay = float(delay) if "." in delay else int(delay)
+    except ValueError as e:
+        await message.edit(e)
+        await message.reply_sticker(
+            sticker="CAACAgIAAx0CW6USIQACCwVh62uAu8M5kiBQgKbj8R3s9xEtQQAC6AAD-H-lCtLIOj4Om6I7HgQ"
+        )
+        return
         return await message.edit(
             f"Need admin rights to copy posts to {to_.title}...", del_in=5
         )
