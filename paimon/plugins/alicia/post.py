@@ -58,11 +58,11 @@ async def copy_channel_(message: Message):
     try:
         delay = float(delay) if "." in delay else int(delay)
     except ValueError as e:
-    await message.edit(e)
-    await message.reply_sticker(
+        await message.edit(e)
+        await message.reply_sticker(
             sticker="CAACAgIAAx0CW6USIQACCwVh62uAu8M5kiBQgKbj8R3s9xEtQQAC6AAD-H-lCtLIOj4Om6I7HgQ"
         )
-    return
+        return
     return await message.edit(
         "`One or both of the given chat is/are not channel...`", del_in=5
     )
