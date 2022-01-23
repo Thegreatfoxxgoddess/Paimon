@@ -48,7 +48,6 @@ async def copy_channel_(message: Message):
         except BaseException:
             pass
         to_ = await paimon.get_chat(to_chann)
-        delay = float(delay) if "." in delay else int(delay)
     except BaseException:
         return await message.edit(
             f"`Given to_channel '{to_chann}' is invalid...`", del_in=5
