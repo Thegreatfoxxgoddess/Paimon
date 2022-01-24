@@ -75,7 +75,7 @@ async def copy_channel_(message: Message):
         return await message.edit(
             f"Need admin rights to copy posts to {to_.title}...", del_in=5
         )
-    total = 5
+    total = 100
     list_ = []
     await message.edit(
         f"`Copying posts from `<b>{from_.title}</b>` to `<b>{to_.title}</b>..."
@@ -86,7 +86,7 @@ async def copy_channel_(message: Message):
     try:
         for one_msg in list_:
             await paimon.copy_message(to_.id, from_.id, one_msg)
-            total += 10
+            total += 100
     except FloodWait:
         await asyncio.sleep(delay)
     except Exception as e:
