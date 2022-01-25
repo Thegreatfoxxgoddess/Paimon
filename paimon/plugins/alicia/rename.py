@@ -1,12 +1,13 @@
 # kang?
 import io
 import os
+import re
+import time
 from datetime import datetime
 from pathlib import Path
 
-
 @paimon.on_cmd(
-    "rename",
+    "r",
     about={
         "header": "Rename telegram files",
         "flags": {"-d": "upload as document", "-wt": "without thumb"},
@@ -26,7 +27,6 @@ async def rename_(message: Message):
         await _handle_message(message)
     else:
         await message.edit("Please read `.help rename`", del_in=5)
-
 
 async def upload(
     message: Message,
