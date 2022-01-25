@@ -1,10 +1,9 @@
 # kang?
 import io
 import os
-import re
-import time
 from datetime import datetime
 from pathlib import Path
+
 
 @paimon.on_cmd(
     "r",
@@ -27,6 +26,7 @@ async def rename_(message: Message):
         await _handle_message(message)
     else:
         await message.edit("Please read `.help rename`", del_in=5)
+
 
 async def upload(
     message: Message,
