@@ -109,7 +109,7 @@ async def helpme(message: Message) -> None:
             if cat == "plugins":
                 continue
             out_str += (
-                f"    {_CATEGORY.get(cat, '📁')} <b>{cat}</b> "
+                f" {_CATEGORY.get(cat, '📁')} <b>{cat}</b> "
                 f"(<code>{len(cat_plugins[cat])}</code>) :   <code>"
                 + "</code>    <code>".join(sorted(cat_plugins[cat]))
                 + "</code>\n\n"
