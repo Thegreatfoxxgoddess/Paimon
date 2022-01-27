@@ -12,8 +12,8 @@ from paimon import Config, Message, paimon
 async def webss(message: Message):
     reply = message.reply_to_message
     if reply:
-        replied = reply.message_id
-    if not Config.GOOGLE_CHROME_BIN is None:
+        reply.message_id
+    if Config.GOOGLE_CHROME_BIN is not None:
         await message.err("need to install Google Chrome. Module Stopping")
         return
     link_match = match(r"\bhttps?://.*\.\S+", message.input_str)
