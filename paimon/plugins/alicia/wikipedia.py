@@ -1,21 +1,24 @@
-
 # All rights reserved.
 
 import wikipedia
 
-from paimon import paimon, Message
+from paimon import Message, paimon
 
 
-@paimon.on_cmd("wiki", about={
-    'header': "do a Wikipedia search",
-    'flags': {'-l': "limit the number of returned results (defaults to 5)"},
-    'usage': "{tr}wiki [flags] [query | reply to msg]",
-    'examples': "{tr}wiki -l5 paimon"})
+@paimon.on_cmd(
+    "wiki",
+    about={
+        "header": "do a Wikipedia search",
+        "flags": {"-l": "limit the number of returned results (defaults to 5)"},
+        "usage": "{tr}wiki [flags] [query | reply to msg]",
+        "examples": "{tr}wiki -l5 paimon",
+    },
+)
 async def wiki_pedia(message: Message):
     await message.edit("Processing ...")
     query = message.filtered_input_str
     flags = message.flags
-    limit = int(flags.get('-l', 5))
+    limit = int(flags.get("-l", 5))
     if message.reply_to_message:
         query = message.reply_to_message.text
     if not query:
@@ -35,5 +38,6 @@ async def wiki_pedia(message: Message):
         if i == limit:
             break
     output = f"**Wikipedia Search:**\n`{query}`\n\n**Results:**\n{output}"
-    await message.edit_or_send_as_file(text=output, caption=query,
-                                       disable_web_page_preview=True)
+    await message.edit_or_send_as_file(
+        text=output, caption=query, disable_web_page_preview=True
+    )
