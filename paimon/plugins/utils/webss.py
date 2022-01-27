@@ -11,14 +11,13 @@ from paimon import Config, Message, paimon
 @paimon.on_cmd("webss", about={"header": "Get snapshot of a website"})
 async def webss(message: Message):
     reply = message.reply_to_message
-    input_url = None
     if message.input_str:
-        input_url = message.input_str
+        message.input_str
     elif reply:
         if reply.text:
-            input_url = reply.text
+            reply.text
         elif reply.caption:
-            input_url = reply.caption
+            reply.caption
     if Config.GOOGLE_CHROME_BIN is not None:
         await message.err("need to install Google Chrome. Module Stopping")
         return
