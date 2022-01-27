@@ -24,6 +24,7 @@ from .sys_tools import SafeDict, get_import_path, secure_text, terminate
 from .tools import sort_file_name_key  # noqa
 from .tools import (
     clean_obj,
+    demojify,
     get_file_id,
     get_file_id_of_media,
     humanbytes,
@@ -37,5 +38,4 @@ from .tools import (
     sublists,
     take_screen_shot,
     time_formatter,
-    demojify,
 )
