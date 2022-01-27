@@ -188,3 +188,10 @@ def clean_obj(obj, convert: bool = False):
     if isinstance(obj, dict):
         return {key: clean_obj(value) for key, value in obj.items() if key != "_"}
     return obj
+
+
+def sort_file_name_key(file_name: str) -> tuple:
+    """ sort key for file names """
+    if not isinstance(file_name, str):
+        file_name = str(file_name)
+    return tuple(_sort_algo(_PTN_SPLIT.split(file_name.lower())))
