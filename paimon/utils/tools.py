@@ -65,6 +65,21 @@ def import_ytdl():
         raise
 
 
+def demojify(string: str) -> str:
+    """ Remove emojis and other non-safe characters from string """
+    return get_emoji_regexp().sub(u'', string)
+
+
+def get_file_id_of_media(message: 'paimon.Message') -> Optional[str]:
+    """ get file_id """
+    file_ = message.audio or message.animation or message.photo \
+        or message.sticker or message.voice or message.video_note \
+        or message.video or message.document
+    if file_:
+        return file_.file_id
+    return None
+
+
 def time_formatter(seconds: float) -> str:
     """humanize time"""
     minutes, seconds = divmod(int(seconds), 60)
