@@ -41,17 +41,17 @@ from .utils.notes import get_inote
 CHANNEL = paimon.getCLogger(__name__)
 
 _CATEGORY = {
-    "admin": "🔹",
-    "fun": "🔹",
-    "misc": "🔹",
-    "tools": "🔹",
-    "utils": "🔹",
-    "xtra": "🔹",
-    "temp": "🔹",
-    "plugins": "🔹",
-    "bot": "🔹",
-    "custom": "🔹",
-    "kawaii": "🔹",
+    "admin": "📁",
+    "fun": "📁",
+    "misc": "📁",
+    "tools": "📁",
+    "utils": "📁",
+    "xtra": "📁",
+    "temp": "📁",
+    "plugins": "📁",
+    "bot": "📁",
+    "custom": "📁",
+    "kawaii": "📁",
 }
 # Database
 SEEN_BY = get_collection("SEEN_BY")
@@ -68,7 +68,7 @@ REPO_X = InlineQueryResultArticle(
         [
             [
                 InlineKeyboardButton(
-                    "paimon repo", url="https://github.com/thegreatfoxxgoddess/Paimon"
+                    "paimon repo ✨", url="https://github.com/thegreatfoxxgoddess/Paimon"
                 ),
                 InlineKeyboardButton(
                     "🚀 Deploy Heroku",
@@ -115,7 +115,7 @@ async def helpme(message: Message) -> None:
                 + "</code>\n\n"
             )
         out_str += (
-            f"""📕 <mb>Use:</b>  <code>{Config.CMD_TRIGGER}help [plugin name]</code>"""
+            f"""<mb>Use:</b>  <code>{Config.CMD_TRIGGER}help [plugin name]</code>"""
         )
     else:
         key = message.input_str
@@ -138,7 +138,7 @@ async def helpme(message: Message) -> None:
                     f"    ▪️ <b>cmd:</b>  <code>{cmd.name}</code>\n"
                     f"    ▪️ <b>info:</b>  <i>{cmd.doc}</i>\n\n"
                 )
-            out_str += f"""📕 <b>Use:</b>  <code>{Config.CMD_TRIGGER}help [command name]</code>"""
+            out_str += f"""<b>Use:</b>  <code>{Config.CMD_TRIGGER}help [command name]</code>"""
         else:
             commands = paimon.manager.enabled_commands
             key = key.lstrip(Config.CMD_TRIGGER)
@@ -166,10 +166,10 @@ if paimon.has_bot:
                 try:
                     await func(c_q)
                 except MessageNotModified:
-                    await c_q.answer("Nothing found to update 🤷‍♂️", show_alert=True)
+                    await c_q.answer("Nothing found to update", show_alert=True)
                 except MessageIdInvalid:
                     await c_q.answer(
-                        "I do not have permission to edit this 😔",
+                        "I do not have permission to edit this.",
                         show_alert=True,
                     )
             else:
@@ -202,7 +202,7 @@ if paimon.has_bot:
             buttons = parse_buttons(
                 p_num,
                 cur_pos,
-                lambda x: f"🔹 {x}",
+                lambda x: f"📂 {x}",
                 paimon.manager.get_all_plugins()[pos_list[-1]],
             )
         elif len(pos_list) == 3:
@@ -336,11 +336,11 @@ if paimon.has_bot:
             pairs = pairs[current_page * rows : (current_page + 1) * rows] + [
                 [
                     InlineKeyboardButton(
-                        "⏪ Previous",
+                        "Previous",
                         callback_data=f"({cur_pos})prev({current_page})".encode(),
                     ),
                     InlineKeyboardButton(
-                        "⏩ Next",
+                        "Next",
                         callback_data=f"({cur_pos})next({current_page})".encode(),
                     ),
                 ],
@@ -366,7 +366,7 @@ if paimon.has_bot:
             )
             if len(cur_pos.split("|")) > 2:
                 tmp_btns.append(
-                    InlineKeyboardButton("🖥 Menu Principal", callback_data="mm")
+                    InlineKeyboardButton("Main Menu", callback_data="mm")
                 )
                 tmp_btns.append(
                     InlineKeyboardButton(
@@ -377,7 +377,7 @@ if paimon.has_bot:
             cur_clnt = "USER" if Config.USE_USER_FOR_CLIENT_CHECKS else "BOT"
             tmp_btns.append(
                 InlineKeyboardButton(
-                    f"🔩 client for checks and sudo : {cur_clnt}",
+                    f"client for checks and sudo : {cur_clnt}",
                     callback_data="chgclnt",
                 )
             )
@@ -396,7 +396,7 @@ if paimon.has_bot:
     def plugin_data(cur_pos: str, p_num: int = 0):
         pos_list = cur_pos.split("|")
         plg = paimon.manager.plugins[pos_list[2]]
-        text = f"""🔹 <u><b>Plugin Status<b></u> 🔹
+        text = f"""<u><b>Plugin Status<b></u>
 
 🎭 **Category** : `{pos_list[1]}`
 🔖 **Name** : `{plg.name}`
@@ -431,7 +431,7 @@ if paimon.has_bot:
         else:
             tmp_btns.append(
                 InlineKeyboardButton(
-                    "➕ Enable",
+                    "Enable",
                     callback_data=f"enable({'|'.join(pos_list[:3])})".encode(),
                 )
             )
@@ -453,8 +453,8 @@ if paimon.has_bot:
 🔖 **Name** : `{flt.name}`
 📝 **Doc** : `{flt.doc}`
 🤖 **Via Bot** : `{flt.allow_via_bot}`
-✅ **Carregado** : `{flt.is_loaded}`
-➕ **Habilitado** : `{flt.is_enabled}`"""
+✅ **Loaded** : `{flt.is_loaded}`
+➕ **Enabled** : `{flt.is_enabled}`"""
         if hasattr(flt, "about"):
             text = f"""<b><u>Status do Comando</u></b>
 {flt_data}
