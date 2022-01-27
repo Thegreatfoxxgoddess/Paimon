@@ -10,14 +10,6 @@ from paimon import Config, Message, paimon
 
 @paimon.on_cmd("webss", about={"header": "Get snapshot of a website"})
 async def webss(message: Message):
-    reply = message.reply_to_message
-    if message.input_str:
-        message.input_str
-    elif reply:
-        if reply.text:
-            reply.text
-        elif reply.caption:
-            reply.caption
     if Config.GOOGLE_CHROME_BIN is not None:
         await message.err("need to install Google Chrome. Module Stopping")
         return
@@ -76,3 +68,20 @@ async def webss(message: Message):
     )
     os.remove(file_path)
     driver.quit()
+
+
+
+async def webss(message: Message, link: str):
+    reply = message.reply_to_message
+    reply_id = reply.message_id if reply else None
+    if link.endswith("png"):
+        #  Bots can't use "unsave=True"
+        bool_unsave = not message.client.is_bot
+        await message.client.send_document(
+            chat_id=message.chat.id,
+            unsave=bool_unsave,
+            reply_to_message_id=reply_id,
+        )
+    else:
+        await message.client.send_document(
+            chat_id=message.chat.id, reply_to_message_id=reply_id
