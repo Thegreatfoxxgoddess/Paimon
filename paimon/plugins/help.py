@@ -138,7 +138,9 @@ async def helpme(message: Message) -> None:
                     f"    ▪️ <b>cmd:</b>  <code>{cmd.name}</code>\n"
                     f"    ▪️ <b>info:</b>  <i>{cmd.doc}</i>\n\n"
                 )
-            out_str += f"""<b>Use:</b>  <code>{Config.CMD_TRIGGER}help [command name]</code>"""
+            out_str += (
+                f"""<b>Use:</b>  <code>{Config.CMD_TRIGGER}help [command name]</code>"""
+            )
         else:
             commands = paimon.manager.enabled_commands
             key = key.lstrip(Config.CMD_TRIGGER)
@@ -365,9 +367,7 @@ if paimon.has_bot:
                 )
             )
             if len(cur_pos.split("|")) > 2:
-                tmp_btns.append(
-                    InlineKeyboardButton("Main Menu", callback_data="mm")
-                )
+                tmp_btns.append(InlineKeyboardButton("Main Menu", callback_data="mm"))
                 tmp_btns.append(
                     InlineKeyboardButton(
                         "Update", callback_data=f"refresh({cur_pos})".encode()
