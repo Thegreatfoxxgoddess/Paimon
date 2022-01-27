@@ -190,6 +190,10 @@ def clean_obj(obj, convert: bool = False):
     return obj
 
 
+def is_url(url: str) -> bool:
+    return bool(re.match(r"(?:https?|ftp)://[^|\s]+\.[^|\s]+", url))
+
+
 def sort_file_name_key(file_name: str) -> tuple:
     """sort key for file names"""
     if not isinstance(file_name, str):
