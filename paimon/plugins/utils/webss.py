@@ -70,7 +70,6 @@ async def webss(message: Message):
     driver.quit()
 
 
-
 async def webss(message: Message, link: str):
     reply = message.reply_to_message
     reply_id = reply.message_id if reply else None
