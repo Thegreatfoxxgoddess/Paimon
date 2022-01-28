@@ -81,6 +81,9 @@ async def copy_channel_(message: Message):
         f"`Copying posts from `<b>{from_.title}</b>` to `<b>{to_.title}</b>..."
     )
     async for post in paimon.search_messages(from_.id):
+    delay = split(" ", maxsplit=1)
+    try:
+        delay = float(delay) if "." in delay else int(delay)
         list_.append(post.message_id)
     list_.reverse()
     try:
