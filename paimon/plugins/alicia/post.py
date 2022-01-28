@@ -88,6 +88,7 @@ async def copy_channel_(message: Message):
         delay = float(delay) if "." in delay else int(delay)
         for one_msg in list_:
             await paimon.copy_message(to_.id, from_.id, one_msg)
+            await asyncio.sleep(10) 
             total += 100
     except FloodWait:
         await asyncio.sleep(delay)
