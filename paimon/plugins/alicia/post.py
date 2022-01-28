@@ -83,7 +83,6 @@ async def copy_channel_(message: Message):
     async for post in paimon.search_messages(from_.id):
         list_.append(post.message_id)
     list_.reverse()
-    delay = split(" ", maxsplit=1)
     try:
         for one_msg in list_:
             await paimon.copy_message(to_.id, from_.id, one_msg)
