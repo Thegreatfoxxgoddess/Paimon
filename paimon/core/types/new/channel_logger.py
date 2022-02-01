@@ -22,7 +22,7 @@ _LOG_STR = "<<<!  :::::  %s  :::::  !>>>"
 
 
 def _gen_string(name: str) -> str:
-    return "**Registro** : #" + name.split('.')[-1].upper() + "\n\n{}"
+    return "**logger** : #" + name.split('.')[-1].upper() + "\n\n{}"
 
 
 class ChannelLogger:
