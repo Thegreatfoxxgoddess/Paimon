@@ -1,4 +1,4 @@
-from Paimon import paimon 
+from paimon import paimon 
 import io
 import os
 import re
