@@ -1,10 +1,4 @@
-from paimon import paimon 
-import io
-import os
-import re
-import time
-from datetime import datetime
-from pathlib import Path
+from paimon import paimon
 
 
 @paimon.on_cmd(
