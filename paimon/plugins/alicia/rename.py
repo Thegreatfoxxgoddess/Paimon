@@ -1,19 +1,4 @@
-from paimon import paimon
-from paimon import Config, Message, paimon
-from paimon.plugins.misc.download import tg_download, url_download
-from paimon.utils import humanbytes, progress, take_screen_shot
-from paimon.utils.exceptions import ProcessCanceled
-import io
-import os
-import re
-import time
-from datetime import datetime
-from pathlib import Path
-from paimon import Config, Message, paimon
-from paimon.plugins.misc.download import tg_download, url_download
-from paimon.utils import humanbytes, progress, take_screen_shot
-from paimon.utils.exceptions import ProcessCanceled
-
+from paimon import Message, paimon
 
 
 @paimon.on_cmd(
