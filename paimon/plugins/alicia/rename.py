@@ -1,6 +1,5 @@
 import io
 import os
-import re
 import time
 from datetime import datetime
 from pathlib import Path
@@ -13,9 +12,7 @@ from pyrogram.errors import FloodWait
 from pyrogram.types import CallbackQuery
 
 from paimon import Config, Message, paimon
-from paimon.plugins.misc.download import tg_download, url_download
 from paimon.utils import humanbytes, progress, take_screen_shot
-from paimon.utils.exceptions import ProcessCanceled
 
 LOGGER = paimon.getLogger(__name__)
 CHANNEL = paimon.getCLogger(__name__)
@@ -44,7 +41,6 @@ async def rename_(message: Message):
         await _handle_message(message)
     else:
         await message.edit("Please read `.help rename`", del_in=5)
-
 
 
 async def upload_path(message: Message, path: Path, del_path: bool):
