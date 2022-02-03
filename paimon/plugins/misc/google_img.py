@@ -1,27 +1,27 @@
 """Google IMGS"""
 
-#  Copyright (C) 2021 BY paimon
+#  Copyright (C) 2021 BY Paimon
 #  All rights reserved.
 #
 #  Author: https://github.com/code-rgb [TG: @DeletedUser420]
 
-
+ 
 import asyncio
 import os
 from datetime import datetime
 from pathlib import Path
 from shutil import rmtree
-
+ 
 from google_images_download.google_images_download import googleimagesdownload
 from pyrogram.errors import FloodWait
 from pyrogram.types import InputMediaDocument, InputMediaPhoto
-
-from paimon import Config, Message, paimon, pool
+ 
+from paimon import Config, Message, pool, paimon
 from paimon.utils import sublists
-
-from .upload import doc_upload, photo_upload
-
-
+ 
+from .uploads import doc_upload, photo_upload
+ 
+ 
 class Colors:
     # fmt: off
     choice = [
@@ -31,10 +31,10 @@ class Colors:
         "gray", "black", "brown",
     ]
     # fmt: on
-
-
+ 
+ 
 @paimon.on_cmd(
-    "(?:gimg|img)",
+    "gimg",
     about={
         "header": "Google Image Downloader",
         "description": "Search and download images from google and upload to telegram",
@@ -56,7 +56,6 @@ class Colors:
             "{tr}gimg -gif rain <download 5 gifs>",
         ],
     },
-    name="gimg",
     del_pre=True,
     check_downpath=True,
 )
@@ -69,16 +68,16 @@ async def gimg_down(message: Message):
         text = args
     elif reply and (reply.text or reply.caption):
         text = reply.text or reply.caption
-
+ 
     if not text:
-        await message.err("`Input not found!...`", del_in=5)
+        await message.err("`Input not found...`", del_in=5)
         return
-    await message.edit("🔎")
+    await message.edit("searching...")
     start_t = datetime.now()
     color_ = None
     flags_ = message.flags
     allow_gif = bool("gif" in flags_)
-    upload_ = not bool("down" in flags_ or allow_gif)
+    upload_ = not bool("down" in flags_)
     doc_ = bool("d" in flags_)
     limit = int(flags_.get("l", 5))
     limit = min(limit, 40) if upload_ else min(limit, 100)
@@ -99,23 +98,25 @@ async def gimg_down(message: Message):
     else:
         arguments = await get_arguments(query=text)
     media_type = "Gifs" if allow_gif else "Pics"
-    await message.edit(f"⬇️  Downloading  {limit} {media_type} ...")
+    await message.edit(f"Downloading {limit} {media_type} ...")
     try:
         results = await gimg_downloader(arguments)
     except Exception as e:
         await message.err(str(e), del_in=7)
         return
     if upload_:
-        await message.edit(f"⬆️  Uploading {limit} {media_type} ...")
+        await message.edit(f"Uploading {limit} {media_type} ...")
         try:
-            await upload_image_grp(results, message, doc_)
+            gif = True if "gif" in flags_ else False
+            await upload_image_grp(results, message, gif, doc_)
         except Exception as err:
             await message.err(str(err), del_in=7)
         else:
+            type_ = "gif/s" if gif else "pic/s"
             end_t = datetime.now()
             time_taken_s = (end_t - start_t).seconds
             await message.edit(
-                f"Uploaded {limit} Pics in {time_taken_s} sec with {results[1]} errors.",
+                f"Uploaded {limit} {type_} in {time_taken_s} sec with {results[1]} errors.",
                 del_in=5,
                 log=__name__,
             )
@@ -127,8 +128,8 @@ async def gimg_down(message: Message):
             f"sec with {results[1]} errors.",
             log=__name__,
         )
-
-
+ 
+ 
 async def get_arguments(
     query: str,
     limit: int = 5,
@@ -161,8 +162,8 @@ async def get_arguments(
     arguments["size"] = size_
     # ------------------- #
     return arguments
-
-
+ 
+ 
 @pool.run_in_thread
 def check_path(path_name: str = "GIMG"):
     path_ = os.path.join(Config.DOWN_PATH, path_name)
@@ -172,16 +173,18 @@ def check_path(path_name: str = "GIMG"):
         return
     os.mkdir(path_)
     return path_
-
-
+ 
+ 
 @pool.run_in_thread
 def gimg_downloader(arguments):
     response = googleimagesdownload()
     path_ = response.download(arguments)
     return path_
-
-
-async def upload_image_grp(results, message: Message, doc: bool = False):
+ 
+ 
+async def upload_image_grp(
+    results, message: Message, gif: bool = False, doc: bool = False
+):
     key_ = list(results[0])[0]
     medias_ = results[0][key_]
     if message.process_is_canceled:
@@ -197,18 +200,31 @@ async def upload_image_grp(results, message: Message, doc: bool = False):
     else:
         mgroups = sublists(
             [
-                (InputMediaDocument(media=x) if doc else InputMediaPhoto(media=x))
+                (InputMediaDocument(media=x) if (doc) else InputMediaPhoto(media=x))
                 for x in medias_
                 if x.endswith((".jpg", ".jpeg", ".png", ".bmp"))
             ],
             width=10,
         )
+        if gif:
+            total = 0
+            for path_ in medias_:
+                total += 1
+                try:
+                    await message.edit(
+                        f"Uploading **{round(total / len(medias_) * 100)} %** ..."
+                    )
+                    await paimon.send_document(message.chat.id, path_)
+                    os.remove(path_)
+                except FloodWait as f:
+                    await asyncio.sleep(f.x + 5)
         for num, m_ in enumerate(mgroups, start=1):
             try:
                 await message.edit(
-                    f"⬆️  Uploading **{round(num / len(mgroups) * 100)} %** ..."
+                    f"Uploading **{round(num / len(mgroups) * 100)} %** ..."
                 )
                 await message.client.send_media_group(message.chat.id, media=m_)
                 await asyncio.sleep(len(m_))
             except FloodWait as f:
                 await asyncio.sleep(f.x + 5)
+ 
