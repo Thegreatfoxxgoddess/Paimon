@@ -87,11 +87,11 @@ async def copy_channel_(message: Message):
         for one_msg in list_:
             await paimon.copy_message(to_.id, from_.id, one_msg)
             await asyncio.sleep(delay)
-            await asyncio.sleep(30)
+            await asyncio.sleep(200)
             total += 100
     except FloodWait:
         await asyncio.sleep(10)
-        await asyncio.sleep(20)
+        await asyncio.sleep(20)    
 
     except Exception as e:
         await CHANNEL.log(f"ERROR: {str(e)}")
