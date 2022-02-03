@@ -91,7 +91,7 @@ async def copy_channel_(message: Message):
             total += 100
     except FloodWait:
         await asyncio.sleep(10)
-        await asyncio.sleep(20)    
+        await asyncio.sleep(20)
 
     except Exception as e:
         await CHANNEL.log(f"ERROR: {str(e)}")
