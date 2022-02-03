@@ -5,23 +5,23 @@
 #
 #  Author: https://github.com/code-rgb [TG: @DeletedUser420]
 
- 
+
 import asyncio
 import os
 from datetime import datetime
 from pathlib import Path
 from shutil import rmtree
- 
+
 from google_images_download.google_images_download import googleimagesdownload
 from pyrogram.errors import FloodWait
 from pyrogram.types import InputMediaDocument, InputMediaPhoto
- 
-from paimon import Config, Message, pool, paimon
+
+from paimon import Config, Message, paimon, pool
 from paimon.utils import sublists
- 
+
 from .uploads import doc_upload, photo_upload
- 
- 
+
+
 class Colors:
     # fmt: off
     choice = [
@@ -31,8 +31,8 @@ class Colors:
         "gray", "black", "brown",
     ]
     # fmt: on
- 
- 
+
+
 @paimon.on_cmd(
     "gimg",
     about={
@@ -68,7 +68,7 @@ async def gimg_down(message: Message):
         text = args
     elif reply and (reply.text or reply.caption):
         text = reply.text or reply.caption
- 
+
     if not text:
         await message.err("`Input not found...`", del_in=5)
         return
@@ -128,8 +128,8 @@ async def gimg_down(message: Message):
             f"sec with {results[1]} errors.",
             log=__name__,
         )
- 
- 
+
+
 async def get_arguments(
     query: str,
     limit: int = 5,
@@ -162,8 +162,8 @@ async def get_arguments(
     arguments["size"] = size_
     # ------------------- #
     return arguments
- 
- 
+
+
 @pool.run_in_thread
 def check_path(path_name: str = "GIMG"):
     path_ = os.path.join(Config.DOWN_PATH, path_name)
@@ -173,15 +173,15 @@ def check_path(path_name: str = "GIMG"):
         return
     os.mkdir(path_)
     return path_
- 
- 
+
+
 @pool.run_in_thread
 def gimg_downloader(arguments):
     response = googleimagesdownload()
     path_ = response.download(arguments)
     return path_
- 
- 
+
+
 async def upload_image_grp(
     results, message: Message, gif: bool = False, doc: bool = False
 ):
@@ -227,4 +227,3 @@ async def upload_image_grp(
                 await asyncio.sleep(len(m_))
             except FloodWait as f:
                 await asyncio.sleep(f.x + 5)
- 
