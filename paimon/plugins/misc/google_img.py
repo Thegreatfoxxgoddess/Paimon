@@ -19,7 +19,7 @@ from pyrogram.types import InputMediaDocument, InputMediaPhoto
 from paimon import Config, Message, paimon, pool
 from paimon.utils import sublists
 
-from .uploads import doc_upload, photo_upload
+from .upload import doc_upload, photo_upload
 
 
 class Colors:
