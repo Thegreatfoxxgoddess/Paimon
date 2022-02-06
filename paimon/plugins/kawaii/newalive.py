@@ -96,8 +96,11 @@ async def view_del_ani(message: Message):
     alive_msg = f"""
 {msg}
 
-{mmsg}
-    ✨ [lil ol meh](https://t.me/eightbituwu) | 👾 [repo](https://github.com/Thegreatfoxxgoddess/Paimon)
+
+   {mmsg}
+
+
+   ✨ [lil ol meh](https://t.me/eightbituwu) | 🚀 [repo](https://github.com/Thegreatfoxxgoddess/Paimon)
 """
     if media.endswith((".gif", ".mp4")):
         await message.client.send_animation(
