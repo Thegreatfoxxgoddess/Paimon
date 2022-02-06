@@ -4,10 +4,8 @@
 
 from telegraph import upload_file
 
-from paimon import Message, get_collection, get_version, paimon
-from paimon.plugins.bot.alive import Bot_Alive
+from paimon import Message, get_collection, paimon
 from paimon.utils import rand_array
-from paimon.versions import __python_version__
 
 SAVED = get_collection("ALIVE_DB")
 
