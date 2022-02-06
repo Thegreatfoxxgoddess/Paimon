@@ -26,9 +26,9 @@ jobs:
           black paimon/plugins/ paimon/utils/ paimon/config.py
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: "code check"
+          commit_message: "análise"
           commit_options: "--no-verify"
           repository: .
-          commit_user_name: thegreatfoxxgoddess
-          commit_user_email: thegreatfoxxgoddess@yandex.com
-          commit_author: thegreatfoxxgoddess <thegreatfoxxgoddess@yandex.com>
+          commit_user_name: avasantiago
+          commit_user_email: fridaellora@yandex.com
+          commit_author: avasantiago <fridaellora@yandex.com>
