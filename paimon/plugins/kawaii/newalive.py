@@ -99,13 +99,7 @@ async def view_del_ani(message: Message):
 {msg}
 
 {mmsg}
-
-• **Modo** :  `{Bot_Alive._get_mode()}`
-• **Uptime**  :  `{paimon.uptime}`
-• **Bot Version**  :  `v{get_version()}`
-• **Python Version**  :  `v{__python_version__}`
-
-    ✨ [magic](https://t.me/eightbituwu) | 👾 [repo](https://github.com/Thegreatfoxxgoddess/Paimon)
+    ✨ [lil ol meh](https://t.me/eightbituwu) | 👾 [repo](https://github.com/Thegreatfoxxgoddess/Paimon)
 """
     if media.endswith((".gif", ".mp4")):
         await message.client.send_animation(
@@ -136,6 +130,9 @@ async def del_a_msg(message: Message):
 
 
 FRASES = (
-    "Quotes",
-    "quotes2",
+    "morning cutie",
+    "hello mommy",
+    "ohayo onisan",
+    "yamete",
+    "yamero",
 )
