@@ -1,5 +1,3 @@
-from search_engine_parser import YandexSearch
-
 from paimon import Message, paimon
 
 
