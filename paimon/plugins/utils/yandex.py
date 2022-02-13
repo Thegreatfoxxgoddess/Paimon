@@ -25,7 +25,7 @@ async def yandexsearch(message: Message):
         await message.err("Give a query or reply to a message to google!")
         return
     try:
-        yandex_search = DuckDuckGoSearch()
+        yandex_search = yandexsearch()
         yandexresults = await yandex_search.async_search(query, page)
     except Exception as e:
         await message.err(e)
