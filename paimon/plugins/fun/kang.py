@@ -31,8 +31,8 @@ from paimon.utils.tools import runcmd
             "{tr}kang 🤔🤣😂 2",
         ],
     },
-    allow_channels=False,
-    allow_via_bot=False,
+    allow_channels=True,
+    allow_via_bot=True,
 )
 async def kang_(message: Message):
     """kang a sticker"""
@@ -111,7 +111,7 @@ async def kang_(message: Message):
         else:
             u_name = user.first_name or user.id
         packname = f"a{user.id}_by_paimon_{pack}"
-        custom_packnick = Config.CUSTOM_PACK_NAME or f"{u_name}'s Kang Pack"
+        custom_packnick = Config.CUSTOM_PACK_NAME or f"{u_name}'s sticker pack"
         packnick = f"{custom_packnick} Vol.{pack}"
         cmd = "/newpack"
         if resize:
@@ -245,7 +245,7 @@ async def kang_(message: Message):
 
 
 @paimon.on_cmd(
-    "stkrinfo",
+    "stickerinfo",
     about={
         "header": "get sticker pack info",
         "usage": "reply {tr}stkrinfo to any sticker",
@@ -307,5 +307,51 @@ async def resize_media(media: str, video: bool) -> str:
     os.remove(media)
     return resized_photo
 
+@paimon.on_cmd(
+    "sticker",
+    about={
+        "header": "Search Sticker Packs",
+        "usage": "Reply {tr}sticker or " "{tr}sticker [text]",
+    },
+)
+async def sticker_search(message: Message):
+    # search sticker packs
+    reply = message.reply_to_message
+    query_ = None
+    if message.input_str:
+        query_ = message.input_str
+    elif reply and reply.from_user:
+        query_ = reply.from_user.username or reply.from_user.id
 
-KANGING_STR = "kanging this sticker..."
+    if not query_:
+        return message.err(
+            "reply to a user or provide text to search sticker packs", del_in=3
+        )
+
+    await message.edit(f'Searching for sticker packs for "`{query_}`"...')
+    titlex = f'<b>Sticker Packs For:</b> "<u>{query_}</u>"\n'
+    sticker_pack = ""
+    try:
+        text = await get_response.text(
+            f"https://combot.org/telegram/stickers?q={query_}"
+        )
+    except ValueError:
+        return await message.err(
+            "Response was not 200!, Api is having some issues\n Please try again later.",
+            del_in=5,
+        )
+    soup = bs(text, "lxml")
+    results = soup.find_all("div", {"class": "sticker-pack__header"})
+    for pack in results:
+        if pack.button:
+            title_ = (pack.find("div", {"class": "sticker-pack__title"})).text
+            link_ = (pack.a).get("href")
+            sticker_pack += f"\n• [{title_}]({link_})"
+    if not sticker_pack:
+        sticker_pack = "`Not Found!`"
+    await message.edit((titlex + sticker_pack), disable_web_page_preview=True)
+
+
+
+KANGING_STR = [
+"kanging this sticker..." ]
