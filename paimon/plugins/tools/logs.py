@@ -10,7 +10,7 @@ import aiohttp
 
 from paimon import Config, Message, logging, paimon, pool
 
-PASTY_URL = "https://pastebin.com/"
+PASTY_URL = "https://katb.in/"
 
 _LEVELS = {
     "debug": logging.DEBUG,
@@ -68,24 +68,24 @@ async def check_logs(message: Message):
                     except BaseException as e:
                         await paimon.send_message(
                             Config.LOG_CHANNEL_ID,
-                            f"Failed to load <b>logs</b> in PastyLus,\n<b>ERROR</b>:`{e}`",
+                            f"Failed to load <b>logs</b> in katbin,\n<b>ERROR</b>:`{e}`",
                         )
                         pasty_ = False
                 if resp.status != 201 or not pasty_:
                     await message.edit(
-                        "`Failed to reach PastyLus! Sending as document...`", del_in=5
+                        "`Failed to reach katbin! Sending as document...`", del_in=5
                     )
                     await message.client.send_document(
                         chat_id=message.chat.id,
                         document="logs/paimon.log",
-                        caption="**paimon-X Logs**",
+                        caption="**paimon Logs**",
                     )
     else:
         await message.delete()
         await message.client.send_document(
             chat_id=message.chat.id,
             document="logs/paimon.log",
-            caption="**paimon-X Logs**",
+            caption="**paimon Logs**",
         )
 
 
