@@ -353,5 +353,6 @@ async def sticker_search(message: Message):
 
 
 
-KANGING_STR = [
-"kanging this sticker..." ]
+KANGING_STR = (
+    "kanging this sticker...",
+)
