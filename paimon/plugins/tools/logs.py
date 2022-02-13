@@ -10,7 +10,7 @@ import traceback
 
 import aiohttp
 
-from paimon import Config, Message, logging, pool, paimon
+from paimon import Config, Message, logging, paimon, pool
 from paimon.plugins.help import CHANNEL
 
 _URL = "https://spaceb.in/" if Config.HEROKU_APP else "https://nekobin.com/"
