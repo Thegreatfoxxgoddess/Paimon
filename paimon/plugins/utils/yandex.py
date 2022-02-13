@@ -1,3 +1,5 @@
+from search_engine_parser import YandexSearch
+
 from paimon import Message, paimon
 
 
@@ -25,7 +27,7 @@ async def yandexsearch(message: Message):
         await message.err("Give a query or reply to a message to google!")
         return
     try:
-        yandex_search = yandexsearch()
+        yandex_search = YandexSearch()
         yandexresults = await yandex_search.async_search(query, page)
     except Exception as e:
         await message.err(e)
