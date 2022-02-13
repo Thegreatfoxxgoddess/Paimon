@@ -1,5 +1,5 @@
 from search_engine_parser import YandexSearch
-
+import asyncio
 from paimon import Message, paimon
 
 
