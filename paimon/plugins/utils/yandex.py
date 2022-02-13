@@ -30,12 +30,10 @@ async def yandexsearch(message: Message):
         return
     try:
         yandex_search = YandexSearch()
-        await asyncio.sleep(delay)
         await asyncio.sleep(3)
         yandexresults = await yandex_search.async_search(query, page)
     except Exception as e:
         await message.err(e)
-        await asyncio.sleep(delay)
         await asyncio.sleep(3)
         return
     output = ""
