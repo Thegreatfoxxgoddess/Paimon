@@ -307,6 +307,7 @@ async def resize_media(media: str, video: bool) -> str:
     os.remove(media)
     return resized_photo
 
+
 @paimon.on_cmd(
     "sticker",
     about={
@@ -352,7 +353,4 @@ async def sticker_search(message: Message):
     await message.edit((titlex + sticker_pack), disable_web_page_preview=True)
 
 
-
-KANGING_STR = (
-    "kanging this sticker...",
-)
+KANGING_STR = ("kanging this sticker...",)
