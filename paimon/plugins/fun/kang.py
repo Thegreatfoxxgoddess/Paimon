@@ -50,11 +50,8 @@ async def kang_(message: Message):
             resize = True
         elif replied.document and "tgsticker" in replied.document.mime_type:
             is_anim = True
-        elif (
-            replied.document
-            and "video" in replied.document.mime_type
-            and replied.document.file_size <= 10485760
-        ):
+        elif (replied.document and "video" in replied.document.mime_type
+                and replied.document.file_size <= 10485760):
             resize = True
             is_video = True
         elif replied.animation:
@@ -68,8 +65,8 @@ async def kang_(message: Message):
             is_anim = replied.sticker.is_animated
             is_video = replied.sticker.is_video
             if not (
-                replied.sticker.file_name.endswith(".tgs")
-                or replied.sticker.file_name.endswith(".webm")
+                replied.sticker.file_name.endswith('.tgs')
+                or replied.sticker.file_name.endswith('.webm')
             ):
                 resize = True
         else:
@@ -97,11 +94,12 @@ async def kang_(message: Message):
             emoji_ = None
         if not emoji_:
             emoji_ = "✨"
-        user.fname
+       
+        a_name = " ".join([me.first_name, me.last_name or ""])
         u_name = user.username
         u_name = "@" + u_name if u_name else user.first_name or user.id
         packname = f"a{user.id}_by_x_{pack}"
-        custom_packnick = Config.CUSTOM_PACK_NAME or f"Alicia's sticker pack({u_name})"
+        custom_packnick = Config.CUSTOM_PACK_NAME or f"a_name's sticker pack({u_name})"
         packnick = f"{custom_packnick} Vol.{pack}"
         cmd = "/newpack"
         if resize:
@@ -113,13 +111,11 @@ async def kang_(message: Message):
         if is_video:
             packname += "_video"
             packnick += " (Video)"
-            cmd = "/newvideo"
+            cmd = '/newvideo'
         exist = False
         try:
             exist = await message.client.send(
-                GetStickerSet(
-                    stickerset=InputStickerSetShortName(short_name=packname), hash=0
-                )
+                GetStickerSet(stickerset=InputStickerSetShortName(short_name=packname), hash=0)
             )
         except StickersetInvalid:
             pass
