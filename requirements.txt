@@ -56,3 +56,4 @@ git+https://github.com/thegreatfoxxgoddess/google-images-download.git
 feedparser>=6.0.2
 google_trans_new
 ffmpeg-python>=0.2.0
+ffmpeg
