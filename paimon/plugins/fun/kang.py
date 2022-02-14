@@ -354,18 +354,18 @@ KANGING_STR = ("kanging this sticker...",)
 @paimon.on_cmd(
     "imgs",
     about={
-        "header": "Converta para imagem",
-        "description": "Converta GIF/sticker/vídeo/thumbnail de música em imagem no formato jpg",
-        "usage": "{tr}imgs [responda a uma mídia]",
+        "header": "convert to image",
+        "description": "convert GIF/sticker/vídeo/thumbnail of music in image into jpg format",
+        "usage": "{tr}imgs [reply to a media]",
     },
 )
 async def img(message: Message):
     if not message.reply_to_message:
-        await message.edit("Responda a uma mídia...", del_in=5)
+        await message.edit("Reply to a media...", del_in=5)
         return
     reply_to = message.reply_to_message.message_id
-    await message.edit("Convertendo...", del_in=5)
-    file_name = "kanna_convert.jpg"
+    await message.edit("converting...", del_in=5)
+    file_name = "paimon.jpg"
     down_file = os.path.join(Config.DOWN_PATH, file_name)
     if os.path.isfile(down_file):
         os.remove(down_file)
