@@ -98,11 +98,11 @@ async def kang_(message: Message):
         if not emoji_:
             emoji_ = "✨"
 
-        " ".join([me.first_name, me.last_name or ""])
+        a_name = user.first_name
         u_name = user.username
         u_name = "@" + u_name if u_name else user.first_name or user.id
         packname = f"a{user.id}_by_x_{pack}"
-        custom_packnick = Config.CUSTOM_PACK_NAME or f"a_name's sticker pack({u_name})"
+        custom_packnick = Config.CUSTOM_PACK_NAME or f"{a_name}'s sticker pack({u_name})"
         packnick = f"{custom_packnick} Vol.{pack}"
         cmd = "/newpack"
         if resize:
