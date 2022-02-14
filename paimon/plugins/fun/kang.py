@@ -284,8 +284,10 @@ async def resize_media(media: str, video: bool) -> str:
     """Resize the given media to 512x512"""
     if video:
         resized_video = f"{media}.webm"
-        cmd = f"ffmpeg -i {media} -ss 00:00:00 -to 00:00:03 -map 0:v" + \
-            f" -c:v libvpx-vp9 -vf scale=512:512:force_original_aspect_ratio=decrease,fps=fps=30 {resized_video}"
+        cmd = (
+            f"ffmpeg -i {media} -ss 00:00:00 -to 00:00:03 -map 0:v"
+            + f" -c:v libvpx-vp9 -vf scale=512:512:force_original_aspect_ratio=decrease,fps=fps=30 {resized_video}"
+        )
         await runcmd(cmd)
         os.remove(media)
         return resized_video
