@@ -285,8 +285,7 @@ async def resize_media(media: str, video: bool) -> str:
     if video:
         resized_video = f"{media}.webm"
         cmd = (
-            f"ffmpeg -i {media} -ss 00:00:00 -to 00:00:03 -map 0:v"
-            + f"-c:v libvpx-vp9 -vf scale=512:512:force_original_aspect_ratio=decrease,fps=fps=30 {resized_video}"
+            f"cmd = f"ffmpeg -i {media} -c:v libvpx-vp9 -pix_fmt yuva420p -b:a 256k -c:a libopus -t 2.99 -vf scale=512:512:force_original_aspect_ratio=decrease -an {resized_video}"
         )
         await runcmd(cmd)
         os.remove(media)
