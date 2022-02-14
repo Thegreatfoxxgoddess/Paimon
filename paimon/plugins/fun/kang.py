@@ -31,16 +31,15 @@ from paimon.utils.tools import runcmd
             "{tr}kang 🤔🤣😂 2",
         ],
     },
-    allow_channels=True,
-    allow_via_bot=True,
+    allow_channels=False,
+    allow_via_bot=False,
 )
 async def kang_(message: Message):
-    """kang a sticker"""
+    """kang um sticker"""
     user = await paimon.get_me()
     replied = message.reply_to_message
     media = None
-    _emoji = None
-    emoji_ = ""
+    emoji_ = None
     is_anim = False
     is_video = False
     resize = False
@@ -51,11 +50,8 @@ async def kang_(message: Message):
             resize = True
         elif replied.document and "tgsticker" in replied.document.mime_type:
             is_anim = True
-        elif (
-            replied.document
-            and "video" in replied.document.mime_type
-            and replied.document.file_size <= 10485760
-        ):
+        elif (replied.document and "video" in replied.document.mime_type
+                and replied.document.file_size <= 10485760):
             resize = True
             is_video = True
         elif replied.animation:
@@ -63,55 +59,46 @@ async def kang_(message: Message):
             is_video = True
         elif replied.sticker:
             if not replied.sticker.file_name:
-                return await message.edit("`Sticker has no Name!`")
-            _ = replied.sticker.emoji
-            if _:
-                emoji_ = _
+                await message.edit("`The sticker has no name!`")
+                return
+            emoji_ = replied.sticker.emoji
             is_anim = replied.sticker.is_animated
             is_video = replied.sticker.is_video
             if not (
-                replied.sticker.file_name.endswith(".tgs")
-                or replied.sticker.file_name.endswith(".webm")
+                replied.sticker.file_name.endswith('.tgs')
+                or replied.sticker.file_name.endswith('.webm')
             ):
                 resize = True
         else:
-            return await message.edit("`Unsupported File!`")
-
+            await message.edit("`unsupported file!`")
+            return
         await message.edit(f"`{random.choice(KANGING_STR)}`")
         media = await paimon.download_media(message=replied, file_name=Config.DOWN_PATH)
     else:
-        return await message.err("`I can't kang that...`")
-
+        await message.edit("`I can't kang this...`")
+        return
     if media:
-        args = message.filtered_input_str.split(" ")
+        args = message.filtered_input_str.split()
         pack = 1
         if len(args) == 2:
-            _emoji, pack = args
+            emoji_, pack = args
         elif len(args) == 1:
             if args[0].isnumeric():
                 pack = int(args[0])
             else:
-                _emoji = args[0]
+                emoji_ = args[0]
 
-        if _emoji is not None:
-            _saved = emoji_
-            for k in _emoji:
-                if k and k in (
-                    getattr(emoji, a) for a in dir(emoji) if not a.startswith("_")
-                ):
-                    emoji_ += k
-            if _saved and _saved != emoji_:
-                emoji_ = emoji_[len(_saved) :]
+        if emoji_ and emoji_ not in (
+            getattr(emoji, _) for _ in dir(emoji) if not _.startswith("_")
+        ):
+            emoji_ = None
         if not emoji_:
             emoji_ = "✨"
-
+        a_name = user.fname
         u_name = user.username
-        if u_name:
-            u_name = "@" + u_name
-        else:
-            u_name = user.first_name or user.id
-        packname = f"a{user.id}_by_paimon_{pack}"
-        custom_packnick = Config.CUSTOM_PACK_NAME or f"{u_name}'s sticker pack"
+        u_name = "@" + u_name if u_name else user.first_name or user.id
+        packname = f"a{user.id}_by_x_{pack}"
+        custom_packnick = Config.CUSTOM_PACK_NAME or f"Alicia's sticker pack({u_name})"
         packnick = f"{custom_packnick} Vol.{pack}"
         cmd = "/newpack"
         if resize:
@@ -123,13 +110,11 @@ async def kang_(message: Message):
         if is_video:
             packname += "_video"
             packnick += " (Video)"
-            cmd = "/newvideo"
+            cmd = '/newvideo'
         exist = False
         try:
             exist = await message.client.send(
-                GetStickerSet(
-                    stickerset=InputStickerSetShortName(short_name=packname), hash=0
-                )
+                GetStickerSet(stickerset=InputStickerSetShortName(short_name=packname), hash=0)
             )
         except StickersetInvalid:
             pass
@@ -138,7 +123,8 @@ async def kang_(message: Message):
                 try:
                     await conv.send_message("/addsticker")
                 except YouBlockedUser:
-                    return await message.edit("first **unblock** @Stickers")
+                    await message.edit("first **unblock** @Stickers")
+                    return
                 await conv.get_response(mark_read=True)
                 await conv.send_message(packname)
                 msg = await conv.get_response(mark_read=True)
@@ -156,11 +142,11 @@ async def kang_(message: Message):
                     await message.edit(
                         "`Switching to Pack "
                         + str(pack)
-                        + " due to insufficient space`"
+                        + "`due to insufficient space`"
                     )
                     await conv.send_message(packname)
                     msg = await conv.get_response(mark_read=True)
-                    if msg.text == "Invalid pack selected.":
+                    if msg.text == "Pacote inválido selecionado.":
                         await conv.send_message(cmd)
                         await conv.get_response(mark_read=True)
                         await conv.send_message(packnick)
@@ -203,12 +189,13 @@ async def kang_(message: Message):
                 await conv.send_message("/done")
                 await conv.get_response(mark_read=True)
         else:
-            await message.edit("`Brewing a new Pack...`")
+            await message.edit("`creating new pack...`")
             async with paimon.conversation("Stickers") as conv:
                 try:
                     await conv.send_message(cmd)
                 except YouBlockedUser:
-                    return await message.edit("first **unblock** @Stickers")
+                    await message.edit("`first **unblock** @Stickers`")
+                    return
                 await conv.get_response(mark_read=True)
                 await conv.send_message(packnick)
                 await conv.get_response(mark_read=True)
@@ -354,3 +341,25 @@ async def sticker_search(message: Message):
 
 
 KANGING_STR = ("kanging this sticker...",)
+
+
+@paimon.on_cmd(
+    "imgs",
+    about={
+        "header": "Converta para imagem",
+        "description": "Converta GIF/sticker/vídeo/thumbnail de música em imagem no formato jpg",
+        "usage": "{tr}imgs [responda a uma mídia]",
+    },
+)
+async def img(message: Message):
+    if not message.reply_to_message:
+        await message.edit("Responda a uma mídia...", del_in=5)
+        return
+    reply_to = message.reply_to_message.message_id
+    await message.edit("Convertendo...", del_in=5)
+    file_name = "kanna_convert.jpg"
+    down_file = os.path.join(Config.DOWN_PATH, file_name)
+    if os.path.isfile(down_file):
+        os.remove(down_file)
+    image = await media_to_image(message)
+    await message.reply_photo(image, reply_to_message_id=reply_to)
