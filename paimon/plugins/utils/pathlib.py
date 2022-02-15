@@ -374,7 +374,7 @@ async def ls_dir(message: Message) -> None:
     if path_.is_dir():
         folders = ""
         files = ""
-        for p_s in sorted(path_.iterdir(), key=lambda a: sort_file_name_key(a.name)):
+        for p_s in sorted(path_.iterdir()):
             if p_s.is_file():
                 if str(p_s).endswith((".mp3", ".flac", ".wav", ".m4a")):
                     files += "🎵"
@@ -399,6 +399,7 @@ async def ls_dir(message: Message) -> None:
         size = os.stat(str(path_)).st_size
         out += f"📄 <code>{path_.name}</code> <i>({humanbytes(size)})</i>\n"
     await message.edit_or_send_as_file(out, parse_mode="html")
+
 
 
 @paimon.on_cmd(
