@@ -214,5 +214,3 @@ def clean_obj(obj, convert: bool = False):
 
 def is_url(url: str) -> bool:
     return bool(re.match(r"(?:https?|ftp)://[^|\s]+\.[^|\s]+", url))
-
- 
