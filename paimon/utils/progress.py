@@ -32,9 +32,9 @@ async def progress(
         del _TASKS[task_id]
         try:
             if c_q:
-                await c_q.edit_message_text("`processo de finalização ...`")
+                await c_q.edit_message_text("`finalization process...`")
             else:
-                await message.try_to_edit("`processo de finalização ...`")
+                await message.try_to_edit("`finalization process...`")
         except FloodWait as f_e:
             await asyncio.sleep(f_e.x)
         return
