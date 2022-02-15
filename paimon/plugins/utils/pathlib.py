@@ -18,7 +18,6 @@ from zipfile import ZipFile, is_zipfile
 
 from rarfile import RarFile, is_rarfile
 
-from paimon.utils import tools
 from paimon import Config, Message, paimon, pool
 from paimon.utils import humanbytes, sort_file_name_key, time_formatter
 from paimon.utils.exceptions import ProcessCanceled
