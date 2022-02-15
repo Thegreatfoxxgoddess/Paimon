@@ -19,9 +19,8 @@ from zipfile import ZipFile, is_zipfile
 from rarfile import RarFile, is_rarfile
 
 from paimon import Config, Message, paimon, pool
-from paimon.utils import humanbytes, sort_file_name_key, time_formatter
+from paimon.utils import humanbytes, time_formatter
 from paimon.utils.exceptions import ProcessCanceled
-from paimon.utils.tools import sort_file_name_key
 
 _LOG = paimon.getLogger(__name__)
 
@@ -399,7 +398,6 @@ async def ls_dir(message: Message) -> None:
         size = os.stat(str(path_)).st_size
         out += f"📄 <code>{path_.name}</code> <i>({humanbytes(size)})</i>\n"
     await message.edit_or_send_as_file(out, parse_mode="html")
-
 
 
 @paimon.on_cmd(
