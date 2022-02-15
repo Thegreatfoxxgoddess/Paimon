@@ -12,8 +12,9 @@ from pyrogram.raw.functions.messages import GetStickerSet
 from pyrogram.raw.types import InputStickerSetShortName
 
 from paimon import Config, Message, paimon
-from paimon.utils.tools import runcmd
 from paimon.utils import media_to_image
+from paimon.utils.tools import runcmd
+
 
 @paimon.on_cmd(
     "kang",
