@@ -146,7 +146,7 @@ def rand_key():
 def check_owner(func):
     async def wrapper(_, c_q: CallbackQuery):
         if c_q.from_user and (
-            c_q.from_user.id in Config.OWNER_ID or c_q.from_user.id in Config.SUDO_USERS
+           c_q.from_user.id in Config.OWNER_ID or c_q.from_user.id in Config.SUDO_USERS
         ):
             try:
                 await func(c_q)
@@ -156,7 +156,7 @@ def check_owner(func):
                 pass
         else:
             await c_q.answer(
-                "Apenas meu mestre pode acessar isso !!\n\n     Instale seu paimon",
+                "Only my master can access this!!\n\n  deploy your own companion",
                 show_alert=True,
             )
 
