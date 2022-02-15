@@ -225,7 +225,7 @@ def sort_file_name_key(file_name: str) -> tuple:
 
 # this algo doesn't support signed values
 def _sort_algo(data: List[str]) -> Iterator[Union[str, float]]:
-    """ sort algo for file names """
+    """sort algo for file names"""
     p1 = 0.0
     for p2 in data:
         # skipping null values
@@ -240,7 +240,7 @@ def _sort_algo(data: List[str]) -> Iterator[Union[str, float]]:
         if c.isdigit():
             # p2 should be [0-9]+
             # so c should be 0-9
-            if c == '0':
+            if c == "0":
                 # add padding
                 # this fixes `a1` and `a01` messing
                 if isinstance(p1, str):
@@ -252,10 +252,10 @@ def _sort_algo(data: List[str]) -> Iterator[Union[str, float]]:
 
             # add padding
             if isinstance(p1, float):
-                yield ''
+                yield ""
 
         # checking p2 is `.[0-9]+` or not
-        elif c == '.' and len(p2) > 1 and p2[1].isdigit():
+        elif c == "." and len(p2) > 1 and p2[1].isdigit():
             # p2 should be `.[0-9]+`
             # so converting to float
             p2 = float(p2)
