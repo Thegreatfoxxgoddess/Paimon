@@ -32,7 +32,7 @@ async def media_to_image(message):
         return
     if not os.path.isdir(Config.DOWN_PATH):
         os.makedirs(Config.DOWN_PATH)
-    await message.edit("`Ah Shit, Here We Go Again ...`")
+    await message.edit("`Processing...`")
     dls = await message.client.download_media(
         message=message.reply_to_message,
         file_name=Config.DOWN_PATH,
