@@ -21,7 +21,7 @@ from rarfile import RarFile, is_rarfile
 from paimon import Config, Message, paimon, pool
 from paimon.utils import humanbytes, sort_file_name_key, time_formatter
 from paimon.utils.exceptions import ProcessCanceled
-
+from paimon.utils.tools import sort_file_name_key
 _LOG = paimon.getLogger(__name__)
 
 
