@@ -66,7 +66,7 @@ async def media_to_image(message):
             return
         dls_loc = anstkr_file
     elif replied.document:
-        stkr_file = os.path.join(Config.DOWN_PATH, "document.png")
+        doc_file = os.path.join(Config.DOWN_PATH, "document.png")
         os.rename(dls_loc, doc_file)
         if not os.path.lexists(doc_file):
             await message.err("```file not found...```")
