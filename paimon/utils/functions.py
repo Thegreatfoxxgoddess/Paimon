@@ -59,7 +59,7 @@ async def media_to_image(message):
             return
         dls_loc = stkr_file
     elif replied.sticker and replied.sticker.file_name.endswith(".webm"):
-        stkr_file = os.path.join(Config.DOWN_PATH, "sticker.png")
+        anstkr_file = os.path.join(Config.DOWN_PATH, "animated_sticker.png")
         os.rename(dls_loc, anstkr_file)
         if not os.path.lexists(anstkr_file):
             await message.err("```Sticker not found...```")
