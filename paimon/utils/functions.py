@@ -65,7 +65,7 @@ async def media_to_image(message):
             await message.err("```Sticker not found...```")
             return
         dls_loc = anstkr_file
-    elif replied.document
+    elif replied.document:
         stkr_file = os.path.join(Config.DOWN_PATH, "document.png")
         os.rename(dls_loc, doc_file)
         if not os.path.lexists(doc_file):
