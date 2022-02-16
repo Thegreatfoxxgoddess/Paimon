@@ -40,21 +40,23 @@ async def webss(message: Message):
         "document.documentElement.clientWidth, document.documentElement.scrollWidth, "
         "document.documentElement.offsetWidth);"
     )
-    driver.set_window_size(width + 125, height + 125)
+    driver.set_window_size(width + 125, height + 70)
     wait_for = height / 1000
+    await asyncio.sleep(5)
     await message.edit(
         f"`Generating screenshot of the page...`"
         f"\n`Height of page = {height}px`"
         f"\n`Width of page = {width}px`"
         f"\n`Waiting ({int(wait_for)}s) for the page to load.`"
     )
+    await asyncio.sleep(5)
     await asyncio.sleep(int(wait_for))
     im_png = driver.get_screenshot_as_png()
     driver.close()
     message_id = message.message_id
     if message.reply_to_message:
         message_id = message.reply_to_message.message_id
-    file_path = os.path.join(Config.DOWN_PATH, "webss.png")
+    file_path = os.path.join(Config.DOWN_PATH, "screenshot.png")
     async with aiofiles.open(file_path, "wb") as out_file:
         await out_file.write(im_png)
     await asyncio.gather(
