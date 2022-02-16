@@ -47,12 +47,19 @@ async def media_to_image(message):
         stdout, stderr = (await runcmd(cmd))[:2]
         os.remove(dls_loc)
         if not os.path.lexists(png_file):
-            await message.err("This sticker is Gey, Task Failed Successfully ≧ω≦")
+            await message.err("Task Failed Successfully ≧ω≦")
             raise Exception(stdout + stderr)
         dls_loc = png_file
     elif replied.sticker and replied.sticker.file_name.endswith(".webp"):
         stkr_file = os.path.join(Config.DOWN_PATH, "stkr.png")
-        os.rename(dls_loc, stkr_file)
+        os.remove(dls_loc, stkr_file)
+        if not os.path.lexists(stkr_file):
+            await message.err("```Sticker not found...```")
+            return
+        dls_loc = stkr_file
+    elif replied.sticker and replied.sticker.file_name.endswith(".webm"):
+        stkr_file = os.path.join(Config.DOWN_PATH, "stkr.png")
+        os.remove(dls_loc, stkr_file)
         if not os.path.lexists(stkr_file):
             await message.err("```Sticker not found...```")
             return
