@@ -372,3 +372,4 @@ async def img(message: Message):
         os.remove(down_file)
     image = await media_to_image(message)
     await message.reply_photo(image, reply_to_message_id=reply_to)
+    os.remove(image)
