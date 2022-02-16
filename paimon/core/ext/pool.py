@@ -2,7 +2,7 @@
 #
 # Copyright (C) 2020 by UsergeTeam@Github, < https://github.com/UsergeTeam >.
 #
-# Edited by Alicia
+# Edited by eightbituwu
 
 __all__ = ['submit_thread', 'run_in_thread']
 
