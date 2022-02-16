@@ -27,6 +27,7 @@ async def media_to_image(message):
         or replied.animation
         or replied.video
         or replied.audio
+        or replied.document
     ):
         await message.err("`Media Type Is Invalid ! See HELP.`")
         return
@@ -57,6 +58,20 @@ async def media_to_image(message):
             await message.err("```Sticker not found...```")
             return
         dls_loc = stkr_file
+    elif replied.sticker and replied.sticker.file_name.endswith(".webm"):
+        stkr_file = os.path.join(Config.DOWN_PATH, "sticker.png")
+        os.rename(dls_loc, anstkr_file)
+        if not os.path.lexists(anstkr_file):
+            await message.err("```Sticker not found...```")
+            return
+        dls_loc = anstkr_file
+    elif replied.document
+        stkr_file = os.path.join(Config.DOWN_PATH, "document.png")
+        os.rename(dls_loc, doc_file)
+        if not os.path.lexists(doc_file):
+            await message.err("```file not found...```")
+            return
+        dls_loc = doc_file
     elif replied.animation or replied.video:
         await message.edit("`Converting Media To Image ...`")
         jpg_file = os.path.join(Config.DOWN_PATH, "image.jpg")
@@ -72,7 +87,7 @@ async def media_to_image(message):
         song_file = os.path.join(Config.DOWN_PATH, "song.mp3")
         os.rename(dls_loc, song_file)
         await thumb_from_audio(song_file, jpg_file)
-        os.remove(song_file)
+        os.remove(dls_loc, song_file)
         if not os.path.lexists(jpg_file):
             await message.err(
                 "`This Audio has no thumbnail, Task Failed Successfully ...`"
@@ -81,6 +96,7 @@ async def media_to_image(message):
         dls_loc = jpg_file
     await message.edit("`Almost Done ...`")
     return dls_loc
+    os.remove(dls_loc)
 
 
 # https://github.com/carpedm20/emoji/blob/master/emoji/core.py
