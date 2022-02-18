@@ -8,9 +8,9 @@ from paimon import Message, paimon
     "wallpaper",
     about={
         "header": "Search Wallpaper",
-        "description": "Search and Download Hd Wallpaper from Unsplash and upload to Telegram",
+        "description": "Search and Download Wallpapers from Nekos-life and upload to Telegram",
         "usage": "{tr}wall [Query]",
-        "examples": "{tr}wall luffy",
+        "examples": "{tr}wall paimon",
     },
 )
 async def wall_(message: Message):
