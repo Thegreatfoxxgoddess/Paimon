@@ -1,7 +1,7 @@
 import requests
 from pyrogram.types import Message
 
-from paimon import Message, paimon
+from paimon import Message, paimon, 
 
 
 @paimon.on_cmd(
@@ -14,9 +14,10 @@ from paimon import Message, paimon
     },
 )
 async def wall_(message: Message):
+    await message.edit("`searching ...`")
     r = requests.get("https://nekos.life/api/v2/img/wallpaper")
     g = r.json().get("url")
-    await paimon.send_document(
+    await message.client.send_document(
         message.chat.id,
         g,
     )
