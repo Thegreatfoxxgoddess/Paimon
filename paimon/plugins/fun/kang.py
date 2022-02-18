@@ -5,6 +5,7 @@ import io
 import os
 import random
 
+from bs4 import BeautifulSoup as bs
 from PIL import Image
 from pyrogram import emoji
 from pyrogram.errors import StickersetInvalid, YouBlockedUser
@@ -12,8 +13,7 @@ from pyrogram.raw.functions.messages import GetStickerSet
 from pyrogram.raw.types import InputStickerSetShortName
 
 from paimon import Config, Message, paimon
-from paimon.utils import get_response, media_to_image
-from paimon.utils.tools import runcmd
+from paimon.utils import get_response, media_to_image, runcmd
 
 
 @paimon.on_cmd(
