@@ -8,7 +8,6 @@ from paimon import Message, paimon
     "wallpaper",
     about={
         "header": "Search Wallpaper",
-        },
         "description": "Search and Download Hd Wallpaper from Unsplash and upload to Telegram",
         "usage": "{tr}wall [Query]",
         "examples": "{tr}wall luffy",
