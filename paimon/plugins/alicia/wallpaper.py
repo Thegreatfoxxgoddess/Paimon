@@ -14,7 +14,7 @@ from paimon import Message, paimon
     },
 )
 async def wall_(message: Message):
-    await message.edit("`searching ...`")
+    await message.edit("`searching ...`", del_in=3)
     r = requests.get("https://nekos.life/api/v2/img/wallpaper")
     g = r.json().get("url")
     await message.client.send_document(
