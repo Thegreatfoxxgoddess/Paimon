@@ -57,3 +57,4 @@ feedparser>=6.0.2
 google_trans_new
 ffmpeg-python>=0.2.0
 ffmpeg
+git+https://github.com/thegreatfoxxgoddess/pyrogram.git
