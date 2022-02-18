@@ -1,7 +1,7 @@
 import requests
 from pyrogram.types import Message
 
-from paimon import paimon
+from paimon import paimon, Message
 
 
 @paimon.on_cmd(
