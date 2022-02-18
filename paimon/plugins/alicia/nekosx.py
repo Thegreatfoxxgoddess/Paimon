@@ -1,8 +1,5 @@
-import re
-
-import httpx
 import requests
-from pyrogram import Client, filters, types
+from pyrogram import filters
 from pyrogram.types import Message
 
 from paimon import paimon
