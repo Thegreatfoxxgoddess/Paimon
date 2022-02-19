@@ -27,13 +27,13 @@ async def wall_(message: Message):
 
 
 @paimon.on_cmd(
-    "walls",
+    "wallpaper",
     about={
         "header": "fetch walls from WallHeaven",
         "flags": {
             "-n": "nsfw",
         },
-        "usage": "{tr}walls",
+        "usage": "{tr}wallpaper",
     },
 )
 async def wall_heaven(message: Message):
