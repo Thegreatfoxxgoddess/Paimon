@@ -55,4 +55,7 @@ async def wall_heaven(message: Message):
     g = r.json().get("url")
     #    await message.reply_or_send_as_file(g)
     try:
-        await paimon.send_photo(message.chat.id, g)
+    await message.client.send_document(
+        message.chat.id,
+        g,
+    )
