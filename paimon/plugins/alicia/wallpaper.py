@@ -1,15 +1,11 @@
-import os
-
 import requests
+import os
 from pyrogram.types import Message
-
-from paimon import Message, paimon
-
+from paimon import paimon, Message
 WALL_H_API = os.environ.get("WALL_H_API")
 
-
 @paimon.on_cmd(
-    "wallpaper",
+    "walls",
     about={
         "header": "Search Wallpaper",
         "description": "Search and Download Wallpapers from Nekos-life and upload to Telegram",
@@ -18,7 +14,6 @@ WALL_H_API = os.environ.get("WALL_H_API")
     },
 )
 async def wall_(message: Message):
-    await message.edit("`searching ...`", del_in=3)
     r = requests.get("https://nekos.life/api/v2/img/wallpaper")
     g = r.json().get("url")
     await message.client.send_document(
@@ -27,8 +22,15 @@ async def wall_(message: Message):
     )
 
 
+
+
+
+
+
+
+
 @paimon.on_cmd(
-    "walls",
+    "wallpaper",
     about={
         "header": "fetch walls from WallHeaven",
         "flags": {
@@ -50,12 +52,12 @@ async def wall_heaven(message: Message):
     link_ = "https://wallhaven.cc/api/v1/search"
     if api_found:
         link_ += f"?apikey={api_}"
-    pure = "001" if "-n" in message.flags else "110"
-    param = {"q": query_, "sorting": "random", "purity": pure}
+    pure = '001' if "-n" in message.flags else '110'
+    param = {'q': query_, 'sorting': 'random', 'purity': pure}
     req = requests.get(link_, params=param)
-    r = req.json().get("data")
-    #    await message.reply_or_send_as_file(r)
+    r = req.json().get('data')
+#    await message.reply_or_send_as_file(r)
     try:
-        await paimon.send_document(message.chat.id, r[0]["url"])
-    except BaseException:
-        await message.edit(r[0]["url"])
+        await message.client.send_document(message.chat.id, r[0]['url'])
+    except:
+        await message.edit(r[0]['url'])
