@@ -18,11 +18,11 @@ WALL_H_API = os.environ.get("WALL_H_API")
     },
 )
 async def wall_(message: Message):
-    r = requests.get("https://nekos.life/api/v2/img/wallpaper")
-    g = r.json().get("url")
+    request = requests.get("https://nekos.life/api/v2/img/wallpaper")
+    grab = request.json().get("url")
     await message.client.send_document(
         message.chat.id,
-        g,
+        grab,
     )
 
 
@@ -51,9 +51,8 @@ async def wall_heaven(message: Message):
         link_ += f"?apikey={api_}"
     pure = "001" if "-n" in message.flags else "110"
     param = {"q": query_, "sorting": "random", "purity": pure}
-    r = requests.get(link_, params=param)
-    g = r.json().get("url")
-    #    await message.reply_or_send_as_file(g)
+    req = requests.get(link_, params=param)
+    g = req.json().get("url")
     await message.client.send_document(
         message.chat.id,
         g,
