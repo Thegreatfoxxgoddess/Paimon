@@ -2,7 +2,7 @@ import os
 
 import requests
 from pyrogram.types import Message
-
+from paimon.plugins.utils import upload
 from paimon import Message, paimon
 
 WALL_H_API = os.environ.get("WALL_H_API")
@@ -53,7 +53,7 @@ async def wall_heaven(message: Message):
     param = {"q": query_, "sorting": "random", "purity": pure}
     req = requests.get(link_, params=param)
     g = req.json().get("url")
-    await message.client.send_document(
+    await message.client.send_photo(
         message.chat.id,
         g,
     )
