@@ -2,7 +2,7 @@ import os
 
 import requests
 from pyrogram.types import Message
-from paimon.plugins.utils import upload
+
 from paimon import Message, paimon
 
 WALL_H_API = os.environ.get("WALL_H_API")
