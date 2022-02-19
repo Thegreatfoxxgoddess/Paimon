@@ -51,7 +51,7 @@ async def wall_heaven(message: Message):
         link_ += f"?apikey={api_}"
     pure = "001" if "-n" in message.flags else "110"
     param = {"q": query_, "sorting": "random", "purity": pure}
-    req = requests.get(link_, params=param)
+    r = requests.get(link_, params=param)
     g = r.json().get("url")
     #    await message.reply_or_send_as_file(g)
     await message.client.send_document(
