@@ -54,7 +54,6 @@ async def wall_heaven(message: Message):
     req = requests.get(link_, params=param)
     g = r.json().get("url")
     #    await message.reply_or_send_as_file(g)
-    try:
     await message.client.send_document(
         message.chat.id,
         g,
