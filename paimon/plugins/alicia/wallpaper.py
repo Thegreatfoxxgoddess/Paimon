@@ -25,15 +25,14 @@ async def wall_(message: Message):
         grab,
     )
 
-
 @paimon.on_cmd(
-    "wallpaper",
+    "walls",
     about={
         "header": "fetch walls from WallHeaven",
         "flags": {
             "-n": "nsfw",
         },
-        "usage": "{tr}wallpaper",
+        "usage": "{tr}walls",
     },
 )
 async def wall_heaven(message: Message):
@@ -49,11 +48,12 @@ async def wall_heaven(message: Message):
     link_ = "https://wallhaven.cc/api/v1/search"
     if api_found:
         link_ += f"?apikey={api_}"
-    pure = "001" if "-n" in message.flags else "110"
-    param = {"q": query_, "sorting": "random", "purity": pure}
+    pure = '001' if "-n" in message.flags else '110'
+    param = {'q': query_, 'sorting': 'random', 'purity': pure}
     req = requests.get(link_, params=param)
-    g = req.json().get("url")
-    await message.client.send_photo(
-        message.chat.id,
-        g,
-    )
+    r = req.json().get('data')
+#    await message.reply_or_send_as_file(r)
+    try:
+        await paimon.send_photo(message.chat.id, r[0]['url'])
+    except:
+        await message.edit(r[0]['url'])
