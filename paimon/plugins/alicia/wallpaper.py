@@ -14,7 +14,7 @@ WALL_H_API = os.environ.get("WALL_H_API")
         "header": "Search Wallpaper",
         "description": "Search and Download Wallpapers from Nekos-life and upload to Telegram",
         "usage": "{tr}wall [Query]",
-        "examples": "{tr}wall paimon",
+        "examples": "{tr}walls paimon",
     },
 )
 async def wall_(message: Message):
@@ -33,7 +33,7 @@ async def wall_(message: Message):
         "flags": {
             "-n": "nsfw",
         },
-        "usage": "{tr}walls",
+        "usage": "{tr}wallpaper",
     },
 )
 async def wall_heaven(message: Message):
@@ -52,9 +52,7 @@ async def wall_heaven(message: Message):
     pure = "001" if "-n" in message.flags else "110"
     param = {"q": query_, "sorting": "random", "purity": pure}
     req = requests.get(link_, params=param)
-    r = req.json().get("data")
-    #    await message.reply_or_send_as_file(r)
+    g = r.json().get("url")
+    #    await message.reply_or_send_as_file(g)
     try:
-        await paimon.send_document(message.chat.id, r[0]["url"])
-    except BaseException:
-        await message.edit(r[0]["url"])
+        await paimon.send_photo(message.chat.id, g)
