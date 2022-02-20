@@ -42,22 +42,20 @@ async def wall_(message: Message):
     r = requests.get("https://wallhaven.cc/api/v1/collections")
     g = r.json().get("url")
     link = (await client.image(NSFWImageTags[input_choice])).url
-        else:
-            await message.err(
-                "Choose a valid Input !, See Help for more info.", del_in=5
-            )
-            return
-    else:
-        link = (await client.random_image()).url
-
+else:
+    await message.err(
+        "Choose a valid Input !, See Help for more info.", del_in=5
+      )
+     return
+else:
+    link = (await client.random_image()).url
     await message.delete()
-
-    try:
-        await send_nekos(message, link)
-    except (MediaEmpty, WebpageCurlFailed):
-        link = download(link)
-        await send_walls(message, link)
-        os.remove(link)
+try:
+    await send_nekos(message, link)
+except (MediaEmpty, WebpageCurlFailed):
+     link = download(link)
+     await send_walls(message, link)
+     os.remove(link)
 
 async def send_walls(message: Message, link: str):
         await message.client.send_photo(
