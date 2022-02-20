@@ -65,6 +65,8 @@ async def wall_heaven(message: Message):
         link = download(link)
         await send_walls(message, link)
         os.remove(link)
+
+
 async def send_walls(message: Message, link: str):
     await message.client.send_photo(
         message.chat.id,
