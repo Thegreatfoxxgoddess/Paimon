@@ -56,16 +56,17 @@ async def wall_heaven(message: Message):
     req = requests.get(link_, params=param)
     req.json().get("data")
     #    await message.reply_or_send_as_file(r)
-    link = (await paimon.image(query_).url
-    await send_walls(message, link)
-except (MediaEmpty, WebpageCurlFailed):
-     link = download(link)
-     await send_walls(message, link)
-     os.remove(link)
+    link = (await client.random_image()).url
+    await message.delete()
 
-
+    try:
+        await send_walls(message, link)
+    except (MediaEmpty, WebpageCurlFailed):
+        link = download(link)
+        await send_walls(message, link)
+        os.remove(link)
 async def send_walls(message: Message, link: str):
-    await message.paimon.send_photo(
+    await message.client.send_photo(
         message.chat.id,
         g,
     )
