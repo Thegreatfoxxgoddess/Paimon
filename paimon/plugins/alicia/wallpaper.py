@@ -58,6 +58,7 @@ async def wall_heaven(message: Message):
     #    await message.reply_or_send_as_file(r)
     link = (await paimon.image(query_).url
 
+
 try:
         await send_walls(message, link)
     except (MediaEmpty, WebpageCurlFailed):
