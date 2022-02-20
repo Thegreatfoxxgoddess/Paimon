@@ -57,7 +57,7 @@ async def wall_heaven(message: Message):
     req.json().get("data")
     #    await message.reply_or_send_as_file(r)
     link = (await paimon.image(query_).url
-
+    await send_walls(message, link)
 
 try:
         await send_walls(message, link)
