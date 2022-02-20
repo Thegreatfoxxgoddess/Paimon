@@ -58,6 +58,5 @@ async def wall_heaven(message: Message):
     #    await message.reply_or_send_as_file(r)
     try:
         await paimon.send_document(message.chat.id, r[0]["url"])
-    except (MediaEmpty, WebpageCurlFailed):
-        download(r[0]["url"])
-        await paimon.send_document(message.chat.id)
+    except
+        await paimon.send_photo(message.chat.id, r[0]["url"])
