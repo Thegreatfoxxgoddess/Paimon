@@ -60,9 +60,11 @@ async def wall_heaven(message: Message):
         url = download(url)
         await send_wallpaper(message, url)
         os.remove(url)
+
+
 async def send_wallpaper(message: Message, link: str):
     reply = message.reply_to_message
     reply_id = reply.message_id if reply else None
     await message.client.send_photo(
-            chat_id=message.chat.id, photo=url, reply_to_message_id=reply_id
-        )
+        chat_id=message.chat.id, photo=url, reply_to_message_id=reply_id
+    )
