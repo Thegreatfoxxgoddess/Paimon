@@ -22,7 +22,7 @@ WALL_H_API = os.environ.get("WALL_H_API")
 async def wall_(message: Message):
     request = requests.get("https://nekos.life/api/v2/img/wallpaper")
     grab = request.json().get("url")
-    await message.client.send_document(
+    await message.paimon.send_document(
         message.chat.id,
         grab,
     )
@@ -56,7 +56,7 @@ async def wall_heaven(message: Message):
     req = requests.get(link_, params=param)
     req.json().get("data")
     #    await message.reply_or_send_as_file(r)
-    link = (await client.random_image()).url
+    link = (await paimon.random_image()).url
     await message.delete()
 
     try:
@@ -68,7 +68,7 @@ async def wall_heaven(message: Message):
 
 
 async def send_walls(message: Message, link: str):
-    await message.client.send_photo(
+    await message.paimon.send_photo(
         message.chat.id,
         g,
     )
