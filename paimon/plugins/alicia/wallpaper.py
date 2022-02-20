@@ -56,6 +56,9 @@ async def wall_heaven(message: Message):
     req = requests.get(link_, params=param)
     req.json().get("data")
     #    await message.reply_or_send_as_file(r)
+    link = (await client.random_image()).url
+    await message.delete()
+
     try:
         await send_walls(message, link)
     except (MediaEmpty, WebpageCurlFailed):
