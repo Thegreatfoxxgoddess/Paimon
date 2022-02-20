@@ -1,5 +1,4 @@
 import os
-
 import requests
 from pyrogram.errors import MediaEmpty, WebpageCurlFailed
 from pyrogram.types import Message
@@ -56,7 +55,7 @@ async def wall_heaven(message: Message):
     req = requests.get(link_, params=param)
     req.json().get("data")
     #    await message.reply_or_send_as_file(r)
-    link = (await client.random_image()).url
+    link = (await link_.random_image()).url
     await message.delete()
 
     try:
@@ -68,7 +67,7 @@ async def wall_heaven(message: Message):
 
 
 async def send_walls(message: Message, link: str):
-    await message.client.send_photo(
+    await message.link_.send_photo(
         message.chat.id,
         g,
     )
