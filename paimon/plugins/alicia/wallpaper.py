@@ -26,8 +26,6 @@ async def wall_(message: Message):
     )
 
 
-
-
 @paimon.on_cmd(
     "wallpaper",
     about={
@@ -40,19 +38,21 @@ async def wall_(message: Message):
 async def wall_(message: Message):
     await message.edit("`searching ...`", del_in=3)
     r = requests.get("https://wallhaven.cc/api/v1/collections")
-    g = r.json().get("url")
-    link = (await client.random_image()).url
+    r.json().get("url")
+    (await client.random_image()).url
     await message.delete()
+
+
 try:
     await send_walls(message, link)
 except (MediaEmpty, WebpageCurlFailed):
-     link = download(link)
-     await send_walls(message, link)
-     os.remove(link)
+    link = download(link)
+    await send_walls(message, link)
+    os.remove(link)
+
 
 async def send_walls(message: Message, link: str):
-        await message.client.send_photo(
-          message.chat.id,
-          g,
+    await message.client.send_photo(
+        message.chat.id,
+        g,
     )
-         
