@@ -39,11 +39,6 @@ async def wall_(message: Message):
     await message.edit("`searching ...`", del_in=3)
     r = requests.get("https://wallhaven.cc/api/v1/collections")
     r.json().get("url")
-    (await client.random_image()).url
-    await message.delete()
-
-
-try:
     await send_walls(message, link)
 except (MediaEmpty, WebpageCurlFailed):
     link = download(link)
