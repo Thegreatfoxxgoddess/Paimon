@@ -1,11 +1,12 @@
 import os
-
+import asyncio
+import random
 import requests
 from pyrogram.errors import MediaEmpty, WebpageCurlFailed
 from pyrogram.types import Message
 from wget import download
 
-from paimon import Message, paimon
+from paimon import Message,Config, paimon
 
 WALL_H_API = os.environ.get("WALL_H_API")
 
