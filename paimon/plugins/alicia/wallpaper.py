@@ -23,7 +23,9 @@ async def wall_(message: Message):
     request = requests.get("https://nekos.life/api/v2/img/wallpaper")
     grab = request.json().get("url")
     await message.client.send_document(
-        message.chat.id, grab,)
+        message.chat.id,
+        grab,
+    )
 
 
 @paimon.on_cmd(
