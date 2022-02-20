@@ -56,7 +56,7 @@ async def wall_heaven(message: Message):
     req = requests.get(link_, params=param)
     req.json().get("data")
     #    await message.reply_or_send_as_file(r)
-    link = (await paimon.random_image()).url
+    link = (await client.image(query_).url
     await message.delete()
 
     try:
