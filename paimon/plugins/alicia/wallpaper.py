@@ -55,6 +55,14 @@ async def wall_heaven(message: Message):
     r = req.json().get("data")
     #    await message.reply_or_send_as_file(r)
     try:
-        await paimon.send_document(message.chat.id, r[0]["url"])
-    except BaseException:
-        await paimon.send_photo(message.chat.id, r[0]["url"])
+        await paimon.send_wallpaper(message, r[0]["url"])
+    except (MediaEmpty, WebpageCurlFailed):
+        url = download(url)
+        await send_wallpaper(message, url)
+        os.remove(url)
+async def send_wallpaper(message: Message, link: str):
+    reply = message.reply_to_message
+    reply_id = reply.message_id if reply else None
+    await message.client.send_photo(
+            chat_id=message.chat.id, photo=url, reply_to_message_id=reply_id
+        )
