@@ -1,9 +1,7 @@
 import os
 
 import requests
-from pyrogram.errors import MediaEmpty, WebpageCurlFailed
 from pyrogram.types import Message
-from wget import download
 
 from paimon import Message, paimon
 
@@ -58,5 +56,5 @@ async def wall_heaven(message: Message):
     #    await message.reply_or_send_as_file(r)
     try:
         await paimon.send_document(message.chat.id, r[0]["url"])
-    except:
+    except BaseException:
         await paimon.send_photo(message.chat.id, r[0]["url"])
