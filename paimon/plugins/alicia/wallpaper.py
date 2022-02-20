@@ -57,6 +57,5 @@ async def wall_heaven(message: Message):
     try:
         await paimon.send_document(message.chat.id, r[0]["url"])
     except (MediaEmpty, WebpageCurlFailed):
-        link = download(r[0]["url"])
+        download(r[0]["url"])
         await paimon.send_document(message.chat.id)
-        
