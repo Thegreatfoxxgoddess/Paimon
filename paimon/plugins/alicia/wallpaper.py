@@ -33,8 +33,6 @@ async def wall_(message: Message):
 
 
 
-WALL_H_API = os.environ.get("WALL_H_API")
-
 
 @paimon.on_cmd(
     "wallpaper",
