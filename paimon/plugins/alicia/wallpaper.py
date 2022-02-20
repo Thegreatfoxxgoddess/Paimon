@@ -46,7 +46,7 @@ async def wall_heaven(message: Message):
     query_ = message.filtered_input_str
     if not query_:
         query_ = "wallpaper"
-    link_ = "https://danbooru.donmai.us/posts"
+    link_ = "https://wallhaven.cc/api/v1/search"
     if api_found:
         link_ += f"?apikey={api_}"
     pure = "001" if "-n" in message.flags else "110"
