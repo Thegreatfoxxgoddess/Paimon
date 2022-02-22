@@ -101,7 +101,6 @@ async def kang_(message: Message):
             emoji_ = emoji_[len(_saved) :]
     if not emoji_:
         emoji_ = "✨"
-    a_name = user.first_name
     user = await paimon.get_me()
     u_name = user.username
     if u_name:
@@ -109,6 +108,7 @@ async def kang_(message: Message):
     else:
         u_name = user.first_name or user.id
 
+    a_name = user.first_name
     packname = f"a{user.id}_by_paimon_{pack}"
     custom_packnick = Config.CUSTOM_PACK_NAME or f"{a_name}'s sticker pack[{u_name}]"
     packnick = f"{custom_packnick} {pack}"
