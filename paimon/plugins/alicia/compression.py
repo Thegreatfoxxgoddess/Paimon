@@ -5,7 +5,7 @@ from paimon.helpers import msg_type
 
 
 @paimon.on_cmd(
-    "comp",
+    "r",
     about={
         "header": "document to compressed media and vice versa",
         "flags": {
