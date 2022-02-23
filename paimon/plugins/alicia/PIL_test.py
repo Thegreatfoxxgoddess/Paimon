@@ -72,7 +72,7 @@ async def pfp_stick_(message: Message):
     },
 )
 async def rect_angle(message: Message):
-    await message.edit("Making quote...", del_in=3)
+    await message.edit("Making quote...", del_in=5)
     reply_ = message.reply_to_message
     name_ = reply_.from_user.first_name if reply_ else message.from_user.first_name
     text_ = reply_.text if reply_ else message.input_str or ""
@@ -122,7 +122,7 @@ async def rect_angle(message: Message):
     },
 )
 async def cu_tee(message: Message):
-    await message.edit("Making quote...", del_in=3)
+    await message.edit("Making quote...", del_in=5)
     reply_ = message.reply_to_message
     name_ = reply_.from_user.first_name if reply_ else message.from_user.first_name
     if "-f" in message.flags:
