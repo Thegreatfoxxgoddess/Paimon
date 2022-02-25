@@ -262,7 +262,7 @@ async def audio_upload(
     thumb = None
     duration = 0
     str_path = str(path)
-    file_size = humanbytes(os.stat(str_path).st_size)
+    humanbytes(os.stat(str_path).st_size)
     if with_thumb:
         try:
             album_art = stagger.read_tag(str_path)
