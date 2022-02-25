@@ -293,7 +293,7 @@ async def audio_upload(
             chat_id=message.chat.id,
             audio=str_path,
             thumb=thumb,
-            caption=f"{path.name} [ {file_size} ]",
+            caption="",
             title=title,
             performer=artist,
             duration=duration,
