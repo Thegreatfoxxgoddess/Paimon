@@ -13,7 +13,7 @@ async def webss(message: Message):
     if Config.GOOGLE_CHROME_BIN is None:
         await message.edit("`need to install Google Chrome. Module Stopping`", del_in=5)
         return
-    link_match = match(message.input_str)
+    link_match = match(r"\bhttps?://.*\.\S+", message.input_str)
     if not link_match:
         await message.err("I need a valid link to take screenshots from.")
         return
