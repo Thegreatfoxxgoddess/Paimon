@@ -9,7 +9,7 @@ from pyrogram.errors import BadRequest, FloodWait, Forbidden, MediaEmpty
 from pyrogram.file_id import PHOTO_TYPES, FileId
 from pyrogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
 
-from paimon import Config, Message, get_collection, get_version, paimon, versions
+from paimon import Config, Message, get_collection, paimon
 from paimon.core.ext import RawClient
 from paimon.helpers import msg_type
 from paimon.plugins.utils.telegraph import upload_media_
@@ -211,7 +211,6 @@ async def send_alive_message(message: Message) -> None:
 
 
 if paimon.has_bot:
-
 
     @paimon.bot.on_callback_query(filters.regex(pattern=r"^settings_btn$"))
     async def alive_cb(_, c_q: CallbackQuery):
