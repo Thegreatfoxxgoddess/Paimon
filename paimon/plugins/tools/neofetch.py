@@ -60,13 +60,13 @@ async def neo_image():
         if ":" in u_text:
             ms = u_text.split(":", 1)
             drawing.text(
-                xy=(318, 50 + x),
+                xy=(320, 55 + x),
                 text=ms[0] + ":",
                 font=font,
                 fill=font_color,
             )
             drawing.text(
-                xy=((8.5 * len(ms[0])) + 318, 50 + x), text=ms[1], font=font, fill=white
+                xy=((8.5 * len(ms[0])) + 320, 55 + x), text=ms[1], font=font, fill=white
             )
         else:
             color = font_color if y == 0 else white
