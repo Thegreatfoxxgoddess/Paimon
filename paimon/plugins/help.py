@@ -8,6 +8,8 @@ from html_telegraph_poster import TelegraphPoster
 from pyrogram import filters
 from pyrogram.errors import BadRequest, MessageIdInvalid, MessageNotModified
 from pyrogram.types import (
+    InlineQueryResultCachedDocument,
+    InlineQueryResultCachedPhoto,
     CallbackQuery,
     InlineKeyboardButton,
     InlineKeyboardMarkup,
@@ -26,7 +28,7 @@ from paimon.utils import parse_buttons as pb
 from paimon.utils import rand_key
 
 from .bot.alive import Bot_Alive
-from .bot.anime_dl import Anime
+from .bot.gogo import Anime
 from .bot.utube_inline import (
     download_button,
     get_yt_video_id,
@@ -35,8 +37,13 @@ from .bot.utube_inline import (
     ytsearch_data,
 )
 from .fun.stylish import Styled, font_gen
+from .jutsu.ivotings import vote_buttons
 from .misc.redditdl import reddit_thumb_link
 from .utils.notes import get_inote
+
+# from .inline_ivoting import alive_inline_q
+
+CHANNEL = paimon.getCLogger(__name__)
 
 CHANNEL = paimon.getCLogger(__name__)
 
@@ -68,7 +75,7 @@ REPO_X = InlineQueryResultArticle(
         [
             [
                 InlineKeyboardButton(
-                    "paimon repo ✨", url="https://github.com/thegreatfoxxgoddess/Paimon"
+                    "paimon repo ✨", url="https://github.com/ashwinstr/UX-jutsu"
                 ),
                 InlineKeyboardButton(
                     "🚀 Deploy Heroku",
@@ -639,8 +646,8 @@ if paimon.has_bot:
                     return
 
             if string == "alive":
-                await paimon.get_me()
-                alive_info = await Bot_Alive.alive_info()
+                me = await userge.get_me()
+                alive_info = Bot_Alive.alive_info(me)
                 buttons = Bot_Alive.alive_buttons()
                 if Config.ALIVE_MEDIA_TYPE == "photo":
                     results.append(
@@ -650,7 +657,7 @@ if paimon.has_bot:
                             reply_markup=buttons,
                         )
                     )
-                elif Config.ALIVE_MEDIA_TYPE == "gif" or "video":
+                elif Config.ALIVE_MEDIA_TYPE == "gif":
                     results.append(
                         InlineQueryResultAnimation(
                             animation_url=Config.NEW_ALIVE_MEDIA,
