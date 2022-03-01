@@ -54,8 +54,8 @@ async def neo_image():
     photo = Image.open(BytesIO(get(base_pic).content))
     drawing = ImageDraw.Draw(photo)
     font = ImageFont.truetype(BytesIO(get(font_url).content), 14)
-    x = 0
-    y = 0
+    x = 5
+    y = 5
     for u_text in neofetch.splitlines():
         if ":" in u_text:
             ms = u_text.split(":", 1)
