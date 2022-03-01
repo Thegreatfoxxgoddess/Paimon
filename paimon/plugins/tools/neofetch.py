@@ -39,7 +39,7 @@ async def neofetch_(message: Message):
 
 async def neo_image():
     neofetch = (await runcmd("neofetch --stdout"))[0]
-    font_color = (22, 118, 113)  # Deep sea
+    font_color = (3, 150, 153)  # Deep sea
     white = (255, 255, 255)
     if "Debian" in neofetch:
         base_pic = "https://telegra.ph/file/1f62cbef3fe8e24afc6f7.jpg"
@@ -60,13 +60,13 @@ async def neo_image():
         if ":" in u_text:
             ms = u_text.split(":", 1)
             drawing.text(
-                xy=(318, 45 + x),
+                xy=(318, 50 + x),
                 text=ms[0] + ":",
                 font=font,
                 fill=font_color,
             )
             drawing.text(
-                xy=((8.5 * len(ms[0])) + 315, 45 + x), text=ms[1], font=font, fill=white
+                xy=((8.5 * len(ms[0])) + 318, 50 + x), text=ms[1], font=font, fill=white
             )
         else:
             color = font_color if y == 0 else white
