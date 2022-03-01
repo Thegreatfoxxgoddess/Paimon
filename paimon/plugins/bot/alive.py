@@ -9,14 +9,19 @@ from pyrogram.errors import BadRequest, FloodWait, Forbidden, MediaEmpty
 from pyrogram.file_id import PHOTO_TYPES, FileId
 from pyrogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
 
-from paimon import Config, Message, get_version, paimon
+from paimon import Config, Message, get_collection, get_version, paimon, versions
 from paimon.core.ext import RawClient
+from paimon.helpers import msg_type
+from paimon.plugins.utils.telegraph import upload_media_
 from paimon.utils import get_file_id, rand_array
 
 _ALIVE_REGEX = comp_regex(
-    r"http[s]?://(i\.imgur\.com|telegra\.ph/file|t\.me)/(\w+)(?:\.|/)(gif|mp4|jpg|png|jpeg|[0-9]+)(?:/([0-9]+))?"
+    r"http[s]?://(i\.imgur\.com|telegra\.ph/file|t\.me)/(\w+)(?:\.|/)(gif|jpg|png|jpeg|[0-9]+)(?:/([0-9]+))?"
 )
 _USER_CACHED_MEDIA, _BOT_CACHED_MEDIA = None, None
+media_ = None
+
+SAVED_SETTINGS = get_collection("CONFIGS")
 
 LOGGER = paimon.getLogger(__name__)
 
@@ -40,6 +45,56 @@ async def _init() -> None:
                     )
             except Exception as b_rr:
                 LOGGER.debug(b_rr)
+
+
+@paimon.on_cmd(
+    "a_media",
+    about={
+        "header": "set alive media",
+        "flags": {
+            "-c": "check alive media.",
+            "-r": "reset alive media.",
+        },
+        "usage": "{tr}a_media [reply to media]",
+    },
+)
+async def set_alive_media(message: Message):
+    """set alive media"""
+    found = await SAVED_SETTINGS.find_one({"_id": "ALIVE_MEDIA"})
+    if "-c" in message.flags:
+        if found:
+            media_ = found["url"]
+        else:
+            media_ = "https://telegra.ph/file/1fb4c193b5ac0c593f528.jpg"
+        return await message.edit(f"The alive media is set to [<b>THIS</b>]({media_}).")
+    elif "-r" in message.flags:
+        if not found:
+            return await message.edit("`No alive media is set.`", del_in=5)
+        await SAVED_SETTINGS.delete_one({"_id": "ALIVE_MEDIA"})
+        asyncio.get_event_loop().create_task(paimon.restart())
+        return await message.edit("`Alive media reset to default.`", del_in=5)
+    reply_ = message.reply_to_message
+    if not reply_:
+        return await message.edit(
+            "`Reply to media to set it as alive media.`", del_in=5
+        )
+    type_ = msg_type(reply_)
+    if type_ not in ["gif", "photo"]:
+        return await message.edit("`Reply to media only.`", del_in=5)
+    link_ = await upload_media_(message)
+    whole_link = f"https://telegra.ph{link_}"
+    await SAVED_SETTINGS.update_one(
+        {"_id": "ALIVE_MEDIA"}, {"$set": {"url": whole_link}}, upsert=True
+    )
+    await SAVED_SETTINGS.update_one(
+        {"_id": "ALIVE_MEDIA"}, {"$set": {"type": type_}}, upsert=True
+    )
+    link_log = (await reply_.forward(Config.LOG_CHANNEL_ID)).link
+    await message.edit(
+        f"`Alive media set.` [<b>Preview</b>]({link_log})\n`Bot soft restarting, please wait...`",
+        disable_web_page_preview=True,
+    )
+    asyncio.get_event_loop().create_task(paimon.restart())
 
 
 @paimon.on_cmd("alive", about={"header": "Just For Fun"}, allow_channels=False)
@@ -83,9 +138,10 @@ async def send_inline_alive(message: Message) -> None:
 
 async def send_alive_message(message: Message) -> None:
     global _USER_CACHED_MEDIA, _BOT_CACHED_MEDIA
+    me = await paimon.get_me()
     chat_id = message.chat.id
     client = message.client
-    caption = Bot_Alive.alive_info()
+    caption = Bot_Alive.alive_info(me)
     if client.is_bot:
         reply_markup = Bot_Alive.alive_buttons()
         file_id = _BOT_CACHED_MEDIA
@@ -93,14 +149,14 @@ async def send_alive_message(message: Message) -> None:
         reply_markup = None
         file_id = _USER_CACHED_MEDIA
         caption += (
-            f"\n⚡️  <a href={Config.UPSTREAM_REPO}><b>repo</b></a>"
+            f"\n⚡️  <a href={Config.UPSTREAM_REPO}><b>REPO</b></a>"
             "    <code>|</code>    "
-            "👥  <a href='https://t.me/eightbituwu><b>meh</b></a>"
+            "👥  <a href='https://t.me/useless_x'><b>SUPPORT</b></a>"
         )
     if not Config.ALIVE_MEDIA:
-        await client.send_animation(
+        await client.send_photo(
             chat_id,
-            animation=Bot_Alive.alive_default_imgs(),
+            photo=Bot_Alive.alive_default_imgs(),
             caption=caption,
             reply_markup=reply_markup,
         )
@@ -156,14 +212,6 @@ async def send_alive_message(message: Message) -> None:
 
 if paimon.has_bot:
 
-    @paimon.bot.on_callback_query(filters.regex(pattern=r"^status_alive$"))
-    async def status_alive_(_, c_q: CallbackQuery):
-        c_q.from_user.id
-        await c_q.answer(
-            f"▫️ ᴍᴏᴅᴏ :  {Bot_Alive._get_mode()}\n▫️ ᴠᴇʀsɪᴏɴ  :  v{get_version()}\n▫️ ᴜᴘᴛɪᴍᴇ  :  {paimon.uptime}\n\n{rand_array(FRASES)}",
-            show_alert=True,
-        )
-        return status_alive_
 
     @paimon.bot.on_callback_query(filters.regex(pattern=r"^settings_btn$"))
     async def alive_cb(_, c_q: CallbackQuery):
@@ -207,7 +255,7 @@ if paimon.has_bot:
 
 
 def _parse_arg(arg: bool) -> str:
-    return "ᵃᶜᵗᶦᵛᵃᵗᵉᵈ" if arg else "ᵈᵉᵃᶜᵗᶦᵛᵃᵗᵉᵈ"
+    return " 𝙴𝚗𝚊𝚋𝚕𝚎𝚍" if arg else " 𝙳𝚒𝚜𝚊𝚋𝚕𝚎𝚍"
 
 
 class Bot_Alive:
@@ -221,7 +269,7 @@ class Bot_Alive:
             link_type = "url_gif" if match.group(3) == "gif" else "url_image"
         elif match.group(1) == "telegra.ph/file":
             link = match.group(0)
-            link_type = "url_gif" if match.group(3) == "gif" else "url_image"
+            link_type = "url_image"
         else:
             link_type = "tg_media"
             if match.group(2) == "c":
@@ -252,6 +300,14 @@ class Bot_Alive:
         return "USER"
 
     @staticmethod
+    def _get_mode() -> str:
+        if RawClient.DUAL_MODE:
+            return "DUAL"
+        if Config.BOT_TOKEN:
+            return "BOT"
+        return "USER"
+
+    @staticmethod
     def alive_buttons() -> InlineKeyboardMarkup:
         buttons = [
             [
@@ -264,22 +320,16 @@ class Bot_Alive:
     @staticmethod
     def alive_default_imgs() -> str:
         alive_imgs = [
-            "https://www.icegif.com/wp-content/uploads/genshin-impact-icegif.gif",
-            "https://www.icegif.com/wp-content/uploads/genshin-impact-icegif-2.gif",
-            "https://www.icegif.com/wp-content/uploads/genshin-impact-icegif-6.gif",
-            "https://www.icegif.com/wp-content/uploads/genshin-impact-icegif-13.gif",
-            "https://www.icegif.com/wp-content/uploads/genshin-impact-icegif-4.gif",
-            "https://www.icegif.com/wp-content/uploads/genshin-impact-icegif-11.gif",
-            "https://www.icegif.com/wp-content/uploads/genshin-impact-genshin-impact-is-a-free-to-play-action-role-playing-game-developed-and-published-by-mihoyo-the-game-features-a-fantasy-open-world-environment-and-action-based-ba-icegif.gif",
-            "https://www.icegif.com/wp-content/uploads/genshin-impact-icegif-5.gif",
-            "https://www.icegif.com/wp-content/uploads/genshin-impact-icegif-6.gif",
-            "https://www.icegif.com/wp-content/uploads/genshin-impact-icegif-13.gif",
-            "https://www.icegif.com/wp-content/uploads/genshin-impact-icegif-8.gif",
-            "https://www.icegif.com/wp-content/uploads/genshin-impact-icegif-9.gif",
-            "https://www.icegif.com/wp-content/uploads/genshin-impact-icegif-7.gif",
-            "https://www.icegif.com/wp-content/uploads/genshin-impact-icegif-10.gif",
-            "https://www.icegif.com/wp-content/uploads/genshin-impact-icegif-11.gif",
-            "https://www.icegif.com/wp-content/uploads/icegif-188.gif",
+            "https://i.pinimg.com/originals/d3/8e/d3/d38ed3ec90094626ec590cb940d37ef6.gif",
+            "https://gifimage.net/wp-content/uploads/2017/09/anime-pixel-gif-7.gif",
+            "https://64.media.tumblr.com/ad61e9e3c9c9562d90e8de5913d8ba8d/tumblr_mir1lsmQ7N1s1ogrno1_500.gif",
+            "https://i.pinimg.com/originals/e4/0b/ca/e40bca75ab3e089a9e085d1ed353cf07.gif",
+            "https://c.tenor.com/5IjEPSL9sAAAAAAd/tenor.gif",
+            "https://c.tenor.com/BVdoO8TNa00AAAAC/helltaker-modeus.gif",
+            "https://c.tenor.com/gVMHczWXBycAAAAd/helltaker.gif",
+            "https://i.pinimg.com/originals/0d/2e/e3/0d2ee30a2234d838368e33f2d28a0cfb.gif",
+            "https://telegra.ph/file/ad016e0e5c30617e94db0.gif",
+            "https://telegra.ph/file/a2bbf053f786024c85477.gif",
         ]
         return rand_array(alive_imgs)
 
@@ -292,4 +342,4 @@ class Bot_Alive:
         return bool(FileId.decode(file_id).file_type in PHOTO_TYPES)
 
 
-FRASES = ("you're beautiful",)
+FRASES = ("ara ara..... you look kawaii",)
