@@ -28,7 +28,7 @@ from paimon.utils import parse_buttons as pb
 from paimon.utils import rand_key
 
 from .bot.alive import Bot_Alive
-from .bot.gogo import Anime
+from .bot.anime_dl import Anime
 from .bot.utube_inline import (
     download_button,
     get_yt_video_id,
@@ -646,7 +646,7 @@ if paimon.has_bot:
                     return
 
             if string == "alive":
-                me = await userge.get_me()
+                me = await paimon.get_me()
                 alive_info = Bot_Alive.alive_info(me)
                 buttons = Bot_Alive.alive_buttons()
                 if Config.ALIVE_MEDIA_TYPE == "photo":
