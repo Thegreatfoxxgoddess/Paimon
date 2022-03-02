@@ -97,7 +97,7 @@ async def _init() -> None:
         Config.NEW_ALIVE_MEDIA = media_["url"]
         Config.ALIVE_MEDIA_TYPE = media_["type"]
     else:
-        Config.NEW_ALIVE_MEDIA = "https://telegra.ph/file/f22d48bae5cf0c003d665.png"
+        Config.NEW_ALIVE_MEDIA = "https://telegra.ph/file/0a8103f5385d18f0ef6e2.gif"
         Config.ALIVE_MEDIA_TYPE = "photo" or "animation"
 
 
