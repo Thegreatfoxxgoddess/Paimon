@@ -235,9 +235,7 @@ if paimon.has_bot:
                 pass
             ping = "✨ ᵖᶦⁿᵍ : {} ᴍs\n"
 
-        alive_s = "🌿 ᵖˡᵘᵍᶦⁿˢ : {}\n".format(
-            _parse_arg(Config.LOAD_UNOFFICIAL_PLUGINS)
-        )
+        alive_s = "🌿 ᵖˡᵘᵍᶦⁿˢ : {}\n".format(_parse_arg(Config.LOAD_UNOFFICIAL_PLUGINS))
 
         alive_s += f"⚡ ᵃⁿᵗᶦˢᵖᵃᵐ : {_parse_arg(Config.SUDO_ENABLED)}\n"
         alive_s += f"🌈 ᵃⁿᵗᶦˢᵖᵃᵐ : {_parse_arg(Config.ANTISPAM_SENTRY)}\n"
