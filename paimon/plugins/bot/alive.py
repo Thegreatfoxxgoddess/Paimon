@@ -9,11 +9,14 @@ from pyrogram.errors import BadRequest, FloodWait, Forbidden, MediaEmpty
 from pyrogram.file_id import PHOTO_TYPES, FileId
 from pyrogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
 
-from paimon import Config, Message, get_collection, paimon
+from paimon import Config, Message, get_collection, get_version, paimon, versions
 from paimon.core.ext import RawClient
 from paimon.helpers import msg_type
 from paimon.plugins.utils.telegraph import upload_media_
 from paimon.utils import get_file_id, rand_array
+
+
+
 
 _ALIVE_REGEX = comp_regex(
     r"http[s]?://(i\.imgur\.com|telegra\.ph/file|t\.me)/(\w+)(?:\.|/)(gif|jpg|png|jpeg|[0-9]+)(?:/([0-9]+))?"
