@@ -221,9 +221,9 @@ if paimon.has_bot:
 
 ▫️ ✨Mode :  {Bot_Alive._get_mode()}
 ▫️ 🌌Uptime  :  {paimon.uptime}
-▫️ 🐍Python  :  v{version.__python_version__}
+▫️ 🐍Python  :  v{versions.__python_version__}
 ▫️ 🌿Version  :  v{get_version()}
-▫️ 🌊Pyrogram  :  v{version.__pyro_version__}
+▫️ 🌊Pyrogram  :  v{versions.__pyro_version__}
 """,
             show_alert=True,
         )
