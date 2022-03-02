@@ -210,6 +210,22 @@ async def send_alive_message(message: Message) -> None:
 
 
 if paimon.has_bot:
+    
+    
+    @paimon.bot.on_callback_query(filters.regex(pattern=r"^status_alive$"))
+    async def status_alive_(_, c_q: CallbackQuery):
+        c_q.from_user.id
+        await c_q.answer(
+            f"""
+▫️ ✨Mode :  {Bot_Alive._get_mode()}
+▫️ 🌌Uptime  :  {paimon.uptime}
+▫️ 🐍Python  :  v{__python_version__}
+▫️ 🌿Version  :  v{get_version()}
+▫️ 🌊Pyrogram  :  v{__pyro_version__}
+""", show_alert=True,
+        )
+        return status_alive_
+
 
     @paimon.bot.on_callback_query(filters.regex(pattern=r"^settings_btn$"))
     async def alive_cb(_, c_q: CallbackQuery):
@@ -334,3 +350,12 @@ class Bot_Alive:
     @staticmethod
     def is_photo(file_id: str) -> bool:
         return bool(FileId.decode(file_id).file_type in PHOTO_TYPES)
+
+
+FRASES = (
+    "morning cutie",
+    "hello mommy",
+    "ohayo onisan",
+    "yamete",
+    "yamero",
+)
