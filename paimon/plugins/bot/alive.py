@@ -15,9 +15,6 @@ from paimon.helpers import msg_type
 from paimon.plugins.utils.telegraph import upload_media_
 from paimon.utils import get_file_id, rand_array
 
-
-
-
 _ALIVE_REGEX = comp_regex(
     r"http[s]?://(i\.imgur\.com|telegra\.ph/file|t\.me)/(\w+)(?:\.|/)(gif|jpg|png|jpeg|[0-9]+)(?:/([0-9]+))?"
 )
