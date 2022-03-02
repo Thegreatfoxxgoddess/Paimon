@@ -213,9 +213,12 @@ if paimon.has_bot:
 
     @paimon.bot.on_callback_query(filters.regex(pattern=r"^status_alive$"))
     async def status_alive_(_, c_q: CallbackQuery):
+        mmsg = rand_array(FRASES)
         c_q.from_user.id
         await c_q.answer(
             f"""
+   {mmsg}
+
 ▫️ ✨Mode :  {Bot_Alive._get_mode()}
 ▫️ 🌌Uptime  :  {paimon.uptime}
 ▫️ 🐍Python  :  v{__python_version__}
