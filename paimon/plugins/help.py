@@ -98,7 +98,7 @@ async def _init() -> None:
         Config.ALIVE_MEDIA_TYPE = media_["type"]
     else:
         Config.NEW_ALIVE_MEDIA = "https://telegra.ph/file/f22d48bae5cf0c003d665.png"
-        Config.ALIVE_MEDIA_TYPE = "photo"
+        Config.ALIVE_MEDIA_TYPE = "photo" or "animation"
 
 
 @paimon.on_cmd(
