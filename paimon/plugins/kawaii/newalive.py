@@ -98,7 +98,7 @@ async def view_del_ani(message: Message):
 
      {mmsg}
 
-✨ [lil ol meh bio](https://t.me/my_thingsuwu) | 🚀 [repo](https://github.com/Thegreatfoxxgoddess/Paimon)
+✨ [lil ol meh bio](https://t.me/my_thingsuwu) | 🚀 [repo](https://github.com/ashwinstr/UX-Jutsu)
 """
     if media.endswith((".gif", ".mp4")):
         await message.client.send_animation(
