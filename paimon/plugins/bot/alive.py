@@ -4,16 +4,15 @@ import asyncio
 from datetime import datetime
 from re import compile as comp_regex
 
-from pyrogram import filters
-from pyrogram.errors import BadRequest, FloodWait, Forbidden, MediaEmpty
-from pyrogram.file_id import PHOTO_TYPES, FileId
-from pyrogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
-
 from paimon import Config, Message, get_collection, paimon
 from paimon.core.ext import RawClient
 from paimon.helpers import msg_type
 from paimon.plugins.utils.telegraph import upload_media_
 from paimon.utils import get_file_id, rand_array
+from pyrogram import filters
+from pyrogram.errors import BadRequest, FloodWait, Forbidden, MediaEmpty
+from pyrogram.file_id import PHOTO_TYPES, FileId
+from pyrogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
 
 _ALIVE_REGEX = comp_regex(
     r"http[s]?://(i\.imgur\.com|telegra\.ph/file|t\.me)/(\w+)(?:\.|/)(gif|jpg|png|jpeg|[0-9]+)(?:/([0-9]+))?"
@@ -71,7 +70,6 @@ async def set_alive_media(message: Message):
         if not found:
             return await message.edit("`No alive media is set.`", del_in=5)
         await SAVED_SETTINGS.delete_one({"_id": "ALIVE_MEDIA"})
-        asyncio.get_event_loop().create_task(paimon.restart())
         return await message.edit("`Alive media reset to default.`", del_in=5)
     reply_ = message.reply_to_message
     if not reply_:
@@ -149,14 +147,14 @@ async def send_alive_message(message: Message) -> None:
         reply_markup = None
         file_id = _USER_CACHED_MEDIA
         caption += (
-            f"\n⚡️  <a href={Config.UPSTREAM_REPO}><b>REPO</b></a>"
+            f"\n<a href={Config.UPSTREAM_REPO}><b>REPO</b></a>"
             "    <code>|</code>    "
-            "👥  <a href='https://t.me/useless_x'><b>SUPPORT</b></a>"
+            "<a href='https://t.me/useless_x'><b>SUPPORT</b></a>"
         )
     if not Config.ALIVE_MEDIA:
-        await client.send_photo(
+        await client.send_animation(
             chat_id,
-            photo=Bot_Alive.alive_default_imgs(),
+            animation=Bot_Alive.alive_default_animation(),
             caption=caption,
             reply_markup=reply_markup,
         )
@@ -234,9 +232,9 @@ if paimon.has_bot:
                 await asyncio.sleep(e.x)
             except BadRequest:
                 pass
-            ping = "ᵖᶦⁿᵍ✨ : {} ᴍs\n"
+            ping = "✨ ᵖᶦⁿᵍ : {} ᴍs\n"
 
-        alive_s = "ᵖˡᵘᵍᶦⁿˢ🌿 + : {}\n".format(_parse_arg(Config.LOAD_UNOFFICIAL_PLUGINS))
+        alive_s = "🌿 ᵖˡᵘᵍᶦⁿˢ + : {}\n".format(_parse_arg(Config.LOAD_UNOFFICIAL_PLUGINS))
 
         alive_s += f"⚡ ᵃⁿᵗᶦˢᵖᵃᵐ : {_parse_arg(Config.SUDO_ENABLED)}\n"
         alive_s += f"🌈 ᵃⁿᵗᶦˢᵖᵃᵐ : {_parse_arg(Config.ANTISPAM_SENTRY)}\n"
@@ -282,22 +280,17 @@ class Bot_Alive:
         return link_type, link
 
     @staticmethod
-    def alive_info(me) -> str:
-        alive_info_ = f"""
-ㅤㅤㅤㅤㅤㅤㅤ
-  💕   hey, paimon is awake
-  🦋   how are you doing today
-ㅤㅤㅤㅤㅤㅤㅤ
-"""
-        return alive_info_
+    def alive_info(me):
+        u_name = " Alicia"
+        alive_info = f"""
 
-    @staticmethod
-    def _get_mode() -> str:
-        if RawClient.DUAL_MODE:
-            return "DUAL"
-        if Config.BOT_TOKEN:
-            return "BOT"
-        return "USER"
+ㅤㅤㅤㅤㅤㅤㅤ
+  💕   [paimon](https://t.me/my_thingsuwu)
+  🦋   {u_name}, you look kawaii today 👀👀
+   
+
+"""
+        return alive_info
 
     @staticmethod
     def _get_mode() -> str:
@@ -318,8 +311,8 @@ class Bot_Alive:
         return InlineKeyboardMarkup(buttons)
 
     @staticmethod
-    def alive_default_imgs() -> str:
-        alive_imgs = [
+    def alive_default_animation() -> str:
+        alive_animation = [
             "https://i.pinimg.com/originals/d3/8e/d3/d38ed3ec90094626ec590cb940d37ef6.gif",
             "https://gifimage.net/wp-content/uploads/2017/09/anime-pixel-gif-7.gif",
             "https://64.media.tumblr.com/ad61e9e3c9c9562d90e8de5913d8ba8d/tumblr_mir1lsmQ7N1s1ogrno1_500.gif",
@@ -331,7 +324,7 @@ class Bot_Alive:
             "https://telegra.ph/file/ad016e0e5c30617e94db0.gif",
             "https://telegra.ph/file/a2bbf053f786024c85477.gif",
         ]
-        return rand_array(alive_imgs)
+        return rand_array(alive_animation)
 
     @staticmethod
     def get_bot_cached_fid() -> str:
@@ -340,6 +333,3 @@ class Bot_Alive:
     @staticmethod
     def is_photo(file_id: str) -> bool:
         return bool(FileId.decode(file_id).file_type in PHOTO_TYPES)
-
-
-FRASES = ("ara ara..... you look kawaii",)
