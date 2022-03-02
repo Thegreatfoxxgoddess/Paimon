@@ -210,8 +210,7 @@ async def send_alive_message(message: Message) -> None:
 
 
 if paimon.has_bot:
-    
-    
+
     @paimon.bot.on_callback_query(filters.regex(pattern=r"^status_alive$"))
     async def status_alive_(_, c_q: CallbackQuery):
         c_q.from_user.id
@@ -222,10 +221,10 @@ if paimon.has_bot:
 ▫️ 🐍Python  :  v{__python_version__}
 ▫️ 🌿Version  :  v{get_version()}
 ▫️ 🌊Pyrogram  :  v{__pyro_version__}
-""", show_alert=True,
+""",
+            show_alert=True,
         )
         return status_alive_
-
 
     @paimon.bot.on_callback_query(filters.regex(pattern=r"^settings_btn$"))
     async def alive_cb(_, c_q: CallbackQuery):
