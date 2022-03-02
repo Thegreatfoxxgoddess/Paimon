@@ -225,7 +225,7 @@ if paimon.has_bot:
             start = datetime.now()
             try:
                 await c_q.edit_message_text(
-                    Bot_Alive.alive_info(),
+                    Bot_Alive.alive_info(me),
                     reply_markup=Bot_Alive.alive_buttons(),
                     disable_web_page_preview=True,
                 )
@@ -281,7 +281,7 @@ class Bot_Alive:
         return link_type, link
 
     @staticmethod
-    def alive_info() -> str:
+    def alive_info(me) -> str:
         alive_info_ = f"""
 ㅤㅤㅤㅤㅤㅤㅤ
   💕   hey, paimon is awake
