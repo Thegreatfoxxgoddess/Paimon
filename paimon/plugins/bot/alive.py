@@ -214,6 +214,7 @@ if paimon.has_bot:
 
     @paimon.bot.on_callback_query(filters.regex(pattern=r"^settings_btn$"))
     async def alive_cb(_, c_q: CallbackQuery):
+        me = await paimon.get_me()
         allow = bool(
             c_q.from_user
             and (
