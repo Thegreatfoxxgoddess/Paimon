@@ -337,11 +337,11 @@ class Bot_Alive:
             "https://64.media.tumblr.com/ad61e9e3c9c9562d90e8de5913d8ba8d/tumblr_mir1lsmQ7N1s1ogrno1_500.gif",
             "https://i.pinimg.com/originals/e4/0b/ca/e40bca75ab3e089a9e085d1ed353cf07.gif",
             "https://c.tenor.com/5IjEPSL9sAAAAAAd/tenor.gif",
-            "https://c.tenor.com/BVdoO8TNa00AAAAC/helltaker-modeus.gif",
             "https://c.tenor.com/gVMHczWXBycAAAAd/helltaker.gif",
             "https://i.pinimg.com/originals/0d/2e/e3/0d2ee30a2234d838368e33f2d28a0cfb.gif",
             "https://telegra.ph/file/ad016e0e5c30617e94db0.gif",
             "https://telegra.ph/file/a2bbf053f786024c85477.gif",
+            "https://cdn.discordapp.com/attachments/906262079927906324/948622407684456458/helltaker-modeus.gif",
         ]
         return rand_array(alive_animation)
 
