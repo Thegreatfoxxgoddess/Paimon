@@ -235,7 +235,7 @@ if paimon.has_bot:
                 pass
             ping = "✨ ᵖᶦⁿᵍ : {} ᴍs\n"
 
-        alive_s = "🌿 ᵖˡᵘᵍᶦⁿˢ + : {}\n".format(
+        alive_s = "🌿 ᵖˡᵘᵍᶦⁿˢ : {}\n".format(
             _parse_arg(Config.LOAD_UNOFFICIAL_PLUGINS)
         )
 
@@ -289,7 +289,7 @@ class Bot_Alive:
 
 ㅤㅤㅤㅤㅤㅤㅤ
   💕   [paimon](https://t.me/my_thingsuwu)
-  🦋   {u_name}, you look kawaii today 👀👀
+  🦋  {u_name}, ara ara kawaii 👀👀
 
 
 """
