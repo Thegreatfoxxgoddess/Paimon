@@ -71,7 +71,7 @@ async def send_nekos(message: Message, link: str):
         bool_unsave = not message.client.is_bot
         await message.client.send_document(
             chat_id=message.chat.id,
-            animation=link,
+            document=link,
             unsave=bool_unsave,
             reply_to_message_id=reply_id,
         )
