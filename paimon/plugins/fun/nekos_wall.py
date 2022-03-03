@@ -77,5 +77,5 @@ async def send_nekos(message: Message, link: str):
         )
     else:
         await message.client.send_document(
-            chat_id=message.chat.id, photo=link, reply_to_message_id=reply_id
+            chat_id=message.chat.id, document=link, reply_to_message_id=reply_id
         )
