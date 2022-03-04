@@ -10,7 +10,7 @@ from pyrogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMa
 from paimon import Message, paimon
 from paimon.utils import check_owner, get_response, rand_key
 
-GOGO = "https://gogoanime.news"
+GOGO = "https://gogoanime.onl"
 GOGO_DB = {}
 
 
