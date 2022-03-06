@@ -250,7 +250,7 @@ async def kang_(message: Message):
                 await conv.send_message("/done")
                 await conv.get_response(mark_read=True)
         else:
-            await kang_msg.edit("`Brewing a new Pack...`")
+            await kang_msg.edit("`creating a new Pack...`")
             async with paimon.conversation("Stickers") as conv:
                 try:
                     await conv.send_message(cmd)
