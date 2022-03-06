@@ -158,7 +158,7 @@ async def kang_(message: Message):
         u_name = user.username
         u_name = "@" + u_name if u_name else user.first_name or user.id
         packname = f"a{user.id}_by_x_{pack}"
-        custom_packnick =f"{a_name}'s sticker pack({u_name})"
+        custom_packnick = f"{a_name}'s sticker pack({u_name})"
         cmd = "/newpack"
         if resize:
             media_ = await resize_photo(media_, is_video, ff_vid)
@@ -355,7 +355,7 @@ async def resize_photo(media: str, video: bool, fast_forward: bool) -> str:
             else:
                 cmd_f = f"-filter:v scale={width}:{height}"
         fps_ = float(info_["frame_rate"])
-        fps_cmd = "-r 30 " if fps_ > 30 else ""
+        "-r 30 " if fps_ > 30 else ""
         cmd = (
             f"ffmpeg -i {media} -ss 00:00:00 -to 00:00:03 -map 0:v"
             + f" -c:v libvpx-vp9 -vf scale=512:512:force_original_aspect_ratio=decrease,fps=fps=30 {resized_video}"
