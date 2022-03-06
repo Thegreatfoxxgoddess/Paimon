@@ -168,7 +168,7 @@ async def kang_(message: Message):
             cmd = "/newanimated"
         if is_video:
             packname += "_video"
-            packnick += " (Video)"
+            packnick += "(Video)"
             cmd = "/newvideo"
         exist = False
         try:
