@@ -257,6 +257,7 @@ def extract_id(mention: str):
 
 class Media_Info:
     def data(media: str) -> dict:
+
         "Get downloaded media's information"
         found = False
         media_info = MediaInfo.parse(media)
