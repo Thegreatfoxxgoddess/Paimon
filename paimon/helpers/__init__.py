@@ -10,6 +10,6 @@ from .paimon_tools import (
     get_response,
     full_name,
     msg_type,
-    Media_info,
+    Media_Info,
     extract_id
 )
