@@ -1,13 +1,11 @@
 # ported from oub-remix to paimon-X by @Kakashi_HTK/@ashwinstr
 
-import io
 import os
-import random
 
 from paimon import Config, Message, paimon
 from paimon.helpers import Media_Info
-from paimon.utils import runcmd, media_to_image
-from pyrogram.raw.types import InputStickerSetShortName
+from paimon.utils import media_to_image, runcmd
+
 
 @paimon.on_cmd(
     "stick",
