@@ -1,5 +1,11 @@
 """ kang stickers """
 
+# Copyright (C) 2020 by paimonTeam@Github, < https://github.com/paimonTeam >.
+#
+# This file is part of < https://github.com/paimonTeam/paimon > project,
+# and is released under the "GNU v3.0 License Agreement".
+# Please see < https://github.com/uaudith/paimon/blob/master/LICENSE >
+#
 # All rights reserved.
 
 import io
@@ -69,9 +75,9 @@ async def log_kang(message: Message):
             "{tr}kang",
             "{tr}kang -s",
             "{tr}kang -d",
-            "{tr}kang 👀",
+            "{tr}kang 🤔",
             "{tr}kang 2",
-            "{tr}kang 👀 2",
+            "{tr}kang 🤔 2",
         ],
     },
     allow_channels=False,
@@ -152,13 +158,13 @@ async def kang_(message: Message):
         ):
             emoji_ = None
         if not emoji_:
-            emoji_ = "✨"
+            emoji_ = "🤔"
 
-        a_name = user.first_name
         u_name = user.username
         u_name = "@" + u_name if u_name else user.first_name or user.id
-        packname = f"a{user.id}_by_x_{pack}"
-        custom_packnick = f"{a_name}'s sticker pack({u_name})"
+        packname = f"a{user.id}_by_{user.username}_{pack}"
+        custom_packnick = Config.CUSTOM_PACK_NAME or f"{u_name}'s kang pack"
+        packnick = f"{custom_packnick} vol.{pack}"
         cmd = "/newpack"
         if resize:
             media_ = await resize_photo(media_, is_video, ff_vid)
@@ -250,7 +256,7 @@ async def kang_(message: Message):
                 await conv.send_message("/done")
                 await conv.get_response(mark_read=True)
         else:
-            await kang_msg.edit("`creating a new Pack...`")
+            await kang_msg.edit("`Brewing a new Pack...`")
             async with paimon.conversation("Stickers") as conv:
                 try:
                     await conv.send_message(cmd)
@@ -290,7 +296,7 @@ async def kang_(message: Message):
 
 
 @paimon.on_cmd(
-    "stickerinfo",
+    "stkrinfo",
     about={
         "header": "get sticker pack info",
         "usage": "reply {tr}stkrinfo to any sticker",
@@ -355,11 +361,8 @@ async def resize_photo(media: str, video: bool, fast_forward: bool) -> str:
             else:
                 cmd_f = f"-filter:v scale={width}:{height}"
         fps_ = float(info_["frame_rate"])
-        "-r 30 " if fps_ > 30 else ""
-        cmd = (
-            f"ffmpeg -i {media} -ss 00:00:00 -to 00:00:03 -map 0:v"
-            + f" -c:v libvpx-vp9 -vf scale=512:512:force_original_aspect_ratio=decrease,fps=fps=30 {resized_video}"
-        )
+        fps_cmd = "-r 30 " if fps_ > 30 else ""
+        cmd = f"ffmpeg -i {media} {cmd_f} -ss 00:00:00 -to 00:00:03 -an -c:v libvpx-vp9 {fps_cmd}-fs 256K {resized_video}"
         await runcmd(cmd)
         os.remove(media)
         return resized_video
@@ -377,7 +380,9 @@ async def resize_photo(media: str, video: bool, fast_forward: bool) -> str:
     return resized_photo
 
 
-KANGING_STR = ("saving this sticker...",)
+KANGING_STR = (
+    "Kanging this sticker..."
+)
 
 
 # Based on:
@@ -404,7 +409,7 @@ async def sticker_search(message: Message):
         )
 
     await message.edit(f'Searching for sticker packs for "`{query_}`"...')
-    titlex = f'<b>stickers:</b> "<u>{query_}</u>"\n'
+    titlex = f'<b>Sticker Packs For:</b> "<u>{query_}</u>"\n'
     sticker_pack = ""
     try:
         text = await get_response.text(
