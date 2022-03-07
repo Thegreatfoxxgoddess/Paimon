@@ -167,7 +167,7 @@ async def kang_(message: Message):
         u_name = "@" + u_name if u_name else user.first_name or user.id
         packname = f"a{user.id}_by_{user.username}_{pack}"
         custom_packnick = (
-            Config.CUSTOM_PACK_NAME or f"{a_name}'s sticker pack({u_name})"
+            Config.CUSTOM_PACK_NAME or f"{a_name}'s sticker pack"
         )
         packnick = f"{a_name}'s sticker pack({u_name})"
         cmd = "/newpack"
@@ -204,7 +204,7 @@ async def kang_(message: Message):
                 while limit in msg.text:
                     pack += 1
                     packname = f"a{user.id}_by_paimon_{pack}"
-                    packnick = f"{custom_packnick} Vol.{pack}"
+                    packnick = f"{custom_packnick} {pack}"
                     if is_anim:
                         packname += "_anim"
                         packnick += " (Animated)"
