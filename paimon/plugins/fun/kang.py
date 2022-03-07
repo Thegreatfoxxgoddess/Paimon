@@ -75,9 +75,9 @@ async def log_kang(message: Message):
             "{tr}kang",
             "{tr}kang -s",
             "{tr}kang -d",
-            "{tr}kang 🤔",
+            "{tr}kang ✨",
             "{tr}kang 2",
-            "{tr}kang 🤔 2",
+            "{tr}kang ✨ 2",
         ],
     },
     allow_channels=False,
@@ -158,13 +158,14 @@ async def kang_(message: Message):
         ):
             emoji_ = None
         if not emoji_:
-            emoji_ = "🤔"
-
+            emoji_ = "👀"
+    
+        a_name = user.first_name
         u_name = user.username
         u_name = "@" + u_name if u_name else user.first_name or user.id
         packname = f"a{user.id}_by_{user.username}_{pack}"
-        custom_packnick = Config.CUSTOM_PACK_NAME or f"{u_name}'s kang pack"
-        packnick = f"{custom_packnick} vol.{pack}"
+        custom_packnick = Config.CUSTOM_PACK_NAME or f"{a_name}'s sticker pack({u_name})"
+        packnick = f"{a_name}'s sticker pack({u_name})"
         cmd = "/newpack"
         if resize:
             media_ = await resize_photo(media_, is_video, ff_vid)
@@ -299,7 +300,7 @@ async def kang_(message: Message):
     "stickerinfo",
     about={
         "header": "get sticker pack info",
-        "usage": "reply {tr}stkrinfo to any sticker",
+        "usage": "reply {tr}stickerinfo to any sticker",
     },
 )
 async def sticker_pack_info_(message: Message):
@@ -408,8 +409,8 @@ async def sticker_search(message: Message):
             "reply to a user or provide text to search sticker packs", del_in=3
         )
 
-    await message.edit(f'Searching for sticker packs for "`{query_}`"...')
-    titlex = f'<b>Sticker Packs For:</b> "<u>{query_}</u>"\n'
+    await message.edit(f'Searching for "`{query_}`"...')
+    titlex = f'<b>sticker packs :</b> "<u>{query_}</u>"\n'
     sticker_pack = ""
     try:
         text = await get_response.text(
