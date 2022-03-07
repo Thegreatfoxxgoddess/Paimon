@@ -93,7 +93,7 @@ async def kang_(message: Message):
             Config.LOG_CHANNEL_ID, "`theft in progress...`"
         )
     else:
-        kang_msg = await message.edit("`still processing...`")
+        kang_msg = await message.edit("`me stealing this...`", del_in=5)
     media_ = None
     emoji_ = None
     is_anim = False
@@ -385,7 +385,7 @@ async def resize_photo(media: str, video: bool, fast_forward: bool) -> str:
     return resized_photo
 
 
-KANGING_STR = "Kanging this sticker..."
+KANGING_STR = "me stealing this..."
 
 
 # Based on:
