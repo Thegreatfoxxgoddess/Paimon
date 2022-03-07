@@ -382,9 +382,7 @@ async def resize_photo(media: str, video: bool, fast_forward: bool) -> str:
     return resized_photo
 
 
-KANGING_STR = (
-    "stealing this sticker..."
-)
+KANGING_STR = "stealing this sticker..."
 
 
 # Based on:
