@@ -89,7 +89,9 @@ async def kang_(message: Message):
     replied = message.reply_to_message
     if Config.LOG_KANG:
         await message.edit("`me stealing this...`", del_in=5)
-        kang_msg = await paimon.send_message(Config.LOG_CHANNEL_ID, "`theft in progress...`")
+        kang_msg = await paimon.send_message(
+            Config.LOG_CHANNEL_ID, "`theft in progress...`"
+        )
     else:
         kang_msg = await message.edit("`still processing...`")
     media_ = None
