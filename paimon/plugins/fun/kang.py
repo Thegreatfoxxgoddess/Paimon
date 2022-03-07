@@ -12,7 +12,7 @@ from pyrogram.raw.functions.messages import GetStickerSet
 from pyrogram.raw.types import InputStickerSetShortName
 
 from paimon import Config, Message, paimon
-from paimon.utils import media_to_image, runcmd
+from paimon.utils import runcmd
 from paimon.utils.tools import runcmd
 
 
