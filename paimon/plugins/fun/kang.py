@@ -75,9 +75,9 @@ async def log_kang(message: Message):
             "{tr}kang",
             "{tr}kang -s",
             "{tr}kang -d",
-            "{tr}kang 🤔",
+            "{tr}kang 🤌",
             "{tr}kang 2",
-            "{tr}kang 🤔 2",
+            "{tr}kang 🤌 2",
         ],
     },
     allow_channels=False,
@@ -158,7 +158,7 @@ async def kang_(message: Message):
         ):
             emoji_ = None
         if not emoji_:
-            emoji_ = "🤔"
+            emoji_ = "✨"
 
         u_name = user.username
         u_name = "@" + u_name if u_name else user.first_name or user.id
@@ -256,12 +256,12 @@ async def kang_(message: Message):
                 await conv.send_message("/done")
                 await conv.get_response(mark_read=True)
         else:
-            await kang_msg.edit("`Brewing a new Pack...`")
+            await kang_msg.edit("`creating new pack...`")
             async with paimon.conversation("Stickers") as conv:
                 try:
                     await conv.send_message(cmd)
                 except YouBlockedUser:
-                    await kang_msg.edit("first **unblock** @Stickers")
+                    await kang_msg.edit("pls **unblock** @Stickers")
                     return
                 await conv.get_response(mark_read=True)
                 await conv.send_message(packnick)
@@ -296,7 +296,7 @@ async def kang_(message: Message):
 
 
 @paimon.on_cmd(
-    "stkrinfo",
+    "stickerinfo",
     about={
         "header": "get sticker pack info",
         "usage": "reply {tr}stkrinfo to any sticker",
@@ -360,6 +360,8 @@ async def resize_photo(media: str, video: bool, fast_forward: bool) -> str:
                 cmd_f = f"-filter:v 'setpts={set_pts_}*PTS',scale={width}:{height}"
             else:
                 cmd_f = f"-filter:v scale={width}:{height}"
+        else:
+            cmd_f = f"-filter:v scale={width}:{height}"
         fps_ = float(info_["frame_rate"])
         fps_cmd = "-r 30 " if fps_ > 30 else ""
         cmd = f"ffmpeg -i {media} {cmd_f} -ss 00:00:00 -to 00:00:03 -an -c:v libvpx-vp9 {fps_cmd}-fs 256K {resized_video}"
@@ -380,7 +382,9 @@ async def resize_photo(media: str, video: bool, fast_forward: bool) -> str:
     return resized_photo
 
 
-KANGING_STR = "Kanging this sticker..."
+KANGING_STR = (
+    "stealing this sticker..."
+)
 
 
 # Based on:
@@ -406,7 +410,7 @@ async def sticker_search(message: Message):
             "reply to a user or provide text to search sticker packs", del_in=3
         )
 
-    await message.edit(f'Searching for sticker packs for "`{query_}`"...')
+    await message.edit(f'Searching for  "`{query_}`"...')
     titlex = f'<b>Sticker Packs For:</b> "<u>{query_}</u>"\n'
     sticker_pack = ""
     try:
