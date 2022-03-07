@@ -243,7 +243,7 @@ async def kang_(message: Message):
         os.remove(media)
 
 
-KANGING_STR = ( "Kanging this sticker..." )
+KANGING_STR = "Kanging this sticker..."
 
 
 @paimon.on_cmd(
