@@ -1,30 +1,24 @@
-""" kang stickers """
-
-# Copyright (C) 2020-2022 by paimonTeam@Github, < https://github.com/paimonTeam >.
-#
-# This file is part of < https://github.com/paimonTeam/paimon > project,
-# and is released under the "GNU v3.0 License Agreement".
-# Please see < https://github.com/paimonTeam/paimon/blob/master/LICENSE >
-#
-# All rights reserved.
-
 import io
 import os
 import random
-from typing import Union
 
-from hachoir.metadata import extractMetadata
-from hachoir.parser import createParser
+from bs4 import BeautifulSoup as bs
 from PIL import Image
 from pyrogram import emoji
 from pyrogram.errors import StickersetInvalid, YouBlockedUser
 from pyrogram.raw.functions.messages import GetStickerSet
 from pyrogram.raw.types import InputStickerSetShortName
 
-from paimon import Message, config, paimon
-from paimon.utils.tools import runcmd
+from paimon import Config, Message, get_collection, paimon
+from paimon.helpers import Media_Info
+from paimon.utils import get_response, runcmd
 
-from .. import kang
+async def _init() -> None:
+    found = await SAVED_SETTINGS.find_one({"_id": "LOG_KANG"})
+    if found:
+        Config.LOG_KANG = found["switch"]
+    else:
+        Config.LOG_KANG = True
 
 
 @paimon.on_cmd(
