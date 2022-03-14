@@ -78,7 +78,7 @@ REPO_X = InlineQueryResultArticle(
                 ),
                 InlineKeyboardButton(
                     "🚀 Deploy Heroku",
-                    url="https://heroku.com/deploy?template=https://youtu.be/tzYPr9w22VU",
+                    url="https://youtu.be/tzYPr9w22VU",
                 ),
             ],
         ]
