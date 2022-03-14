@@ -67,7 +67,7 @@ REPO_X = InlineQueryResultArticle(
     input_message_content=InputTextMessageContent(
         "**Paimon repository and utilities**"
     ),
-    url="https://github.com/thegreatfoxxgoddess/Paimon",
+    url="https://youtu.be/tzYPr9w22VU",
     description="set up your own",
     thumb_url="https://telegra.ph/file/ab8827aefcf2559a0eacb.png",
     reply_markup=InlineKeyboardMarkup(
@@ -828,11 +828,11 @@ if paimon.has_bot:
                     [
                         InlineKeyboardButton(
                             "Paimon Repo 💕",
-                            url="https://github.com/thegreatfoxxgoddess/Paimon",
+                            url="https://ask@eightbituwu",
                         ),
                         InlineKeyboardButton(
                             "Deploy Heroku 🚀",
-                            url="https://heroku.com/deploy?template=https://github.com/thegreatfoxxgoddess/paimon-Deploy",
+                            url="https://youtu.be/tzYPr9w22VU",
                         ),
                     ],
                 ]
@@ -1237,7 +1237,7 @@ if paimon.has_bot:
             MAIN_MENU = InlineQueryResultArticle(
                 title="open inline menu",
                 input_message_content=InputTextMessageContent(" paimon menu "),
-                url="https://github.com/thegreatfoxxgoddess/Paimon",
+                url="https://ask@eightbituwu",
                 description="paimon Menu",
                 thumb_url="https://telegra.ph/file/98c61eea0388cf08e199f.jpg",
                 reply_markup=InlineKeyboardMarkup(main_menu_buttons()),
