@@ -10,7 +10,6 @@
 
 import io
 import os
-import random
 
 from bs4 import BeautifulSoup as bs
 from PIL import Image
@@ -385,7 +384,7 @@ async def resize_photo(media: str, video: bool, fast_forward: bool) -> str:
     return resized_photo
 
 
-KANGING_STR = ("me stealing this...")
+KANGING_STR = "me stealing this..."
 
 
 # Based on:
