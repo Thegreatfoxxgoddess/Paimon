@@ -66,6 +66,7 @@ async def convert_(message: Message):
     else:
         await message.edit("Please read `.help convert`", del_in=5)
 
+
 @paimon.on_cmd(
     "r",
     about={
@@ -278,7 +279,7 @@ async def doc_upload(
             chat_id=message.chat.id,
             document=str_path,
             thumb=thumb,
-	    force_document=True,
+            force_document=True,
             parse_mode="html",
             disable_notification=True,
             progress=progress,
@@ -385,7 +386,7 @@ async def audio_upload(
     thumb = None
     duration = 0
     str_path = str(path)
-    file_size = humanbytes(os.stat(str_path).st_size)
+    humanbytes(os.stat(str_path).st_size)
     if with_thumb:
         try:
             album_art = stagger.read_tag(str_path)
