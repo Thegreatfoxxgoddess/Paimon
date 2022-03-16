@@ -155,7 +155,7 @@ async def doc_upload(
             chat_id=message.chat.id,
             document=str_path,
             thumb=thumb,
-        force_document=True
+        force_document=True,
             caption="",
             parse_mode="html",
             disable_notification=True,
