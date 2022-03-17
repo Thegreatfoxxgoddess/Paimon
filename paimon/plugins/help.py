@@ -78,7 +78,7 @@ REPO_X = InlineQueryResultArticle(
                 ),
                 InlineKeyboardButton(
                     "🚀 Deploy Heroku",
-                    url="https://github.com",
+                    url="https://github.com"
                 ),
             ],
         ]
@@ -168,7 +168,7 @@ if paimon.has_bot:
         async def wrapper(_, c_q: CallbackQuery):
             if c_q.from_user and (
                 c_q.from_user.id in Config.OWNER_ID
-                or c_q.from_user.id in Config.SUDO_USERS
+                or c_q.from_user.id in Config.TRUSTED_SUDO_USERS
             ):
                 await c_q.answer()
                 try:
