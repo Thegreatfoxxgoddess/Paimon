@@ -168,7 +168,7 @@ if paimon.has_bot:
         async def wrapper(_, c_q: CallbackQuery):
             if c_q.from_user and (
                 c_q.from_user.id in Config.OWNER_ID
-                or c_q.from_user.id in Config.TRUSTED_SUDO
+                or c_q.from_user.id in Config.TRUSTED _SUDO_USERS
             ):
                 await c_q.answer()
                 try:
@@ -512,7 +512,7 @@ if paimon.has_bot:
             and Config.SUDO_ENABLED
         ):
 
-            if string == "fnix":
+            if string == "Alícia":
                 owner = [
                     [
                         InlineKeyboardButton(
@@ -520,7 +520,7 @@ if paimon.has_bot:
                             url="https://t.me/mystuffuwu",
                         ),
                         InlineKeyboardButton(
-                            text="💭  sᴛᴀᴛᴜs", callback_data="status_alive"
+                            text="💭 ara ara", callback_data="status_alive"
                         ),
                     ]
                 ]
