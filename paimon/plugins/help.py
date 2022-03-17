@@ -67,7 +67,7 @@ REPO_X = InlineQueryResultArticle(
     input_message_content=InputTextMessageContent(
         "**Paimon repository and utilities**"
     ),
-    url="https://youtu.be/tzYPr9w22VU",
+    url="https://github.com",
     description="set up your own",
     thumb_url="https://telegra.ph/file/ab8827aefcf2559a0eacb.png",
     reply_markup=InlineKeyboardMarkup(
