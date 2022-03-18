@@ -43,6 +43,8 @@ async def convert_(message: Message):
         await message.edit("Please read `.help r`", del_in=5)
 
 
+
+
 async def _handle_message(message: Message) -> None:
     try:
         dl_loc, _ = await tg_download(message, message.reply_to_message)
@@ -156,7 +158,6 @@ async def doc_upload(
             document=str_path,
             thumb=thumb,
             force_document=True,
-            caption="",
             parse_mode="html",
             disable_notification=True,
             progress=progress,
@@ -219,7 +220,6 @@ async def vid_upload(
             thumb=thumb,
             width=width,
             height=height,
-            caption="",
             parse_mode="html",
             disable_notification=True,
             progress=progress,
@@ -295,7 +295,6 @@ async def audio_upload(
             chat_id=message.chat.id,
             audio=str_path,
             thumb=thumb,
-            caption="",
             title=title,
             performer=artist,
             duration=duration,
@@ -331,7 +330,6 @@ async def photo_upload(message: Message, path, del_path: bool = False, extra: st
         msg = await message.client.send_photo(
             chat_id=message.chat.id,
             photo=str_path,
-            caption="",
             parse_mode="html",
             disable_notification=True,
             progress=progress,
@@ -393,3 +391,5 @@ async def finalize(message: Message, msg: Message, start_t):
         end_t = datetime.now()
         m_s = (end_t - start_t).seconds
         await message.edit(f"Uploaded in {m_s} seconds", del_in=10)
+
+
