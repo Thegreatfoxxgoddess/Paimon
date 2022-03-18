@@ -68,26 +68,6 @@ async def convert_(message: Message):
 
 
 @paimon.on_cmd(
-    "r",
-    about={
-        "header": "convert telegram file",
-        "flags": {"-d": "upload as document", "-wt": "without thumb"},
-        "usage": "{tr}rename [flags] [new_name_with_extension] : reply to telegram media",
-        "examples": "{tr}r -d",
-    },
-    del_pre=True,
-    check_downpath=True,
-)
-async def rename_(message: Message):
-    """rename telegram files"""
-    await message.edit("`Trying to Rename ...`")
-    if message.reply_to_message and message.reply_to_message.media:
-        await _handle_message(message)
-    else:
-        await message.edit("Please read `.help rename`", del_in=5)
-
-
-@paimon.on_cmd(
     "convert",
     about={
         "header": "Convert telegram files",
