@@ -21,10 +21,8 @@ neko_help += "\n\n<b>SFW</b> :  "
 for m in SFW:
     neko_help += f"<code>{m.lower()}</code>   "
 
-@paimon.on_message(
-    filters.regex(r"^kis$")
-)
 
+@paimon.on_message(filters.regex(r"^kis$"))
 @paimon.on_cmd(
     "kis",
     about={
