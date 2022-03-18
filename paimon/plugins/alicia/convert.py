@@ -43,8 +43,6 @@ async def convert_(message: Message):
         await message.edit("Please read `.help r`", del_in=5)
 
 
-
-
 async def _handle_message(message: Message) -> None:
     try:
         dl_loc, _ = await tg_download(message, message.reply_to_message)
@@ -391,5 +389,3 @@ async def finalize(message: Message, msg: Message, start_t):
         end_t = datetime.now()
         m_s = (end_t - start_t).seconds
         await message.edit(f"Uploaded in {m_s} seconds", del_in=10)
-
-
