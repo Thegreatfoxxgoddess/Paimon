@@ -68,25 +68,6 @@ async def convert_(message: Message):
 
 
 @paimon.on_cmd(
-    "convert",
-    about={
-        "header": "Convert telegram files",
-        "usage": "reply {tr}convert to any media",
-    },
-    del_pre=True,
-    check_downpath=True,
-)
-async def convert_(message: Message):
-    """convert telegram files"""
-    await message.edit("`Trying to Convert ...`")
-    if message.reply_to_message and message.reply_to_message.media:
-        message.text = "" if message.reply_to_message.document else ". -d"
-        await _handle_message(message)
-    else:
-        await message.edit("Please read `.help convert`", del_in=5)
-
-
-@paimon.on_cmd(
     "upload",
     about={
         "header": "Upload files to telegram",
@@ -243,7 +224,6 @@ async def doc_upload(
     del_path: bool = False,
     extra: str = "",
     with_thumb: bool = True,
-    force_document: bool = True,
 ):
     str_path = str(path)
     sent: Message = await message.client.send_message(
@@ -259,7 +239,7 @@ async def doc_upload(
             chat_id=message.chat.id,
             document=str_path,
             thumb=thumb,
-            force_document=True,
+            caption=path.name,
             parse_mode="html",
             disable_notification=True,
             progress=progress,
@@ -322,6 +302,7 @@ async def vid_upload(
             thumb=thumb,
             width=width,
             height=height,
+            caption=path.name,
             parse_mode="html",
             disable_notification=True,
             progress=progress,
@@ -366,7 +347,7 @@ async def audio_upload(
     thumb = None
     duration = 0
     str_path = str(path)
-    humanbytes(os.stat(str_path).st_size)
+    file_size = humanbytes(os.stat(str_path).st_size)
     if with_thumb:
         try:
             album_art = stagger.read_tag(str_path)
@@ -397,6 +378,7 @@ async def audio_upload(
             chat_id=message.chat.id,
             audio=str_path,
             thumb=thumb,
+            caption=f"{path.name} [ {file_size} ]",
             title=title,
             performer=artist,
             duration=duration,
@@ -432,6 +414,7 @@ async def photo_upload(message: Message, path, del_path: bool = False, extra: st
         msg = await message.client.send_photo(
             chat_id=message.chat.id,
             photo=str_path,
+            caption=path.name,
             parse_mode="html",
             disable_notification=True,
             progress=progress,
