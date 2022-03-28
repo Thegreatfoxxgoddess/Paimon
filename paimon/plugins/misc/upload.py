@@ -182,6 +182,7 @@ async def upload(
     with_thumb: bool = True,
     custom_thumb: str = "",
     log: bool = True,
+    force_document: bool = True,
 ):
     if "wt" in message.flags:
         with_thumb = False
@@ -240,6 +241,7 @@ async def doc_upload(
             document=str_path,
             thumb=thumb,
             caption=path.name,
+            force_document=True,
             parse_mode="html",
             disable_notification=True,
             progress=progress,
