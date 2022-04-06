@@ -17,7 +17,7 @@ from pyrogram.errors.exceptions import MessageAuthorRequired, MessageTooLong
 from pyrogram.errors.exceptions.bad_request_400 import MessageNotModified, MessageIdInvalid
 from pyrogram.errors.exceptions.forbidden_403 import MessageDeleteForbidden
 
-from paimonimport logging
+from paimon import logging
 from ... import client as _client  # pylint: disable=unused-import
 
 _CANCEL_LIST: List[int] = []
