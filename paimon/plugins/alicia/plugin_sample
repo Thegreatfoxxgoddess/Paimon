@@ -1,0 +1,12 @@
+from package import Search
+
+from paimon import paimon, Message
+
+@paimon.on_cmd( # define paimon at top
+    "cmd",
+    about={}
+)
+async def function_name(message: Message): # define "Message at top
+    input_ = message.input_str # if you want custom input
+
+    # your code with input_ variable or constant
