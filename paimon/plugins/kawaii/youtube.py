@@ -4,19 +4,22 @@
 
 from __future__ import unicode_literals
 
-import os
 import json
+import os
 
-from yt_dlp import YoutubeDL
-from youtubesearchpython import SearchVideos
 from wget import download
+from youtubesearchpython import SearchVideos
+from yt_dlp import YoutubeDL
 
-from paimon import paimon, Config, Message
+from paimon import Config, Message, paimon
+
 from ..bot.utube_inline import BASE_YT_URL, get_yt_video_id
 
 LOGGER = paimon.getLogger(__name__)
 
 # retunr regex link or get link with query
+
+
 async def get_link(query):
     vid_id = get_yt_video_id(query)
     link = f"{BASE_YT_URL}{vid_id}"
@@ -32,7 +35,10 @@ async def get_link(query):
     else:
         return link, vid_id
 
+
 # yt-dl args - extract video info
+
+
 async def extract_inf(link, opts_):
     with YoutubeDL(opts_) as ydl:
         infoo = ydl.extract_info(link, False)
@@ -50,12 +56,14 @@ async def extract_inf(link, opts_):
     about={
         "header": "Music Downloader",
         "description": "Download music using yt_dlp",
-        'options': {'-f': 'to download in flac format'},
-        'examples': ['{tr}song link',
-                     '{tr}song nome da musica',
-                     '{tr}song -f nome da musica']
-        }
-    )
+        "options": {"-f": "to download in flac format"},
+        "examples": [
+            "{tr}song link",
+            "{tr}song nome da musica",
+            "{tr}song -f nome da musica",
+        ],
+    },
+)
 async def song_(message: Message):
     chat_id = message.chat.id
     query = message.input_str
@@ -73,15 +81,15 @@ async def song_(message: Message):
         "logger": LOGGER,
         "writethumbnail": True,
         "prefer_ffmpeg": True,
-        'format': format_,
+        "format": format_,
         "geo_bypass": True,
         "nocheckcertificate": True,
         "postprocessors": [
-                {
-                     'key': 'FFmpegExtractAudio',
-                     'preferredcodec': fid,
-                     'preferredquality': '320',
-                 },
+            {
+                "key": "FFmpegExtractAudio",
+                "preferredcodec": fid,
+                "preferredquality": "320",
+            },
             {"key": "EmbedThumbnail"},
             {"key": "FFmpegMetadata"},
         ],
@@ -90,11 +98,19 @@ async def song_(message: Message):
     query_ = query.strip("-f")
     link, vid_id = await get_link(query_)
     await message.edit("`Processando o audio ...`")
-    thumb_ = download(f"https://i.ytimg.com/vi/{vid_id}/maxresdefault.jpg", Config.DOWN_PATH)
+    thumb_ = download(
+        f"https://i.ytimg.com/vi/{vid_id}/maxresdefault.jpg", Config.DOWN_PATH
+    )
     capt_, title_, duration_ = await extract_inf(link, aud_opts)
     capt_ += f"\n❯ Formato: {fid}"
     await message.delete()
-    await message.client.send_audio(chat_id, audio=f"{Config.DOWN_PATH}{title_}.{fid}", caption=capt_, thumb=thumb_, duration=duration_)
+    await message.client.send_audio(
+        chat_id,
+        audio=f"{Config.DOWN_PATH}{title_}.{fid}",
+        caption=capt_,
+        thumb=thumb_,
+        duration=duration_,
+    )
     os.remove(f"{Config.DOWN_PATH}{title_}.{fid}")
     os.remove(f"{Config.DOWN_PATH}maxresdefault.jpg")
 
@@ -104,10 +120,12 @@ async def song_(message: Message):
     about={
         "header": "Video Downloader",
         "description": "Download videos using yt_dlp",
-        'examples': ['{tr}video link',
-                     '{tr}video video name',]
-        }
-    )
+        "examples": [
+            "{tr}video link",
+            "{tr}video video name",
+        ],
+    },
+)
 async def vid_(message: Message):
     chat_id = message.chat.id
     query = message.input_str
@@ -116,22 +134,26 @@ async def vid_(message: Message):
     await message.edit("`Aguarde ...`")
     vid_opts = {
         "outtmpl": os.path.join(Config.DOWN_PATH, "%(title)s.%(ext)s"),
-        'logger': LOGGER,
-        'writethumbnail': False,
-        'prefer_ffmpeg': True,
-        'format': 'bestvideo+bestaudio/best',
-        'postprocessors': [
-                {
-                    'key': 'FFmpegMetadata'
-                }
-            ],
+        "logger": LOGGER,
+        "writethumbnail": False,
+        "prefer_ffmpeg": True,
+        "format": "bestvideo+bestaudio/best",
+        "postprocessors": [{"key": "FFmpegMetadata"}],
         "quiet": True,
     }
     link, vid_id = await get_link(query)
-    thumb_ = download(f"https://i.ytimg.com/vi/{vid_id}/maxresdefault.jpg", Config.DOWN_PATH)
+    thumb_ = download(
+        f"https://i.ytimg.com/vi/{vid_id}/maxresdefault.jpg", Config.DOWN_PATH
+    )
     await message.edit("`Processando o video ...`")
     capt_, title_, duration_ = await extract_inf(link, vid_opts)
     await message.delete()
-    await message.client.send_video(chat_id, video=f"{Config.DOWN_PATH}{title_}.webm", caption=capt_, thumb=thumb_, duration=duration_)
+    await message.client.send_video(
+        chat_id,
+        video=f"{Config.DOWN_PATH}{title_}.webm",
+        caption=capt_,
+        thumb=thumb_,
+        duration=duration_,
+    )
     os.remove(f"{Config.DOWN_PATH}{title_}.webm")
     os.remove(f"{Config.DOWN_PATH}maxresdefault.jpg")
