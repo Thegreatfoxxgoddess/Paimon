@@ -62,3 +62,4 @@ ffmpeg-python>=0.2.0
 ffmpeg
 python-ffmpeg>=1.0.13
 git+https://github.com/thegreatfoxxgoddess/pyrogram.git@x21
+yt_dlp
