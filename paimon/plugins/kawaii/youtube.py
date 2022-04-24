@@ -4,115 +4,69 @@
 
 from __future__ import unicode_literals
 
-import json
 import os
+import glob
+import json
 
-from wget import download
-from youtubesearchpython import SearchVideos
+from pathlib import Path
 from yt_dlp import YoutubeDL
+from youtubesearchpython import SearchVideos
 
-from paimon import Config, Message, paimon
-
+from paimon import paimon, Config, Message
 from ..bot.utube_inline import BASE_YT_URL, get_yt_video_id
 
+
 LOGGER = paimon.getLogger(__name__)
-
-# retunr regex link or get link with query
-
-
-async def get_link(query):
-    vid_id = get_yt_video_id(query)
-    link = f"{BASE_YT_URL}{vid_id}"
-    if vid_id is None:
-        try:
-            res_ = SearchVideos(query, offset=1, mode="json", max_results=1)
-            link = json.loads(res_.result())["search_result"][0]["link"]
-            id_ = link = json.loads(res_.result())["search_result"][0]["id"]
-            return link, id_
-        except Exception as e:
-            LOGGER.exception(e)
-            return e
-    else:
-        return link, vid_id
-
-
-# yt-dl args - extract video info
-
-
-async def extract_inf(link, opts_):
-    with YoutubeDL(opts_) as ydl:
-        infoo = ydl.extract_info(link, False)
-        ydl.process_info(infoo)
-        duration_ = infoo["duration"]
-        title_ = infoo["title"]
-        channel_ = infoo["channel"]
-        views_ = infoo["view_count"]
-        capt_ = f"<a href={link}><b>{title_}</b></a>\n❯ Duração: {duration_}\n❯ Views: {views_}\n❯ Canal: {channel_}"
-        return capt_, title_, duration_
-
 
 @paimon.on_cmd(
     "song",
     about={
         "header": "Music Downloader",
-        "description": "Download music using yt_dlp",
-        "options": {"-f": "to download in flac format"},
-        "examples": [
-            "{tr}song link",
-            "{tr}song nome da musica",
-            "{tr}song -f nome da musica",
-        ],
-    },
-)
+        "description": "Download songs using yt_dlp",
+        'options': {'-f': 'to download in flac format'},
+        'examples': ['{tr}song link',
+                     '{tr}song name of song',
+                     '{tr}song -f name of song']
+        }
+    )
 async def song_(message: Message):
-    chat_id = message.chat.id
     query = message.input_str
     if not query:
-        return await message.edit("`Vou baixar o vento?!`", del_in=5)
-    await message.edit("`Aguarde ...`")
-    if query.startswith("-f"):
-        format_ = "flac/best"
-        fid = "flac"
-    else:
-        format_ = "bestaudio/best"
-        fid = "mp3"
+        return await message.edit("`what do you want me to do?!`", del_in=5)
+    await message.edit("`pls wait ...`")
+    link = await get_link(query)
     aud_opts = {
         "outtmpl": os.path.join(Config.DOWN_PATH, "%(title)s.%(ext)s"),
         "logger": LOGGER,
         "writethumbnail": True,
         "prefer_ffmpeg": True,
-        "format": format_,
+        'format': 'bestaudio/best',
         "geo_bypass": True,
         "nocheckcertificate": True,
         "postprocessors": [
-            {
-                "key": "FFmpegExtractAudio",
-                "preferredcodec": fid,
-                "preferredquality": "320",
-            },
+                {
+                     'key': 'FFmpegExtractAudio',
+                     'preferredcodec': "mp3",
+                     'preferredquality': '320',
+                 },
             {"key": "EmbedThumbnail"},
             {"key": "FFmpegMetadata"},
         ],
         "quiet": True,
     }
-    query_ = query.strip("-f")
-    link, vid_id = await get_link(query_)
-    await message.edit("`Processando o audio ...`")
-    thumb_ = download(
-        f"https://i.ytimg.com/vi/{vid_id}/maxresdefault.jpg", Config.DOWN_PATH
-    )
-    capt_, title_, duration_ = await extract_inf(link, aud_opts)
-    capt_ += f"\n❯ Formato: {fid}"
-    await message.delete()
-    await message.client.send_audio(
-        chat_id,
-        audio=f"{Config.DOWN_PATH}{title_}.{fid}",
-        caption=capt_,
-        thumb=thumb_,
-        duration=duration_,
-    )
-    os.remove(f"{Config.DOWN_PATH}{title_}.{fid}")
-    os.remove(f"{Config.DOWN_PATH}maxresdefault.jpg")
+    filename_, capt_, duration_ = extract_inf(link, aud_opts)
+    if filename_ == 0:
+        _fpath = ''
+        for _path in glob.glob(os.path.join(Config.DOWN_PATH, '*')):
+            if not _path.lower().endswith((".jpg", ".png", ".webp")):
+                _fpath = _path
+        if not _fpath:
+            await message.err("nothing found !")
+            return
+        await message.reply_audio(audio=Path(_fpath), caption=capt_, duration=duration_)
+        os.remove(Path(_fpath))
+    else:
+        await message.edit(str(filename_))
 
 
 @paimon.on_cmd(
@@ -120,40 +74,75 @@ async def song_(message: Message):
     about={
         "header": "Video Downloader",
         "description": "Download videos using yt_dlp",
-        "examples": [
-            "{tr}video link",
-            "{tr}video video name",
-        ],
-    },
-)
+        'examples': ['{tr}video link',
+                     '{tr}video video name',]
+        }
+    )
 async def vid_(message: Message):
-    chat_id = message.chat.id
     query = message.input_str
     if not query:
-        return await message.edit("`Vou baixar o vento?!`", del_in=5)
-    await message.edit("`Aguarde ...`")
+        return await message.edit("`input smth ?!`", del_in=5)
+    await message.edit("`hold on ...`")
     vid_opts = {
         "outtmpl": os.path.join(Config.DOWN_PATH, "%(title)s.%(ext)s"),
-        "logger": LOGGER,
-        "writethumbnail": False,
-        "prefer_ffmpeg": True,
-        "format": "bestvideo+bestaudio/best",
-        "postprocessors": [{"key": "FFmpegMetadata"}],
+        'logger': LOGGER,
+        'writethumbnail': False,
+        'prefer_ffmpeg': True,
+        'format': 'bestvideo+bestaudio/best',
+        'postprocessors': [
+                {
+                    'key': 'FFmpegMetadata'
+                }
+            ],
         "quiet": True,
     }
-    link, vid_id = await get_link(query)
-    thumb_ = download(
-        f"https://i.ytimg.com/vi/{vid_id}/maxresdefault.jpg", Config.DOWN_PATH
-    )
-    await message.edit("`Processando o video ...`")
-    capt_, title_, duration_ = await extract_inf(link, vid_opts)
-    await message.delete()
-    await message.client.send_video(
-        chat_id,
-        video=f"{Config.DOWN_PATH}{title_}.webm",
-        caption=capt_,
-        thumb=thumb_,
-        duration=duration_,
-    )
-    os.remove(f"{Config.DOWN_PATH}{title_}.webm")
-    os.remove(f"{Config.DOWN_PATH}maxresdefault.jpg")
+    link = await get_link(query)
+    await message.edit("`processing...`")
+    filename_, capt_, duration_ = extract_inf(link, vid_opts)
+    if filename_ == 0:
+        _fpath = ''
+        for _path in glob.glob(os.path.join(Config.DOWN_PATH, '*')):
+            if not _path.lower().endswith((".jpg", ".png", ".webp")):
+                _fpath = _path
+        if not _fpath:
+            return await message.err("nothing found !")
+        await message.delete()
+        await message.reply_video(video=Path(_fpath), caption=capt_, duration=duration_)
+        os.remove(Path(_fpath))
+    else:
+        await message.edit(str(filename_))
+
+
+# retunr regex link or get link with query
+async def get_link(query):
+    vid_id = get_yt_video_id(query)
+    link = f"{BASE_YT_URL}{vid_id}"
+    if vid_id is None:
+        try:
+            res_ = SearchVideos(query, offset=1, mode="json", max_results=1)
+            link = json.loads(res_.result())["search_result"][0]["link"]
+            return link
+        except Exception as e:
+            LOGGER.exception(e)
+            return e
+    else:
+        return link
+
+
+def extract_inf(url, _opts):
+    try:
+        x = YoutubeDL(_opts)
+        infoo = x.extract_info(url, False)
+        x.process_info(infoo)
+        duration_ = infoo["duration"]
+        title_ = infoo["title"].replace("/", "_")
+        channel_ = infoo["channel"]
+        views_ = infoo["view_count"]
+        capt_ = f"<a href={url}><b>{title_}</b></a>\n❯ duration: {duration_}\n❯ Views: {views_}\n❯ channel: {channel_}"
+        dloader = x.download(url)
+    except Exception as y_e:  # pylint: disable=broad-except
+        LOGGER.exception(y_e)
+        return y_e
+    else:
+        return dloader, capt_, duration_
+
