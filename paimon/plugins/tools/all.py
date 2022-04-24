@@ -7,7 +7,7 @@ from paimon import Message, paimon
 from .. import get_all_plugins
 
 
-@paimon.on_cmd("all", about={"header": "list all plugins in plugins/ path"})
+@paimon.on_cmd("plugins", about={"header": "list all plugins in plugins/ path"})
 async def getplugins(message: Message):
     raw_ = get_all_plugins()
     out_str = f"**--({len(raw_)}) Plugins Available!--**\n\n"
