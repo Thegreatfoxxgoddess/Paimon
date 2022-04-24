@@ -66,19 +66,19 @@ async def fun_(message: Message):
         await message.try_to_edit(fun, parse_mode="html")
 
 
-@paimon.on_cmd("Oof$", about={"header": "Ooooof"}, trigger="", allow_via_bot=False)
+@paimon.on_cmd("oof$", about={"header": "ooooof"}, trigger="", allow_via_bot=False)
 async def Oof_(message: Message):
     """Oof"""
-    Oof = "Oo "
+    Oof = "oo "
     for _ in range(6):
         Oof = Oof[:-1] + "of"
         await message.try_to_edit(Oof)
 
 
-@paimon.on_cmd("Hmm$", about={"header": "Hmmmmm"}, trigger="", allow_via_bot=False)
+@paimon.on_cmd("hmm$", about={"header": "hmmmmm"}, trigger="", allow_via_bot=False)
 async def Hmm_(message: Message):
     """Hmm"""
-    Hmm = "Hm "
+    Hmm = "hm "
     for _ in range(4):
         Hmm = Hmm[:-1] + "mm"
         await message.try_to_edit(Hmm)
