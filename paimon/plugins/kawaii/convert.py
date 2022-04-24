@@ -30,7 +30,7 @@ async def convert_(message: Message):
         img.save("converted.png", "png")
         await message.delete()
         msg = "__Made by [paimon](https://t.me/candys_bot)__"
-        await client.send_document(
+        await paimon.send_document(
             chat_id=message.chat.id, document="converted.png", caption=msg
         )
     except Exception as e:
