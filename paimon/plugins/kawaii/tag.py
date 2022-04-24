@@ -12,19 +12,18 @@ def mention_html(user_id, name):
 
 
 @paimon.on_cmd(
-    "all",
+    "everyone",
     about={
-        "header": "Tagall recent 100 members with caption",
-        "usage": "{tr}tagall [Text | reply to text Msg]",
+        "header": "Tag all recent 100 members with caption",
+        "usage": "{tr} [Text | reply to text Msg]",
     },
-    allow_via_bot=True,
     allow_private=False,
 )
 async def tagall_(message: Message):
     """Tag recent members"""
     message.chat.title
     c_id = message.chat.id
-    await message.edit(f"@all")
+    await message.edit(f"@everyone")
     message_id = replied.message_id if replied else None
     try:
         async for members in message.client.iter_chat_members(c_id, filter="recent"):
