@@ -21,9 +21,9 @@ async def convert_(message: Message):
     if not replied:
         return await message.err("`Reply to some media.`")
     media = await message.reply_to_message.download()
-    if not media.endswith((".jpg", ".png", ".bmp", ".tif", ".webp")):
+    if not media.endswith((".jpg", ".png", ".bmp", ".tif", ".webp" ".mp3")):
         os.remove(media)
-        return await message.err("`Formato não suportado`")
+        return await message.err("`not supported`")
     try:
         await message.edit("`converting...`")
         img = Image.open(media).convert("RGB")
