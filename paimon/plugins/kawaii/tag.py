@@ -21,10 +21,10 @@ def mention_html(user_id, name):
     allow_private=False,
 )
 async def tagall_(message: Message):
-    """ Tag recent members """
+    """Tag recent members"""
     replied = message.reply_to_message
     text = message.input_str
-    c_title = message.chat.title
+    message.chat.title
     c_id = message.chat.id
     await message.edit(f"`@all`")
     text = f"**{text}**\n" if text else ""
@@ -42,7 +42,6 @@ async def tagall_(message: Message):
     await message.edit("```Tagged recent Members Successfully...```", del_in=3)
 
 
-
 @paimon.on_cmd(
     "tagall",
     about={
@@ -53,10 +52,10 @@ async def tagall_(message: Message):
     allow_private=False,
 )
 async def tagall_(message: Message):
-    """ Tag recent members """
+    """Tag recent members"""
     replied = message.reply_to_message
     text = message.input_str
-    c_title = message.chat.title
+    message.chat.title
     c_id = message.chat.id
     await message.edit(f"@all")
     text = f"**{text}**\n" if text else ""
