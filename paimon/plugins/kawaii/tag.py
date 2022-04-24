@@ -1,14 +1,5 @@
-import asyncio
 import html
-import os
 
-from pyrogram.errors import (
-    BadRequest,
-    PeerIdInvalid,
-    UsernameInvalid,
-    UsernameNotOccupied,
-    UsernameOccupied,
-)
 from paimon import Config, Message, paimon
 
 LOG = paimon.getLogger(__name__)
@@ -18,11 +9,7 @@ PATH = Config.DOWN_PATH + "chat_pic.jpg"
 
 def mention_html(user_id, name):
     return '<a href="tg://user?id={}">{}</a>'.format(user_id, html.escape(name))
-    
-    
-    
-    
-    
+
 
 @paimon.on_cmd(
     "all",
@@ -35,7 +22,7 @@ def mention_html(user_id, name):
 )
 async def tagall_(message: Message):
     """Tag recent members"""
-    c_title = message.chat.title
+    message.chat.title
     c_id = message.chat.id
     await message.edit(f"@all")
     message_id = replied.message_id if replied else None
@@ -49,4 +36,3 @@ async def tagall_(message: Message):
     except Exception as e:
         text += " " + str(e)
     await message.client.send_message(c_id, text, reply_to_message_id=message_id)
-
