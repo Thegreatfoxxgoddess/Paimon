@@ -11,7 +11,7 @@ async def _init() -> None:
     if found:
         Config.REVEAL_VAR = found["switch"]
     else:
-        Config.REVEAL_VAR = False
+        Config.REVEAL_VAR = True
 
 
 @paimon.on_cmd(
