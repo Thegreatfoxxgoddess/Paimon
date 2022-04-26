@@ -9,7 +9,6 @@ from os import environ, getpid, kill
 from os.path import isfile, relpath
 from signal import SIGTERM
 from typing import Dict, List, Union
-from paimon import config
 
 _SECURE = [
     # critical
@@ -71,6 +70,6 @@ def secure_text(text: str) -> str:
         return ""
     for var in _SECURE:
         tvar = environ.get(var, None)
-        if tvar and tvar in text and Config.REVEAL_VAR == True:
+        if tvar and tvar in text and Config.REVEAL_VAR:
             text = text.replace(tvar, "[SECURED!]")
     return text
