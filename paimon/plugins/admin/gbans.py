@@ -12,7 +12,7 @@ from pyrogram.errors import (
 )
 from spamwatch.types import Ban
 
-from paimon import Config, Message, filters, get_collection, pool, paimon
+from paimon import Config, Message, filters, get_collection, paimon, pool
 from paimon.helpers import full_name
 from paimon.utils import get_response, mention_html
 
