@@ -1,8 +1,12 @@
-""" Anti-Flood Modulo de controle de Spam """
+""" Anti-Flood Module to control Spam """
 
-# Copyright (C) 2020 by UsergeTeam@Github, < https://github.com/UsergeTeam >.
+# Copyright (C) 2020-2021 by paimonTeam@Github, < https://github.com/paimonTeam >.
 #
-# Edited by Alicia
+# This file is part of < https://github.com/paimonTeam/paimon > project,
+# and is released under the "GNU v3.0 License Agreement".
+# Please see < https://github.com/paimonTeam/paimon/blob/master/LICENSE >
+#
+# All rights reserved.
 
 import asyncio
 import time
@@ -41,25 +45,25 @@ async def cache_admins(msg):
 @paimon.on_cmd(
     "setflood",
     about={
-        "header": "Defina o limite Anti-Flood para agir\n"
-        "Pass <on/off> para desligar e ligaro turn Off and On.",
+        "header": "Set Anti-Flood limit to take Action\n"
+        "Pass <on/off> to turn Off and On.",
         "usage": "{tr}setflood 5\n"
-        "{tr}setflood on (para ON)\n{tr}setflood off (para OFF)",
+        "{tr}setflood on (for ON)\n{tr}setflood off (for OFF)",
     },
     allow_private=False,
 )
 async def set_flood(msg: Message):
-    """Set flood on/off e limite de flood"""
+    """Set flood on/off and flood limit"""
     args = msg.input_str
     if not args:
-        await msg.err("leia .help setflood")
+        await msg.err("read .help setflood")
         return
     if "on" in args.lower():
         if (
             msg.chat.id in ANTIFLOOD_DATA
             and ANTIFLOOD_DATA[msg.chat.id].get("data") == "on"
         ):
-            return await msg.err("Antiflood Já habilitado para este chat.")
+            return await msg.err("Antiflood Already enabled for this chat.")
         chat_limit = 5
         chat_mode = "Ban"
         if ANTIFLOOD_DATA.get(msg.chat.id):
@@ -76,101 +80,96 @@ async def set_flood(msg: Message):
             upsert=True,
         )
         await msg.edit(
-            "`Anti-Flood foi habilitado com sucesso...`", log=__name__, del_in=5
+            "`Anti-Flood is Enabled Successfully...`", log=__name__, del_in=5
         )
     elif "off" in args.lower():
         if msg.chat.id not in ANTIFLOOD_DATA or (
             msg.chat.id in ANTIFLOOD_DATA
             and ANTIFLOOD_DATA[msg.chat.id].get("data") == "off"
         ):
-            return await msg.err("Antiflood Já desativado para este bate-papo.")
+            return await msg.err("Antiflood Already Disabled for this chat.")
         ANTIFLOOD_DATA[msg.chat.id]["data"] = "off"
         await ANTI_FLOOD.update_one(
             {"chat_id": msg.chat.id}, {"$set": {"data": "off"}}, upsert=True
         )
         await msg.edit(
-            "`Anti-Flood foi desabilitado com sucesso...`", log=__name__, del_in=5
+            "`Anti-Flood is Disabled Successfully...`", log=__name__, del_in=5
         )
     elif args.isnumeric():
         if msg.chat.id not in ANTIFLOOD_DATA or (
             msg.chat.id in ANTIFLOOD_DATA
             and ANTIFLOOD_DATA[msg.chat.id].get("data") == "off"
         ):
-            return await msg.err(
-                "Primeiro ligue o ANTIFLOOD e, em seguida, defina o Limite."
-            )
+            return await msg.err("First turn ON ANTIFLOOD then set Limit.")
         input_ = int(args)
         if input_ < 3:
-            await msg.err("Não é possível definir o Limite Antiflood inferior a 3")
+            await msg.err("Can't set Antiflood Limit less then 3")
             return
         ANTIFLOOD_DATA[msg.chat.id]["limit"] = input_
         await ANTI_FLOOD.update_one(
             {"chat_id": msg.chat.id}, {"$set": {"limit": input_}}, upsert=True
         )
         await msg.edit(
-            f"`Anti-Flood  limite foi atualizado com sucesso para {input_}.`",
+            f"`Anti-Flood  limit is Successfully Updated for {input_}.`",
             log=__name__,
             del_in=5,
         )
     else:
-        await msg.err("Argumento inválido, leia .help setflood")
+        await msg.err("Invalid argument, read .help setflood")
 
 
 @paimon.on_cmd(
     "setmode",
     about={
-        "header": "Modo Anti-Flood",
-        "description": "Quando o usuário atingiu o limite de flood "
-        "Ele será banido/chutado/mutado pelos administradores de grupo",
+        "header": "Set Anti-Flood Mode",
+        "description": "When User Reached Limit of Flooding "
+        "He will Got Ban/Kick/Mute By Group Admins",
         "usage": "{tr}setmode Ban\n{tr}setmode Kick\n{tr}setmode Mute",
     },
     allow_private=False,
 )
 async def set_mode(msg: Message):
-    """Defina o modo de flood para agir"""
+    """Set flood mode to take action"""
     mode = msg.input_str
     if not mode:
-        await msg.err("leia .help setmode")
+        await msg.err("read .help setmode")
         return
     if msg.chat.id not in ANTIFLOOD_DATA or (
         msg.chat.id in ANTIFLOOD_DATA
         and ANTIFLOOD_DATA[msg.chat.id].get("data") == "off"
     ):
-        return await msg.err("Primeiro ligue o ANTIFLOOD e, em seguida, defina o modo.")
+        return await msg.err("First turn ON ANTIFLOOD then set Mode.")
     if mode.lower() in ("ban", "kick", "mute"):
         ANTIFLOOD_DATA[msg.chat.id]["mode"] = mode.lower()
         await ANTI_FLOOD.update_one(
             {"chat_id": msg.chat.id}, {"$set": {"mode": mode.lower()}}, upsert=True
         )
         await msg.edit(
-            f"`Anti-Flood, O modo foi atualizado com sucesso para {mode.title()}`",
+            f"`Anti-Flood Mode is Successfully Updated to {mode.title()}`",
             log=__name__,
             del_in=5,
         )
     else:
-        await msg.err("Argumento inválido, leia .help setmode")
+        await msg.err("Invalid argument, read .help setmode")
 
 
 @paimon.on_cmd(
     "vflood",
-    about={
-        "header": "Ver as configurações atuais de anti-flood",
-        "usage": "{tr}vflood",
-    },
+    about={"header": "View Current Anti Flood Settings", "usage": "{tr}vflood"},
     allow_private=False,
 )
 async def view_flood_settings(msg: Message):
-    """ver as configurações atuais de inundação"""
+    """view Current Flood Settings"""
     chat_data = ANTIFLOOD_DATA.get(msg.chat.id)
     if not chat_data or (chat_data and chat_data.get("data") == "off"):
-        return await msg.err("Anti-Flood desativado neste chat.")
+        return await msg.err("Anti-Flood Disabled in this chat.")
     limit = chat_data["limit"]
     mode = chat_data["mode"]
     await msg.edit(
-        f"**Anti-Flood em {msg.chat.title}**\n"
-        "\t\t**Habilitado:** `True`\n"
-        f"\t\t**Limite:** `{limit}`\n"
-        f"\t\t**Modo:** `{mode}`\n"
+        f"**Anti-Flood in {msg.chat.title}**\n"
+        "\t\t**Enabled:** `True`\n"
+        f"\t\t**Limit:** `{limit}`\n"
+        f"\t\t**Mode:** `{mode}`\n"
     )
 
 
@@ -180,7 +179,7 @@ async def view_flood_settings(msg: Message):
     check_restrict_perm=True,
 )
 async def anti_flood_handler(msg: Message):
-    """Filtrando mensagens para lidar com flood"""
+    """Filtering msgs for Handling Flooding"""
 
     if not msg.from_user:
         return
@@ -217,17 +216,17 @@ async def anti_flood_handler(msg: Message):
         await asyncio.gather(
             msg.reply(
                 r"\\**#paimon_AntiFlood**//"
-                "\n\nEste usuário atingiu seu limite de spam\n\n"
-                f"**Usuario:** [{first_name}](tg://user?id={user_id})\n"
+                "\n\nThis User Reached His Limit of Spamming\n\n"
+                f"**User:** [{first_name}](tg://user?id={user_id})\n"
                 f"**ID:** `{user_id}`\n**Limit:** `{limit}`\n\n"
-                f"**Ação:** {exec_str}"
+                f"**Quick Action:** {exec_str}"
             ),
             CHANNEL.log(
                 r"\\**#AntiFlood_Log**//"
-                "\n\n**Limite anti-flood do usuário atingido**\n"
-                f"**Usuario:** [{first_name}](tg://user?id={user_id})\n"
+                "\n\n**User Anti-Flood Limit reached**\n"
+                f"**User:** [{first_name}](tg://user?id={user_id})\n"
                 f"**ID:** `{user_id}`\n**Limit:** {limit}\n"
-                f"**Ação:** {exec_str} in {msg.chat.title}"
+                f"**Quick Action:** {exec_str} in {msg.chat.title}"
             ),
         )
 

@@ -8,21 +8,21 @@ from paimon import Message, paimon
 @paimon.on_cmd(
     "purge",
     about={
-        "header": "limpar mensagens do usuário",
+        "header": "purge messages from user",
         "flags": {
-            "-u": "obter user_id da mensagem respondida",
-            "-l": "limite de mensagem : max 100",
+            "-u": "get user_id from replied message",
+            "-l": "message limit : max 100",
         },
-        "usage": "responda {tr}purge a mensagem inicial para limpar.\n"
-        "use {tr}purge [user_id | user_name] para limpar mensagens desse usuário ou usar flags",
+        "usage": "reply {tr}purge to the start message to purge.\n"
+        "use {tr}purge [user_id | user_name] to purge messages from that user or use flags",
         "examples": ["{tr}purge", "{tr}purge -u", "{tr}purge [user_id | user_name]"],
     },
-    allow_bots=True,
+    allow_bots=False,
     del_pre=True,
 )
 async def purge_(message: Message):
-    """limpar da mensagem respondida"""
-    await message.edit("`limpando ...`")
+    """purge from replied message"""
+    await message.edit("`purging ...`")
     from_user_id = None
     if message.filtered_input_str:
         from_user_id = (await message.client.get_users(message.filtered_input_str)).id
@@ -36,7 +36,7 @@ async def purge_(message: Message):
         if "u" in message.flags:
             from_user_id = message.reply_to_message.from_user.id
     if not start_message:
-        await message.err("mensagem de início inválida!")
+        await message.err("invalid start message!")
         return
     list_of_messages = []
     purged_messages_count = 0
@@ -92,8 +92,8 @@ async def purge_(message: Message):
 @paimon.on_cmd(
     "purgeme",
     about={
-        "header": "limpar mensagens de você mesmo",
-        "usage": "{tr}purgeme [numero]",
+        "header": "purge messages from yourself",
+        "usage": "{tr}purgeme [number]",
         "examples": ["{tr}purgeme 10"],
     },
     allow_bots=False,
@@ -105,7 +105,7 @@ async def purgeme_(message: Message):
     await message.edit("`purging ...`")
     if not (message.input_str and message.input_str.isdigit()):
         return await message.err(
-            "Forneça um número válido de mensagem para excluir", del_in=3
+            "Provide a valid number of message to delete", del_in=3
         )
     start_t = datetime.datetime.now()
     number = min(int(message.input_str), 100)
@@ -138,5 +138,5 @@ async def purgeme_(message: Message):
 
     end_t = datetime.datetime.now()
     time_taken_s = (end_t - start_t).seconds
-    out = f"<u>limpas</u> {len(del_list_)} mensagens em {time_taken_s} segundos."
+    out = f"<u>purged</u> {len(del_list_)} messages in {time_taken_s} seconds."
     await message.edit(out, del_in=3)

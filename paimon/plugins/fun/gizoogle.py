@@ -7,7 +7,7 @@ from paimon import Message, paimon
 
 
 @paimon.on_cmd(
-    "giz",
+    "google",
     about={
         "header": "gizoogle the text",
         "usage": "{tr}giz [text | reply to message]",

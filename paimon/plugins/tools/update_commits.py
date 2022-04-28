@@ -11,10 +11,10 @@ from paimon import Config, Message, paimon
 
 
 @paimon.on_cmd(
-    "fetch_up",
+    "update_f",
     about={
         "header": "check update commits",
-        "usage": "{tr}fetch_up",
+        "usage": "{tr}update_f",
     },
 )
 async def fetch_(message: Message):

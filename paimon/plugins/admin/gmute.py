@@ -1,5 +1,13 @@
 """ setup gmute """
 
+# Copyright (C) 2020 by paimonTeam@Github, < https://github.com/paimonTeam >.
+#
+# This file is part of < https://github.com/paimonTeam/paimon > project,
+# and is released under the "GNU v3.0 License Agreement".
+# Please see < https://github.com/uaudith/paimon/blob/master/LICENSE >
+#
+# All rights reserved
+
 import asyncio
 
 from pyrogram.errors.exceptions.bad_request_400 import (
@@ -9,7 +17,6 @@ from pyrogram.errors.exceptions.bad_request_400 import (
 from pyrogram.types import ChatPermissions
 
 from paimon import Config, Message, filters, get_collection, paimon
-from paimon.utils.tools import is_dev
 
 GMUTE_USER_BASE = get_collection("GMUTE_USER")
 CHANNEL = paimon.getCLogger(__name__)
@@ -30,14 +37,11 @@ async def gmute_user(msg: Message):
     """Mute a user globally"""
     await msg.edit("`Globally Muting this User...`")
     user_id, reason = msg.extract_user_and_text
-    if is_dev(user_id):
-        await msg.reply("`Lol ele é meu desenvolvedor porque iria muta-lo?.`")
-        return
     if not user_id:
         await msg.edit(
             "`no valid user_id or message specified,`"
             "`don't do .help gmute for more info. "
-            "Coz no one's gonna help ya`(｡ŏ_ŏ) ⚠"
+            "Coz no one's gonna help ya`(｡ŏ_ŏ) �?"
         )
         return
     get_mem = await msg.client.get_user_dict(user_id)

@@ -7,11 +7,11 @@ from paimon.utils import mention_html
 @paimon.on_cmd(
     "admins",
     about={
-        "header": "Ver ou mencionar administradores no chat",
+        "header": "View or mention admins in chat",
         "flags": {
-            "-m": "mencionar todos os administradores",
-            "-mc": "apenas mencione o criador",
-            "-id": "mostrar ids",
+            "-m": "mention all admins",
+            "-mc": "only mention creator",
+            "-id": "show ids",
         },
         "usage": "{tr}admins [any flag] [chatid]",
     },
@@ -28,7 +28,7 @@ async def mentionadmins(message: Message):
     show_id = "-id" in flags
     if not chat_id:
         chat_id = message.chat.id
-    mentions = "<b>Admins em {}</b>\n".format(
+    mentions = "<b>Admins in {}</b>\n".format(
         (await message.client.get_chat(chat_id)).title
     )
     try:
@@ -42,31 +42,31 @@ async def mentionadmins(message: Message):
             full_name = (await message.client.get_user_dict(u_id))["flname"]
             if status == "creator":
                 if men_admins or men_creator:
-                    owner_ += f"\n 👑 {mention_html(u_id, full_name)}"
+                    owner_ += f"\n {mention_html(u_id, full_name)}"
                 elif username:
-                    owner_ += "\n 👑 [{}](https://t.me/{})".format(
+                    owner_ += "\n [{}](https://t.me/{})".format(
                         html.escape(full_name), username
                     )
                 else:
-                    owner_ += "\n 👑 [{}](tg://openmessage?user_id={})".format(
+                    owner_ += "\n [{}](tg://openmessage?user_id={})".format(
                         html.escape(full_name), u_id
                     )
                 if show_id:
                     owner_ += f"  `{u_id}`"
             elif status == "administrator":
                 if is_bot:
-                    bots_ += f"\n 🤖 {mention_html(u_id, full_name)}"
+                    bots_ += f"\n {mention_html(u_id, full_name)}"
                     if show_id:
                         bots_ += f"  `{u_id}`"
                 else:
                     if men_admins:
-                        admins_ += f"\n • {mention_html(u_id, full_name)}"
+                        admins_ += f"\n {mention_html(u_id, full_name)}"
                     elif username:
-                        admins_ += "\n • [{}](https://t.me/{})".format(
+                        admins_ += "\n [{}](https://t.me/{})".format(
                             html.escape(full_name), username
                         )
                     else:
-                        admins_ += "\n • [{}](tg://openmessage?user_id={})".format(
+                        admins_ += "\n 👤 [{}](tg://openmessage?user_id={})".format(
                             html.escape(full_name), u_id
                         )
                     if show_id:

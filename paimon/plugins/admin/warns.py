@@ -1,4 +1,4 @@
-"""paimon Module para lidar com avisos"""
+"""paimon-X Module to handle warns"""
 
 
 # This program is distributed in the hope that it will be useful,
@@ -8,7 +8,7 @@
 #
 # Heavily Inspired By Sophie_Bot [https://sophiebot.rocks/]
 #
-# Copyright (C) 2020 BY paimon
+# Copyright (C) 2020 BY paimon-X
 # All rights reserved.
 # Author: Github/code-rgb [TG- @deleteduser420]
 
@@ -28,33 +28,32 @@ from pyrogram.types import (
 )
 
 from paimon import Config, Message, get_collection, paimon
-from paimon.utils.tools import is_dev
 
 WARN_DATA = get_collection("WARN_DATA")
 WARNS_DB = get_collection("WARNS_DB")
 CHANNEL = paimon.getCLogger(__name__)
 
 no_input_reply = (
-    "Eu não sei de quem você está falando, você vai precisar especificar um usuário...!"
+    "I don't know who you're talking about, you're going to need to specify a user...!"
 )
-userid_not_valid = "não consigo pegar o usuário!"
-user_is_admin = "Desculpe! Não posso adverter um administrador"
-owner_or_sudo = "Não consigo banir meu proprietário e usuários de Sudo"
-permission_denied = "Você não tem permissão para fazer isso !"
-warn_removed = "✅ advertencia removida com sucesso"
-warn_removed_caption = "✅ advertencia removida por {} !"
-no_warns_msg = "Bem, {} não tem nenhuma adverte."
-total_warns_msg = "O usuário {} tem {} / {} avisos.\n**Razão** are:"
-purge_warns = "{} reset {} aviso sobre {} em {}!"
-banned_text = "Os avisos foram excedidos! {} tem sido {}!"
+userid_not_valid = "can't get the user!"
+user_is_admin = "Sorry! I can't warn an Admin"
+owner_or_sudo = "I can't Ban My Owner and Sudo Users"
+permission_denied = "You Don't have the permission to do it !"
+warn_removed = "✅ Warn Removed Successfully"
+warn_removed_caption = "✅ Warn removed by {} !"
+no_warns_msg = "Well, {} doesn't have any warns."
+total_warns_msg = "User {} has {}/{} warnings.\n**Reasons** are:"
+purge_warns = "{} reset {} warns of {} in {}!"
+banned_text = "Warnings has been exceeded! {} has been {}!"
 
 
 @paimon.on_cmd(
     "warn",
     about={
-        "header": "adverte um usuario",
-        "description": "Use este comando para avisar o usuário! você pode mencionar ou responder ao usuário ofendido e adicionar o motivo, se necessário",
-        "usage": "{tr}warn [username | userid] ou [responda um usuario] :razão (opcional)",
+        "header": "warn a user",
+        "description": "Use this command to warn the user! you can mention or reply to the offended user and add reason if needed",
+        "usage": "{tr}warn [username | userid] or [reply to user] :reason (optional)",
     },
     allow_private=False,
     allow_bots=False,
@@ -64,9 +63,6 @@ banned_text = "Os avisos foram excedidos! {} tem sido {}!"
 async def warn_func(message: Message):
     """warn users"""
     warn_user_id, reason = message.extract_user_and_text
-    if is_dev(warn_user_id):
-        await message.reply("`Lol ele é meu desenvolvedor porque iria adverti-lo?.`")
-        return
     if not warn_user_id:
         return await message.err(no_input_reply, del_in=3)
 
@@ -125,9 +121,9 @@ async def warn_func(message: Message):
         return
     warn_text = r"\\**#Warned_User**//"
     warn_text += f"""
-{by_user.mention} foi advertido {warned_user.mention} em <b>{chat_title}</b>
-Razão: <code>{reason}</code>
-Avisos: {wcount}/{max_warns}
+{by_user.mention} has warned {warned_user.mention} in <b>{chat_title}</b>
+Reason: <code>{reason}</code>
+Warns: {wcount}/{max_warns}
 """
     warn_id = str(
         (
@@ -145,14 +141,14 @@ Avisos: {wcount}/{max_warns}
     if message.client.is_bot:
         btn_row = [
             InlineKeyboardButton(
-                "⚠️  Remover Aviso", callback_data=f"remove_warn_{warn_id}"
+                "⚠️  Remove Warn", callback_data=f"remove_warn_{warn_id}"
             )
         ]
         if rules:
             botname = (await paimon.bot.get_me()).username
             btn_row.append(
                 InlineKeyboardButton(
-                    "📝  Regras", url=f"https://t.me/{botname}?start={rules}"
+                    "📝  Rules", url=f"https://t.me/{botname}?start={rules}"
                 )
             )
 
@@ -178,8 +174,8 @@ Avisos: {wcount}/{max_warns}
 @paimon.on_cmd(
     "(?:warnmode|warnaction)",
     about={
-        "header": "Defina o modo de aviso para o bate-papo atual",
-        "description": "nem todos os chats querem banir (padrão) usuários quando excedem o máximo de avisos, então este comando será capaz de modificar isso",
+        "header": "Set the warn mode for current chat",
+        "description": "not all chats want to ban (default) users when exceed maximum warns so this command will able to modify that",
         "usage": "{tr}warnmode [ban|kick|mute]",
     },
     name="warnmode",
@@ -201,12 +197,12 @@ async def warn_mode(message: Message):
             [InlineKeyboardButton("⚰️  BAN", callback_data="warnmode_type_ban")],
         ]
         await message.reply(
-            f"Escolha um modo de aviso para:\n**Chat: {message.chat.title}**",
+            f"Choose a warn mode for:\n**Chat: {message.chat.title}**",
             reply_markup=InlineKeyboardMarkup(buttons),
         )
         return
     if not (warn_mode and warn_mode.lower() in warn_types):
-        return await message.err("Não é um modo de aviso válido", del_in=5)
+        return await message.err("Not a valid warm mode", del_in=5)
     out = await update_warnmode(message, warn_mode)
     await message.edit(out)
 
@@ -218,15 +214,11 @@ async def update_warnmode(message: Message, warn_mode: str):
     out = "{} <b>{}</b> to {} for {}\n**ID:** {}"
     if result.upserted_id:
         out = out.format(
-            "Modo de Aviso", "Alterado", warn_mode, message.chat.title, message.chat.id
+            "Warn Mode", "Changed", warn_mode, message.chat.title, message.chat.id
         )
     else:
         out = out.format(
-            "Modo de Aviso",
-            "Atualizado",
-            warn_mode,
-            message.chat.title,
-            message.chat.id,
+            "Warn Mode", "Updated", warn_mode, message.chat.title, message.chat.id
         )
     await CHANNEL.log(out)
     return out
@@ -236,7 +228,7 @@ async def update_warnmode(message: Message, warn_mode: str):
     "(?:maxwarns|warnlimit)",
     about={
         "header": "maxwarns",
-        "description": "Nem todos os chats querem dar o mesmo máximo de avisos ao usuário, certo? Este comando o ajudará a modificar os avisos de máximo padrão. O padrão é 3",
+        "description": "Not all chats want to give same maximum warns to the user, right? This command will help you to modify default maximum warns. Default is 3",
         "usage": "{tr}maxwarns [2 - 1000]",
         "examples": "{tr}maxwarns 5",
     },
@@ -251,7 +243,7 @@ async def maxwarns(message: Message):
     maxwarns = message.input_str
     if not (maxwarns.isdigit() and int(maxwarns) in range(2, 1001)):
         return await message.err(
-            "Escolha invá´lida! Escolha um numero entre 2 - 1000 \n(min. 2, max. 1000)",
+            "Invalid Input! Choose a number between 2 - 1000 \n(min. 2, max. 1000)",
             del_in=5,
         )
     result = await WARN_DATA.update_one(
@@ -261,13 +253,9 @@ async def maxwarns(message: Message):
     )
     out = "{} <b>{}</b> for {}\n**ID:** {}"
     if result.upserted_id:
-        out = out.format(
-            "Max de Avisos", "Alterado", message.chat.title, message.chat.id
-        )
+        out = out.format("Max Warns", "Changed", message.chat.title, message.chat.id)
     else:
-        out = out.format(
-            "Max de Avisos", "Atualizado", message.chat.title, message.chat.id
-        )
+        out = out.format("Max Warns", "Updated", message.chat.title, message.chat.id)
     await message.edit(out)
     await CHANNEL.log(out)
 
@@ -275,9 +263,9 @@ async def maxwarns(message: Message):
 @paimon.on_cmd(
     "(?:chatrules|setrules)",
     about={
-        "header": "regras do chat",
-        "description": "Como você sabe, ele salva regras!",
-        "usage": "{tr}setrules qualquer coisa aqui",
+        "header": "chat rules",
+        "description": "As you know, It save rules!",
+        "usage": "{tr}setrules whatever here",
     },
     name="setrules",
     allow_private=False,
@@ -293,7 +281,7 @@ async def chat_rules(message: Message):
         content = reply.text.html
     content = "{}".format(content or "")
     if not (content or (reply and reply.media)):
-        await message.err("Nenhum conteúdo encontrado!")
+        await message.err("No Content Found!")
         return
     mid = await CHANNEL.store(reply, content)
     chatrules = f"chatrules_{message.chat.id}_{mid}"
@@ -303,9 +291,9 @@ async def chat_rules(message: Message):
     )
     out = "{} <b>{}</b> for {} \n**ID:** {}"
     if result.upserted_id:
-        out = out.format("Regras", "Alterada", message.chat.title, message.chat.id)
+        out = out.format("Rules", "Changed", message.chat.title, message.chat.id)
     else:
-        out = out.format("Regras", "Atualizada", message.chat.title, message.chat.id)
+        out = out.format("Rules", "Updated", message.chat.title, message.chat.id)
     await message.edit(out, log=__name__)
 
 
@@ -329,8 +317,8 @@ async def ban_function(message: Message, warned_user: User, warn_mode: str):
 @paimon.on_cmd(
     "(?:resetwarns|delwarns)",
     about={
-        "header": "resete os avisos",
-        "description": "Este comando é usado para deletar todos os avisos que o usuário recebeu até agora no chat",
+        "header": "reset warns",
+        "description": "This command is used to delete all the warns user got so far in the chat",
         "usage": "{tr}delwarns @username",
     },
     name="delwarns",
@@ -366,9 +354,9 @@ async def resetwarns(message: Message):
 @paimon.on_cmd(
     "warns",
     about={
-        "header": "verificar avisa de um usuário",
-        "description": "Use este comando para saber o número de avisos que um usuário recebeu até agora no chat",
-        "usage": "{tr}warns [username|userid] ou responda um usuario",
+        "header": "check warns of a user",
+        "description": "Use this command to know number of warns a user got so far in the chat",
+        "usage": "{tr}warns [username|userid] or reply",
     },
     allow_private=False,
     allow_bots=False,
@@ -395,7 +383,7 @@ async def totalwarns(message: Message):
         rsn = warn["reason"]
         reason = f"<code>{rsn}</code>"
         if not rsn or rsn == "None":
-            reason = "<i>Nenhuma Razão</i>"
+            reason = "<i>No Reason</i>"
         u_mention = (await paimon.get_users(warn["by"])).mention
         warns_ += f"  \n**{count}.** {reason} by {u_mention}"
     if count == 0:
@@ -427,9 +415,7 @@ if paimon.has_bot:
         if u_id not in Config.OWNER_ID:
             return await c_q.answer(permission_denied, show_alert=True)
         warnmode = c_q.matches[0].group(1)
-        await c_q.answer(
-            f"Modo de aviso atualizado para '{warnmode}'", show_alert=False
-        )
+        await c_q.answer(f"Warn Mode Updated to '{warnmode}'", show_alert=False)
         out = await update_warnmode(c_q.message, warnmode)
         await c_q.edit_message_caption(
             caption=out,
