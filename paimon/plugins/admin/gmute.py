@@ -41,7 +41,7 @@ async def gmute_user(msg: Message):
         await msg.edit(
             "`no valid user_id or message specified,`"
             "`don't do .help gmute for more info. "
-            "Coz no one's gonna help ya`(｡ŏ_ŏ) �?"
+            "Coz no one's gonna help ya`"
         )
         return
     get_mem = await msg.client.get_user_dict(user_id)
@@ -55,12 +55,12 @@ async def gmute_user(msg: Message):
         return
     user_id = get_mem["id"]
     if user_id == msg.from_user.id:
-        await msg.err(r"LoL. Why would I GMuting myself ¯\(°_o)/¯")
+        await msg.err(r"LoL. Why would I GMuting myself Â¯\(Â°_o)/Â¯")
         return
     if user_id in Config.SUDO_USERS:
         await msg.edit(
             "`That user is in my Sudo List, Hence I can't GMute him.`\n\n"
-            "**Tip:** `Remove them from Sudo List and try again. (¬_¬)`",
+            "**Tip:** `Remove them from Sudo List and try again. (Â¬_Â¬)`",
             del_in=5,
         )
         return
@@ -97,7 +97,7 @@ async def gmute_user(msg: Message):
             pass
     if msg.reply_to_message:
         await CHANNEL.fwd_msg(msg.reply_to_message)
-        await CHANNEL.log(f"$GMUTE #prid{user_id} ⬆️")
+        await CHANNEL.log(f"$GMUTE #prid{user_id} â¬†ï¸")
     LOG.info("G-Muted %s", str(user_id))
 
 
@@ -186,7 +186,7 @@ async def gmute_at_entry(msg: Message):
             await asyncio.gather(
                 msg.client.restrict_chat_member(chat_id, user_id, ChatPermissions()),
                 msg.reply(
-                    r"\\**#𝑿_Antispam**//"
+                    r"\\**#ð‘¿_Antispam**//"
                     "\n\nGlobally Muted User Detected in this Chat.\n\n"
                     f"**User:** [{first_name}](tg://user?id={user_id})\n"
                     f"**ID:** `{user_id}`\n**Reason:** `{gmuted['reason']}`\n\n"
