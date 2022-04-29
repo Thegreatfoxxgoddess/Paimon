@@ -14,8 +14,8 @@ async def booru(message: Message):
     resp = requests.get(f"https://danbooru.donmai.us/posts.json?tags={query}")
     link = resp.json()
     r = random.choice(link)
-    pic = r["large_file_url"] 
+    pic = r["large_file_url"]
     if "-d" not in message.flags:
-        await message.reply_photo(pic) 
+        await message.reply_photo(pic)
     else:
         await message.reply_document(pic)
