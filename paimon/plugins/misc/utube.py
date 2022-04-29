@@ -161,7 +161,7 @@ async def ytDown(message: Message):
         await message.edit(
             f"**YTDL completed in {round(time() - startTime)} seconds**\n`{_fpath}`"
         )
-        if "t" in message.flags:
+        if "t" not in message.flags:
             await upload(message, Path(_fpath))
     else:
         await message.edit(str(retcode))
