@@ -476,4 +476,4 @@ async def finalize(message: Message, msg: Message, start_t):
         await message.edit("`Process Canceled!`", del_in=5)
     else:
         end_t = datetime.now()
-        m_s = (end_t - start_t).seconds
+        (end_t - start_t).seconds
