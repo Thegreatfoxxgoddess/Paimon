@@ -158,9 +158,6 @@ async def ytDown(message: Message):
         if not _fpath:
             await message.err("nothing found !")
             return
-        await message.edit(
-            f"**YTDL completed in {round(time() - startTime)} seconds**\n`{_fpath}`"
-        )
         if "t" not in message.flags:
             await upload(message, Path(_fpath))
     else:
