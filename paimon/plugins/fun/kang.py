@@ -62,7 +62,6 @@ async def log_kang(message: Message):
     await message.edit(f"`Logging kang in channel is now {out_}.`")
 
 
-
 @paimon.on_cmd(
     "kang",
     about={
@@ -299,7 +298,6 @@ async def kang_(message: Message):
             os.remove(media_)
 
 
-
 @paimon.on_cmd(
     "sticker",
     about={
@@ -347,6 +345,7 @@ async def sticker_search(message: Message):
 
 KANGING_STR = "me stealing this..."
 
+
 async def resize_photo(media: str, video: bool, fast_forward: bool) -> str:
     """Resize the given photo to 512x512"""
     if video:
@@ -392,4 +391,3 @@ async def resize_photo(media: str, video: bool, fast_forward: bool) -> str:
     image.save(resized_photo, "PNG")
     os.remove(media)
     return resized_photo
-
