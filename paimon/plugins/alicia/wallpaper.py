@@ -52,8 +52,5 @@ async def wall_heaven(message: Message):
     param = {"q": query_, "sorting": "random", "purity": pure}
     req = requests.get(link_, params=param)
     r = req.json().get("data")
-    #    await message.reply_or_send_as_file(r)
-    try:
-        await paimon.send_photo(message.chat.id, r[0]["url"])
-    except BaseException:
-        await message.edit(r[0]["url"])
+    pic = r[0]["path"]
+    await message.reply_document(pic)
