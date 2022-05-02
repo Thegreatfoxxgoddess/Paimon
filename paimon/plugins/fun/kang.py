@@ -164,7 +164,7 @@ async def kang_(message: Message):
         a_name = user.first_name
         u_name = user.username
         u_name = "@" + u_name if u_name else user.first_name or user.id
-        packname = f"a{user.id}_{user.username}_{pack}"
+        packname = f"a{user.id}_{user.username}"
         custom_packnick = Config.CUSTOM_PACK_NAME or f"{a_name}'s sticker pack"
         packnick = f"{a_name}'s stickers [{u_name}]"
         cmd = "/newpack"
@@ -176,7 +176,7 @@ async def kang_(message: Message):
             cmd = "/newanimated"
         if is_video:
             packname += "_video"
-            packnick += " (Video)"
+            packnick += " "
             cmd = "/newvideo"
         exist = False
         try:
