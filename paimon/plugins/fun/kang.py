@@ -10,7 +10,6 @@
 
 import io
 import os
-import random
 
 from bs4 import BeautifulSoup as bs
 from PIL import Image
@@ -58,8 +57,6 @@ async def log_kang(message: Message):
         await SAVED_SETTINGS.update_one(
             {"_id": "LOG_KANG"}, {"$set": {"switch": True}}, upsert=True
         )
-    out_ = "ON" if Config.LOG_KANG else "OFF"
-    await message.edit(f"`Logging kang in channel is now {out_}.`")
 
 
 @paimon.on_cmd(
@@ -90,10 +87,12 @@ async def kang_(message: Message):
     user = await paimon.get_me()
     replied = message.reply_to_message
     if Config.LOG_KANG:
-        await message.edit("`Kanging in log channel...`", del_in=1)
-        kang_msg = await paimon.send_message(Config.LOG_CHANNEL_ID, "`Processing...`")
+        await message.edit("`me stealing this...`", del_in=6)
+        kang_msg = await paimon.send_message(
+            Config.LOG_CHANNEL_ID, "`theft in progress...`"
+        )
     else:
-        kang_msg = await message.edit("`Processing...`")
+        kang_msg = await message.edit("`me stealing this...`")
     media_ = None
     emoji_ = None
     is_anim = False
@@ -137,7 +136,7 @@ async def kang_(message: Message):
         else:
             await kang_msg.edit("`Unsupported File!`")
             return
-        await kang_msg.edit(f"`{random.choice(KANGING_STR)}`")
+        await kang_msg.edit(f"`{KANGING_STR}`")
         media_ = await paimon.download_media(
             message=replied, file_name=f"{Config.DOWN_PATH}"
         )
@@ -162,10 +161,10 @@ async def kang_(message: Message):
         if not emoji_:
             emoji_ = "👀"
 
+        a_name = user.first_name
         u_name = user.username
         u_name = "@" + u_name if u_name else user.first_name or user.id
-        a_name = user.first_name
-        packname = f"a{user.id}_by_{user.username}_{pack}"
+        packname = f"a{user.id}_{user.username}_{pack}"
         custom_packnick = Config.CUSTOM_PACK_NAME or f"{a_name}'s sticker pack"
         packnick = f"{a_name}'s stickers [{u_name}]"
         cmd = "/newpack"
@@ -198,17 +197,17 @@ async def kang_(message: Message):
                 await conv.get_response(mark_read=True)
                 await conv.send_message(packname)
                 msg = await conv.get_response(mark_read=True)
-                limit = "50" if (is_video or is_anim) else "120"
+                limit = "50" if is_anim else "120"
                 while limit in msg.text:
                     pack += 1
-                    packname = f"a{user.id}_paimon_{pack}"
+                    packname = f"a{user.id}_by_paimon_{pack}"
                     packnick = f"{custom_packnick} {pack}"
                     if is_anim:
-                        packname += f"_anim{pack}"
-                        packnick += f" (Animated){pack}"
+                        packname += "_anim"
+                        packnick += " (Animated)"
                     if is_video:
-                        packname += f"_video{pack}"
-                        packnick += f" (Video){pack}"
+                        packname += "_video"
+                        packnick += " (Video)"
                     await kang_msg.edit(
                         "`Switching to Pack "
                         + str(pack)
@@ -216,7 +215,7 @@ async def kang_(message: Message):
                     )
                     await conv.send_message(packname)
                     msg = await conv.get_response(mark_read=True)
-                    if msg.text == "Invalid set selected.":
+                    if msg.text == "Invalid pack selected.":
                         await conv.send_message(cmd)
                         await conv.get_response(mark_read=True)
                         await conv.send_message(packnick)
@@ -299,51 +298,43 @@ async def kang_(message: Message):
 
 
 @paimon.on_cmd(
-    "sticker",
+    "stickerinfo",
     about={
-        "header": "Search Sticker Packs",
-        "usage": "Reply {tr}sticker or " "{tr}sticker [text]",
+        "header": "get sticker pack info",
+        "usage": "reply {tr}stickerinfo to any sticker",
     },
 )
-async def sticker_search(message: Message):
-    # search sticker packs
-    reply = message.reply_to_message
-    query_ = None
-    if message.input_str:
-        query_ = message.input_str
-    elif reply and reply.from_user:
-        query_ = reply.from_user.username or reply.from_user.id
-
-    if not query_:
-        return message.err(
-            "reply to a user or provide text to search sticker packs", del_in=3
+async def sticker_pack_info_(message: Message):
+    """get sticker pack info"""
+    replied = message.reply_to_message
+    if not replied:
+        await message.edit("`I can't fetch info from nothing, can I ?!`")
+        return
+    if not replied.sticker:
+        await message.edit("`Reply to a sticker to get the pack details`")
+        return
+    await message.edit("`Fetching details of the sticker pack, please wait..`")
+    get_stickerset = await message.client.send(
+        GetStickerSet(
+            stickerset=InputStickerSetShortName(short_name=replied.sticker.set_name),
+            hash=0,
         )
-
-    await message.edit(f'Searching for "`{query_}`"...')
-    titlex = f'<b>sticker packs :</b> "<u>{query_}</u>"\n'
-    sticker_pack = ""
-    try:
-        text = await get_response.text(
-            f"https://combot.org/telegram/stickers?q={query_}"
-        )
-    except ValueError:
-        return await message.err(
-            "Response was not 200!, Api is having some issues\n Please try again later.",
-            del_in=5,
-        )
-    soup = bs(text, "lxml")
-    results = soup.find_all("div", {"class": "sticker-pack__header"})
-    for pack in results:
-        if pack.button:
-            title_ = (pack.find("div", {"class": "sticker-pack__title"})).text
-            link_ = (pack.a).get("href")
-            sticker_pack += f"\n• [{title_}]({link_})"
-    if not sticker_pack:
-        sticker_pack = "`Not Found!`"
-    await message.edit((titlex + sticker_pack), disable_web_page_preview=True)
-
-
-KANGING_STR = "me stealing this..."
+    )
+    pack_emojis = []
+    for document_sticker in get_stickerset.packs:
+        if document_sticker.emoticon not in pack_emojis:
+            pack_emojis.append(document_sticker.emoticon)
+    out_str = (
+        f"**Sticker Title:** `{get_stickerset.set.title}\n`"
+        f"**Sticker Short Name:** `{get_stickerset.set.short_name}`\n"
+        f"**Archived:** `{get_stickerset.set.archived}`\n"
+        f"**Official:** `{get_stickerset.set.official}`\n"
+        f"**Masks:** `{get_stickerset.set.masks}`\n"
+        f"**Animated:** `{get_stickerset.set.animated}`\n"
+        f"**Stickers In Pack:** `{get_stickerset.set.count}`\n"
+        f"**Emojis In Pack:**\n{' '.join(pack_emojis)}"
+    )
+    await message.edit(out_str)
 
 
 async def resize_photo(media: str, video: bool, fast_forward: bool) -> str:
@@ -391,3 +382,53 @@ async def resize_photo(media: str, video: bool, fast_forward: bool) -> str:
     image.save(resized_photo, "PNG")
     os.remove(media)
     return resized_photo
+
+
+KANGING_STR = "me stealing this..."
+
+
+# Based on:
+# https://github.com/AnimeKaizoku/SaitamaRobot/blob/10291ba0fc27f920e00f49bc61fcd52af0808e14/SaitamaRobot/modules/stickers.py#L42
+@paimon.on_cmd(
+    "sticker",
+    about={
+        "header": "Search Sticker Packs",
+        "usage": "Reply {tr}sticker or " "{tr}sticker [text]",
+    },
+)
+async def sticker_search(message: Message):
+    # search sticker packs
+    reply = message.reply_to_message
+    query_ = None
+    if message.input_str:
+        query_ = message.input_str
+    elif reply and reply.from_user:
+        query_ = reply.from_user.username or reply.from_user.id
+
+    if not query_:
+        return message.err(
+            "reply to a user or provide text to search sticker packs", del_in=3
+        )
+
+    await message.edit(f'Searching for "`{query_}`"...')
+    titlex = f'<b>sticker packs :</b> "<u>{query_}</u>"\n'
+    sticker_pack = ""
+    try:
+        text = await get_response.text(
+            f"https://combot.org/telegram/stickers?q={query_}"
+        )
+    except ValueError:
+        return await message.err(
+            "Response was not 200!, Api is having some issues\n Please try again later.",
+            del_in=5,
+        )
+    soup = bs(text, "lxml")
+    results = soup.find_all("div", {"class": "sticker-pack__header"})
+    for pack in results:
+        if pack.button:
+            title_ = (pack.find("div", {"class": "sticker-pack__title"})).text
+            link_ = (pack.a).get("href")
+            sticker_pack += f"\n• [{title_}]({link_})"
+    if not sticker_pack:
+        sticker_pack = "`Not Found!`"
+    await message.edit((titlex + sticker_pack), disable_web_page_preview=True)
