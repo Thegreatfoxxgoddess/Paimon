@@ -18,7 +18,7 @@ from pyrogram.types import (
     User,
 )
 
-from paimon import Config, Message, get_collection, pool, paimon
+from paimon import Config, Message, get_collection, paimon, pool
 from paimon.utils import check_owner, get_file_id
 
 from .bot_forwards import ban_from_bot_pm
