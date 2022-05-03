@@ -1,7 +1,7 @@
 # Copyright (C) 2021 BY - GitHub.com/code-rgb [TG - @deleteduser420]
 # All rights reserved.
 
-"""Módulo que lida com Bot PM"""
+"""Module that handles Bot PM"""
 
 import asyncio
 from collections import defaultdict
@@ -75,7 +75,7 @@ if paimon.has_bot:
     async def get_bot_pm_media() -> None:
         global _BOT_PM_MEDIA
         if not Config.BOT_MEDIA:
-            _BOT_PM_MEDIA = get_file_id(await paimon.bot.get_messages("kannagifs", 6))
+            _BOT_PM_MEDIA = get_file_id(await paimon.bot.get_messages("useless_x", 2))
             return
         if Config.BOT_MEDIA.strip().lower() != "false":
             match = _TG_LINK_REGEX.search(Config.BOT_MEDIA)
@@ -94,7 +94,7 @@ if paimon.has_bot:
                     _BOT_PM_MEDIA = bot_m_fid
 
     async def get_bot_info():
-        """Proprietário do cache e informações do bot"""
+        """Caching Owner and bot info"""
         global _CACHED_INFO
         t_now = datetime.now()
         if not (
@@ -109,8 +109,8 @@ if paimon.has_bot:
             except (BadRequest, IndexError):
                 _CACHED_INFO["owner"] = Config.OWNER_ID[0]
                 LOGGER.debug(
-                    "Não consigo obter informações sobre o usuário em OWNER_ID !\n"
-                    "Tente /start no bot ou verifique OWNER_ID var"
+                    "Coudn't get Info about User in OWNER_ID !\n"
+                    "Try /start in bot or check OWNER_ID var"
                 )
             else:
                 _CACHED_INFO["owner"] = owner_info
@@ -146,10 +146,10 @@ if paimon.has_bot:
             if not found:
                 start_date = str(date.today().strftime("%B %d, %Y")).replace(",", "")
                 bot_start_msg = (
-                    f"<b>[Novo Usuario](tg://openmessage?user_id={user_.id})</b> Iniciou seu bot.\n\n"
-                    f"ID: <code>{user_.id}</code>\n"
-                    f"Nome: {user_.flname}\n"
-                    f"👤: {user_.mention}\n"
+                    f"A <b>[New User](tg://openmessage?user_id={user_.id})</b> Started your Bot.\n"
+                    f"  ID: <code>{user_.id}</code>\n"
+                    f"  Name: {user_.flname}\n"
+                    f"  👤: {user_.mention}\n"
                 )
                 await asyncio.gather(
                     BOT_START.insert_one(
@@ -164,30 +164,28 @@ if paimon.has_bot:
         return not bool(found)
 
     def default_owner_start(from_user):
-        start_msg = f"ᴏɪ ᴍᴇsᴛʀᴇ 🥰!\nᴄᴏᴍᴏ ᴘᴏssᴏ ʟʜᴇ sᴇʀ ᴜᴛɪʟ ʜᴏᴊᴇ?"
+        start_msg = f"Hello Master **{from_user.flname}** !\n"
         btns = [
-            [
-                InlineKeyboardButton(
-                    "➕ ᴀᴅɪᴄɪᴏɴᴀʀ ᴀ ᴜᴍ ɢʀᴜᴘᴏ", callback_data="add_to_grp"
-                )
-            ],
+            [InlineKeyboardButton("ADD TO GROUP", callback_data="add_to_grp")],
         ]
         return start_msg, btns
 
     @paimon.bot.on_message(start_filter())
     async def start_bot(_, message: Message):
         c_info = await get_bot_info()
-        c_info.get("bot")
+        bot_ = c_info.get("bot")
         owner_ = c_info.get("owner")
         from_user = await paimon.bot.get_user_dict(message.from_user, attr_dict=True)
         if from_user.id in Config.OWNER_ID:
             start_msg, btns = default_owner_start(from_user)
         else:
             start_msg = f"""
-ᴏʟᴀ ᴇsᴛʀᴀɴʜᴏ, ᴇᴜ sᴏᴜ ᴋᴀɴɴᴀ\nʙᴏᴛ ᴘᴇssᴏᴀʟ ᴅᴇ: {owner_.flname}
+        hey there {from_user.fname},
+        nice to meet ya, I'm {bot_.fname}.
+        I'm {owner_.flname}'s personal assistant✨🦋
 """
             if Config.BOT_FORWARDS:
-                start_msg += "`ᴠᴏᴄᴇ ᴘᴏᴅᴇ ᴇɴᴛʀᴀʀ ᴇᴍ ᴄᴏɴᴛᴀᴛᴏ ᴄᴏᴍ ᴍᴇᴜ ᴍᴇsᴛʀᴇ ᴜsᴀɴᴅᴏ ᴇsᴛᴇ ʙᴏᴛ!!\nᴇɴᴠɪᴇ sᴜᴀ ᴍᴇɴsᴀɢᴇᴍ, ᴠᴏᴜ ᴇɴᴛʀᴇɢᴀ-ʟᴀ.`"
+                start_msg += "<b>\nNOTE:</b>\nYou can <b>Send Message</b> here to contact my <b>Master.</b>"
             contact_url = (
                 f"https://t.me/{owner_.uname}"
                 if owner_.uname
@@ -195,8 +193,8 @@ if paimon.has_bot:
             )
             btns = [
                 [
-                    InlineKeyboardButton("👤  Contato", url=contact_url),
-                    InlineKeyboardButton("✨  Updates", url="t.me/paimonup"),
+                    InlineKeyboardButton("Bio", url="https://t.me/blame_everything"),
+                    InlineKeyboardButton("REPO", url=Config.UPSTREAM_REPO),
                 ]
             ]
         try:
@@ -205,7 +203,7 @@ if paimon.has_bot:
             await asyncio.sleep(e.x + 10)
         except Exception as bpm_e:
             await CHANNEL.log(
-                f"**ERROR**: {str(bpm_e)}\n\nOcorreu um erro fatal durante o envio de bot Pm Media"
+                f"**ERROR**: {str(bpm_e)}\n\nFatal Error occured while sending Bot Pm Media"
             )
         await check_new_bot_user(message.from_user)
 
@@ -213,12 +211,12 @@ if paimon.has_bot:
     @check_owner
     async def add_to_grp(c_q: CallbackQuery):
         await c_q.answer()
-        msg = "ᴍᴇ ᴀᴅɪᴄɪᴏɴᴇ ᴀ ᴜᴍ ɢʀᴜᴘᴏ \n\nʟᴇᴍʙʀᴇ-sᴇ ᴇᴜ ᴘʀᴇᴄɪsᴏ ᴅᴇ ᴘʀɪᴠɪʟᴇɢɪᴏs ᴀᴅᴍɪɴ ᴘᴀʀᴀ ꜰᴀʟᴀʀ"
+        msg = "<b>Add Your Bot to Group</b> \n\n**NOTE:**\n<i>Admin Privilege Required !</i>"
         add_bot = f"http://t.me/{(await get_bot_info())['bot'].uname}?startgroup=start"
         buttons = InlineKeyboardMarkup(
             [
-                [InlineKeyboardButton("➕ᴀᴅɪᴄɪᴏɴᴀʀ", url=add_bot)],
-                [InlineKeyboardButton("◀️ ᴠᴏʟᴛᴀʀ", callback_data="back_bot_pm")],
+                [InlineKeyboardButton("PRESS TO ADD", url=add_bot)],
+                [InlineKeyboardButton("BACK", callback_data="back_bot_pm")],
             ]
         )
         await c_q.edit_message_text(msg, reply_markup=buttons)
@@ -239,11 +237,9 @@ if paimon.has_bot:
         buttons = InlineKeyboardMarkup(
             [
                 [
+                    InlineKeyboardButton("BAN", callback_data=f"bot_pm_ban_{user_.id}"),
                     InlineKeyboardButton(
-                        "🚫  BAN", callback_data=f"bot_pm_ban_{user_.id}"
-                    ),
-                    InlineKeyboardButton(
-                        "➖ Bot Antiflood [OFF]",
+                        "Bot Antiflood [OFF]",
                         callback_data="toggle_bot-antiflood_off",
                     ),
                 ]
@@ -258,13 +254,13 @@ if paimon.has_bot:
             flood_count = FloodConfig.ALERT[user_.id]["count"] = 1
 
         flood_msg = (
-            r"⚠️ <b>\\#Flood_PmBot//</b>"
+            r"⚠️ <b>\\#Flood_Warning//</b>"
             "\n\n"
             f"  ID: <code>{user_.id}</code>\n"
-            f"  Nome: {user_.flname}\n"
-            f"  👤 Usuario: {user_.mention}"
-            f"\n\n**Está enviando spam para o seu bot !** ->  [ Flood rate **({flood_count})** ]\n"
-            "__Ação rápida__: Ignorado pelo bot por um tempo."
+            f"  Name: {user_.flname}\n"
+            f"  👤 User: {user_.mention}"
+            f"\n\n**Is spamming your bot !** ->  [ Flood rate **({flood_count})** ]\n"
+            "__Quick Action__: Ignored from bot for a while."
         )
 
         if found:
@@ -272,13 +268,13 @@ if paimon.has_bot:
                 if user_.id in Config.SUDO_USERS:
                     sudo_spam = (
                         f"**Sudo User** {user_.mention}:\n  ID: {user_.id}\n\n"
-                        "Está flodando seu bot !, Verifique `.help delsudo` para remover o usuário do Sudo."
+                        "Is Flooding your bot !, Check `.help delsudo` to remove the user from Sudo."
                     )
                     await paimon.bot.send_message(Config.LOG_CHANNEL_ID, sudo_spam)
                 else:
                     await ban_from_bot_pm(
                         user_.id,
-                        f"AutoBan para flood no bot [taxa de flood excedida de **({FloodConfig.AUTOBAN})**]",
+                        f"Automated Ban for Flooding bot [exceeded flood rate of **({FloodConfig.AUTOBAN})**]",
                         log=__name__,
                     )
                     FloodConfig.USERS[user_.id].clear()
@@ -304,10 +300,10 @@ if paimon.has_bot:
             try:
                 await paimon.bot.send_message(
                     Config.OWNER_ID[0],
-                    f"⚠️  **[Bot Aviso Flood !]({fa_msg.link})**",
+                    f"⚠️  **[Bot Flood Warning !]({fa_msg.link})**",
                 )
             except UserIsBlocked:
-                await CHANNEL.log("**Desbloqueie seu bot !**")
+                await CHANNEL.log("**Unblock your bot !**")
         if FloodConfig.ALERT[user_.id].get("fa_id") is None and fa_msg:
             FloodConfig.ALERT[user_.id]["fa_id"] = fa_msg.message_id
 
@@ -316,9 +312,9 @@ if paimon.has_bot:
     async def bot_pm_ban_cb(c_q: CallbackQuery):
         user_id = int(c_q.matches[0].group(1))
         await asyncio.gather(
-            c_q.answer(f"Banindo UserID -> {user_id} ...", show_alert=False),
+            c_q.answer(f"Banning UserID -> {user_id} ...", show_alert=False),
             ban_from_bot_pm(user_id, "Spamming Bot", log=__name__),
-            c_q.edit_message_text(f"✅ **Banido com sucesso**  User ID: {user_id}"),
+            c_q.edit_message_text(f"**Successfully Banned**  User ID: {user_id}"),
         )
 
     def time_now() -> Union[float, int]:
@@ -326,7 +322,7 @@ if paimon.has_bot:
 
     @pool.run_in_thread
     def is_flood(uid: int) -> Optional[bool]:
-        """Verifica se um usuário está flodando"""
+        """Checks if a user is flooding"""
         FloodConfig.USERS[uid].append(time_now())
         if (
             len(
@@ -354,7 +350,7 @@ if paimon.has_bot:
         user_id = msg.from_user.id
         if await BOT_BAN.find_one({"user_id": user_id}):
             # LOGGER.info(
-            #     r"<b>\\#Bot_PM//</b>" f"\n\nBanned UserID: {user_id} ignorado do bot."
+            #     r"<b>\\#Bot_PM//</b>" f"\n\nBanned UserID: {user_id} ignored from bot."
             # )
             await msg.stop_propagation()
         elif await is_flood(user_id):
@@ -371,11 +367,11 @@ if paimon.has_bot:
             await c_q.answer("You are banned from this bot !")
             # LOGGER.info(
             #     r"<b>\\#Callback//</b>"
-            #     f"\n\nBanned UserID: {user_id} ignorado do bot."
+            #     f"\n\nBanned UserID: {user_id} ignored from bot."
             # )
             raise StopPropagation
         if await is_flood(user_id):
-            await c_q.answer("Wooh, Mate Chill ! vá devagar")
+            await c_q.answer("Wooh, Mate Chill ! go slow")
             await send_flood_alert(c_q.from_user)
             FloodConfig.BANNED_USERS.add(user_id)
             raise StopPropagation
@@ -395,49 +391,48 @@ if paimon.has_bot:
                 {"$set": {"data": Config.BOT_ANTIFLOOD}},
                 upsert=True,
             ),
-            c_q.edit_message_text("BOT_ANTIFLOOD agora está desabilitado !"),
+            c_q.edit_message_text("BOT_ANTIFLOOD is now disabled !"),
         )
 
 
 @paimon.on_cmd(
     "bot_users",
     about={
-        "header": "Obtenha uma lista de usuários ativos que iniciaram seu bot",
+        "header": "Get a list Active Users Who started your Bot",
         "examples": "{tr}bot_users",
     },
     allow_channels=False,
 )
 async def bot_users_(message: Message):
-    """Usuários que iniciaram seu bot por - /start"""
+    """Users Who Stated Your Bot by - /start"""
     msg = ""
+    total = 0
     async for c in BOT_START.find():
-        msg += (
-            f"• <i>ID:</i> <code>{c['user_id']}</code>\n   "
-            f"<b>Nome:</b> {c['firstname']},  <b>Data:</b> `{c['date']}`\n"
-        )
+        total += 1
+        msg += f"<b> » </b> name {c['firstname']}\n" f"<b> •  </b> date {c['date']} \n"
     await message.edit_or_send_as_file(
-        f"<u><i><b>Bot PM Userlist</b></i></u>\n\n{msg}"
+        f"<u><i><b>Bot PM Userlist</b></i></u>: **[{total}]**\n\n{msg}"
         if msg
-        else "`Ninguém faz melhor`"
+        else "`sed you're not popular >.<`"
     )
 
 
 @paimon.on_cmd(
     "bot_antif",
     about={
-        "header": "ativar/desativar o Antiflood de bot",
-        "description": "Seja notificado se um usuário enviar spam para seu bot e até mesmo autobans",
+        "header": "enable / disable Bot Antiflood",
+        "description": "Get Notified if a user spams your bot and even autobans",
     },
     allow_channels=False,
 )
 async def bot_antiflood_(message: Message):
-    """ativar/desativar o Antiflood de bot"""
+    """enable / disable Bot Antiflood"""
     if Config.BOT_ANTIFLOOD:
         Config.BOT_ANTIFLOOD = False
-        await message.edit("`Antiflood de bot desativado !`", del_in=3)
+        await message.edit("`Bot Antiflood disabled !`", del_in=3)
     else:
         Config.BOT_ANTIFLOOD = True
-        await message.edit("`Antiflood de bot ativado!`", del_in=3)
+        await message.edit("`Bot Antiflood enabled !`", del_in=3)
     await SAVED_SETTINGS.update_one(
         {"_id": "BOT_ANTIFLOOD"},
         {"$set": {"data": Config.BOT_ANTIFLOOD}},

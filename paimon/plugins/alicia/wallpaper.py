@@ -1,7 +1,8 @@
 # wallpaper plugin made by @eightbituwu and @kakashi_htk
 
 import os
-
+import random 
+from random import choice
 import requests
 from pyrogram.types import Message
 
@@ -44,7 +45,9 @@ async def wall_heaven(message: Message):
         api_found = False
     query_ = message.filtered_input_str
     if not query_:
-        query_ = "wallpaper"
+        reps = requests.get("https://wallhaven.cc/api/v1/search?q=Anime&categories=110&purity=100&sorting=random&order=desc")
+        im = reps.json()
+        return await message.reply_photo(im['data'][0]['path'])
     link_ = "https://wallhaven.cc/api/v1/search"
     if api_found:
         link_ += f"?apikey={api_}"
