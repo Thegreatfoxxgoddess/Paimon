@@ -1,4 +1,4 @@
-# nooru plugin by Ryuk and Kakashi 
+# nooru plugin by Ryuk and Kakashi
 # stolen by yours truly meh 🙂
 
 import random
