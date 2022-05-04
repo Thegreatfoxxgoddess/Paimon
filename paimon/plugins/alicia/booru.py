@@ -1,3 +1,6 @@
+# nooru plugin by Ryuk and Kakashi 
+# stolen by yours truly meh 🙂
+
 import random
 
 import requests
@@ -10,7 +13,7 @@ from paimon import Message, paimon
     about={"download images from danbooru"},
 )
 async def booru(message: Message):
-    query = message.input_str
+    query = message.filtered_input_str
     resp = requests.get(f"https://danbooru.donmai.us/posts.json?tags={query}")
     link = resp.json()
     r = random.choice(link)
