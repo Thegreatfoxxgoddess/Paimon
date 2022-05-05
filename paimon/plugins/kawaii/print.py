@@ -11,7 +11,7 @@ from paimon import Message, paimon
     "print",
     about={
         "header": "Site Screenshot",
-        "description": "Obtenha screenshot de algum site",
+        "description": "Get screenshot of some website",
         "usage": "{tr}print [link]",
     },
 )
@@ -26,4 +26,4 @@ async def printer(message: Message):
     await http.aclose()
     bio.name = "screenshot.png"
     await message.delete()
-    await message.client.send_document(chat_id=message.chat.id, photo=bio)
+    await message.client.send_document(chat_id=message.chat.id, document=bio)
