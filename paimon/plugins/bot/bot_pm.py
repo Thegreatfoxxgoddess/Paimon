@@ -194,7 +194,7 @@ if paimon.has_bot:
             btns = [
                 [
                     InlineKeyboardButton("Bio", url="https://t.me/blame_everything"),
-                    InlineKeyboardButton("REPO", url=Config.UPSTREAM_REPO),
+                    InlineKeyboardButton("REPO", url="https://github.com/aliciadark/paimon"),
                 ]
             ]
         try:
