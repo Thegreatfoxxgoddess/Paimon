@@ -21,7 +21,9 @@ async def convert_(message: Message):
     if not replied:
         return await message.err("`Reply to some media.`")
     media = await message.reply_to_message.download()
-    if not media.endswith((".jpg", ".gif", ".png", ".bmp", ".tif", ".webm", ".webp" ".mp3")):
+    if not media.endswith(
+        (".jpg", ".gif", ".png", ".bmp", ".tif", ".webm", ".webp" ".mp3")
+    ):
         os.remove(media)
         return await message.err("`not supported`")
     try:
