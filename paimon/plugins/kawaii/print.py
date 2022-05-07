@@ -18,7 +18,7 @@ from paimon import Message, paimon
 async def printer(message: Message):
     replied = message.reply_to_message
     text = replied.text if replied else message.input_str
-    if not text:
+    if not text or replied:
         return await message.edit("Please specify a url")
     await message.edit("`taking screenshot...`")
     async with httpx.AsyncClient(http2=True, timeout=1000) as http:
