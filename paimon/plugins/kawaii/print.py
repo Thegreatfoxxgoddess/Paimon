@@ -16,7 +16,8 @@ from paimon import Message, paimon
     },
 )
 async def printer(message: Message):
-    text = message.input_str
+    replied = message.reply_to_message
+    text = replied.text if replied else message.input_str
     if not text:
         return await message.edit("Please specify a url")
     await message.edit("`taking screenshot...`")
