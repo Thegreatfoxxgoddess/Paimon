@@ -129,17 +129,18 @@ async def set_level(message: Message):
     )
 
 
-
-
 @paimon.on_cmd(
     "tlogs",
     about={
-        "header": "check paimon logs",      
+        "header": "check paimon logs",
     },
     allow_channels=False,
 )
 async def tlogs(message: Message):
     with open("logs/paimon.log", "r") as d_f:
-         text = d_f.read()
+        text = d_f.read()
     link = ptgh(f"Paimon Logs", text)
-    return await message.edit(f"Here are the [<b>logs</b>]({link}).", disable_web_page_preview=True,)
+    return await message.edit(
+        f"Here are the [<b>logs</b>]({link}).",
+        disable_web_page_preview=True,
+    )
