@@ -16,7 +16,7 @@ async def send_message_and_reply(message: Message):
     reply_ = message.reply_to_message
     reply_to = reply_.message_id if reply_ else None
     try:
-        await paimon.send_message(
+        await client.send_message(
             message.chat.id,
             text_,
             reply_to_message_id=reply_to,
