@@ -1,6 +1,6 @@
-from paimon import Message, userge
+from paimon import Message, paimon
 
-CHANNEL = userge.getCLogger(__name__)
+CHANNEL = paimon.getCLogger(__name__)
 
 
 @paimon.on_cmd(
