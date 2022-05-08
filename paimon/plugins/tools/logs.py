@@ -12,6 +12,7 @@ import aiohttp
 
 from paimon import Config, Message, logging, paimon, pool
 from paimon.plugins.help import CHANNEL
+from paimon.utils import post_to_telegraph as ptgh
 
 _URL = "https://spaceb.in/" if Config.HEROKU_APP else "https://nekobin.com/"
 
@@ -126,3 +127,19 @@ async def set_level(message: Message):
     await message.edit(
         f"`successfully set logger level as` : **{level.upper()}**", del_in=3
     )
+
+
+
+
+@paimon.on_cmd(
+    "tlogs",
+    about={
+        "header": "check paimon logs",      
+    },
+    allow_channels=False,
+)
+async def tlogs(message: Message):
+    with open("logs/userge.log", "r") as d_f:
+         text = d_f.read()
+    Link = ptgh(f"Paimon Logs", text)
+    return await message.edit(f"Here are the [<b>logs</b>]({link}).", disable_web_page_preview=True,)
