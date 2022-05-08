@@ -213,11 +213,11 @@ if paimon.has_bot:
 
     @paimon.bot.on_callback_query(filters.regex(pattern=r"^status_alive$"))
     async def status_alive_(_, c_q: CallbackQuery):
-        quotes = rand_array(FRASES)
+        mmsg = rand_array(FRASES)
         c_q.from_user.id
         await c_q.answer(
             f"""
-   {quotes}
+   {mmsg}
 
 ▫️ ✨Mode :  {Bot_Alive._get_mode()}
 ▫️ 🌌Uptime  :  {paimon.uptime}
@@ -300,13 +300,13 @@ class Bot_Alive:
 
     @staticmethod
     def alive_info(me):
-        quotes = rand_array(FRASES)
+        mmsg = rand_array(FRASES)
         u_name = " Alicia"
         alive_info = f"""
 
 ㅤㅤㅤㅤㅤㅤㅤ
   💕   [paimon](https://t.me/my_thingsuwu)
-  🦋  {u_name}, {quotes}
+  🦋  {u_name}, {mmsg}
 
 
 """
