@@ -137,7 +137,7 @@ async def set_level(message: Message):
     allow_channels=False,
 )
 async def tlogs(message: Message):
-    with open("logs/paimon.log", "r") as d_f:
+    with open("logs/userge.log", "r") as d_f:
         text = d_f.read()
     ptgh(f"Paimon Logs", text)
     return await message.edit(
