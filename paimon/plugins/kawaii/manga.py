@@ -24,7 +24,7 @@ from pyrogram.types import (
 )
 
 from paimon import Message, paimon
-from paimon.utils import check_owner, get_response, media_to_image
+from paimon.utils import check_owner, media_to_image
 from paimon.utils import post_to_telegraph as post_to_tp
 
 # Logging Errors
@@ -259,6 +259,7 @@ def make_it_rw(time_stamp, as_countdown=False):
         air_time = datetime.fromtimestamp(time_stamp)
         return str(humanize.naturaltime(now - air_time))
     return str(humanize.naturaldate(datetime.fromtimestamp(time_stamp)))
+
 
 @paimon.on_cmd(
     "manga",
