@@ -9,7 +9,7 @@ from re import compile as comp_regex
 from time import time
 
 import ujson
-import youtube_dl
+import yt_dlp
 from pyrogram import filters
 from pyrogram.types import (
     CallbackQuery,
@@ -20,7 +20,7 @@ from pyrogram.types import (
     InputMediaVideo,
 )
 from wget import download
-from youtube_dl.utils import DownloadError, ExtractorError, GeoRestrictedError
+from yt_dlp.utils import DownloadError, ExtractorError, GeoRestrictedError
 from youtubesearchpython import VideosSearch
 
 from paimon import Config, Message, paimon, pool
@@ -369,7 +369,7 @@ def _tubeDl(url: str, starttime, uid: str):
         "quiet": True,
     }
     try:
-        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             x = ydl.download([url])
     except DownloadError as e:
         LOGGER.error(e)
@@ -403,7 +403,7 @@ def _mp3Dl(url: str, starttime, uid: str):
         "quiet": True,
     }
     try:
-        with youtube_dl.YoutubeDL(_opts) as ytdl:
+        with yt_dlp.YoutubeDL(_opts) as ytdl:
             dloader = ytdl.download([url])
     except Exception as y_e:
         LOGGER.exception(y_e)
@@ -505,7 +505,7 @@ def yt_search_btns(
 @pool.run_in_thread
 def download_button(vid: str, body: bool = False):
     try:
-        vid_data = youtube_dl.YoutubeDL({"no-playlist": True}).extract_info(
+        vid_data = yt_dlp.YoutubeDL({"no-playlist": True}).extract_info(
             BASE_YT_URL + vid, download=False
         )
     except ExtractorError:
