@@ -56,7 +56,7 @@ python-rapidjson>=1.4
 ujson>=4.0.1
 youtube-search-python==1.4.2
 git+https://github.com/thegreatfoxxgoddess/google-images-download@patch-1
-feedparser
+feedparser>=6.0.2
 google_trans_new
 ffmpeg-python>=0.2.0
 ffmpeg
