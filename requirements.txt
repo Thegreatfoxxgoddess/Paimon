@@ -53,6 +53,10 @@ ruamel.yaml==0.17.21
 ujson>=4.0.1
 youtube-search-python==1.5.1
 feedparser>=6.0.2
+youtube-dl
+search_engine_parser
+gdshortener
+google_trans_new
 
 ### xtra reqs ###
 
