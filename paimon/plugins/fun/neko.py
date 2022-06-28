@@ -6,7 +6,7 @@ from paimon import Message, paimon
 
 
 @paimon.on_cmd(
-    "neko",
+    "nekox",
     about={
         "header": "Get stuff from nekos.life",
         "usage": "{tr}neko",
