@@ -1,15 +1,15 @@
 ### By Ryuk ###
 
 
-import asyncio
 import json
 import os
 from random import choice
 
 from booru import Gelbooru
 from pyrogram.errors import MediaEmpty, WebpageCurlFailed
-from paimon import Message, paimon
 from wget import download
+
+from paimon import Message, paimon
 
 client = Gelbooru()
 
@@ -35,10 +35,10 @@ async def get_booru(message: Message):
         while count < 10:
             _media = choice(booru)
             try:
-                count +=1
+                count += 1
                 await send_booru(message, _media)
             except (MediaEmpty, WebpageCurlFailed):
-                count -=1
+                count -= 1
     else:
         _media = choice(booru)
         try:
