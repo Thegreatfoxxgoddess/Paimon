@@ -11,7 +11,7 @@ from time import time
 import wget
 import yt_dlp as ytdl
 
-from paimon import Config, Message, pool, paimon
+from paimon import Config, Message, paimon, pool
 from paimon.utils import humanbytes, time_formatter
 
 from .uploads import upload
