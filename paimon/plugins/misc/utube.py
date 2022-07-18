@@ -1,11 +1,5 @@
 """ work with youtube """
 
-# Copyright (C) 2020-2022 by UsergeTeam@Github, < https://github.com/UsergeTeam >.
-#
-# This file is part of < https://github.com/UsergeTeam/Userge > project,
-# and is released under the "GNU v3.0 License Agreement".
-# Please see < https://github.com/UsergeTeam/Userge/blob/master/LICENSE >
-#
 # All rights reserved.
 
 import glob
@@ -17,10 +11,10 @@ from time import time
 import wget
 import yt_dlp as ytdl
 
-from paimon import Config, Message, paimon, pool
+from paimon import Config, Message, pool, paimon
 from paimon.utils import humanbytes, time_formatter
 
-from .upload import upload
+from .uploads import upload
 
 LOGGER = paimon.getLogger(__name__)
 
@@ -36,7 +30,7 @@ LOGGER = paimon.getLogger(__name__)
 )
 async def ytinfo(message: Message):
     """get info from a link"""
-    await message.edit("`processing...`")
+    await message.edit("Hold on \u23f3 ..")
     _exracted = await _yt_getInfo(message.input_or_reply_str)
     if isinstance(_exracted, ytdl.utils.YoutubeDLError):
         await message.err(str(_exracted))
@@ -66,18 +60,19 @@ __{uploader}__
 @paimon.on_cmd(
     "ytdl",
     about={
-        "header": "Download from youtube",
+        "header": "Download from youtube and upload to Telegram.",
         "options": {
             "-a": "select the audio u-id",
             "-v": "select the video u-id",
             "-m": "extract the mp3 in 320kbps",
-            "-t": "upload to telegram",
+            "-s": "Download to Bot",
         },
         "examples": [
             "{tr}ytdl link",
             "{tr}ytdl -a12 -v120 link",
-            "{tr}ytdl -m -t link will upload the mp3",
-            "{tr}ytdl -m -t -d link will upload " "the mp3 as a document",
+            "{tr}ytdl -m -s link will upload the mp3",
+            "{tr}ytdl -m -s -d link will upload ",
+            "the mp3 as a document",
         ],
     },
     del_pre=True,
@@ -124,32 +119,36 @@ async def ytDown(message: Message):
                 )
             paimon.loop.create_task(message.edit(out))
 
-    await message.edit("`Processing...`")
+    await message.edit("Hold on \u23f3 ..")
     if bool(message.flags):
         desiredFormat1 = str(message.flags.get("a", ""))
         desiredFormat2 = str(message.flags.get("v", ""))
         if "m" in message.flags:
-            retcode = await _mp3Dl([message.input_or_reply_str], __progress, startTime)
+            retcode = await _mp3Dl([message.filtered_input_str], __progress, startTime)
         elif all(k in message.flags for k in ("a", "v")):
             # 1st format must contain the video
             desiredFormat = "+".join([desiredFormat2, desiredFormat1])
             retcode = await _tubeDl(
-                [message.input_or_reply_str], __progress, startTime, desiredFormat
+                [message.filtered_input_str], __progress, startTime, desiredFormat
             )
         elif "a" in message.flags:
             desiredFormat = desiredFormat1
             retcode = await _tubeDl(
-                [message.input_or_reply_str], __progress, startTime, desiredFormat
+                [message.filtered_input_str], __progress, startTime, desiredFormat
             )
         elif "v" in message.flags:
             desiredFormat = desiredFormat2 + "+bestaudio"
             retcode = await _tubeDl(
-                [message.input_or_reply_str], __progress, startTime, desiredFormat
+                [message.filtered_input_str], __progress, startTime, desiredFormat
             )
         else:
-            retcode = await _tubeDl([message.input_or_reply_str], __progress, startTime)
+            retcode = await _tubeDl(
+                [message.filtered_input_str], __progress, startTime, None
+            )
     else:
-        retcode = await _tubeDl([message.input_or_reply_str], __progress, startTime)
+        retcode = await _tubeDl(
+            [message.filtered_input_str], __progress, startTime, None
+        )
     if retcode == 0:
         _fpath = ""
         for _path in glob.glob(os.path.join(Config.DOWN_PATH, str(startTime), "*")):
@@ -158,10 +157,13 @@ async def ytDown(message: Message):
         if not _fpath:
             await message.err("nothing found !")
             return
-        if "t" not in message.flags:
-            await upload(message, Path(_fpath))
-    else:
+        await message.edit(
+            f"**YTDL completed in {round(time() - startTime)} seconds**\n`{_fpath}`"
+        )
+    if "s" in message.flags:
         await message.edit(str(retcode))
+    else:
+        await upload(message, Path(_fpath))
 
 
 @paimon.on_cmd(
@@ -174,7 +176,7 @@ async def ytDown(message: Message):
 )
 async def ytdes(message: Message):
     """get description from a link"""
-    await message.edit("`Processing...`")
+    await message.edit("Hold on \u23f3 ..")
     description = await _yt_description(message.input_or_reply_str)
     if isinstance(description, ytdl.utils.YoutubeDLError):
         await message.err(str(description))
