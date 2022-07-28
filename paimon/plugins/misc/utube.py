@@ -6,11 +6,10 @@ from time import time
 
 import wget
 import yt_dlp as ytdl
-
-from paimon import Config, Message, pool, userge
+from userge.plugins.misc.uploads import upload
 from userge.utils import humanbytes, time_formatter
 
-from userge.plugins.misc.uploads import upload
+from paimon import Config, Message, pool, userge
 
 LOGGER = userge.getLogger(__name__)
 
@@ -129,34 +128,24 @@ async def ytDown(message: Message):
         elif all(k in message.flags for k in ("a", "v")):
             # 1st format must contain the video
             desiredFormat = "+".join([desiredFormat2, desiredFormat1])
-            retcode = await _tubeDl(
-                [url], __progress, startTime, desiredFormat
-            )
+            retcode = await _tubeDl([url], __progress, startTime, desiredFormat)
         elif "a" in message.flags:
             desiredFormat = desiredFormat1
-            retcode = await _tubeDl(
-                [url], __progress, startTime, desiredFormat
-            )
+            retcode = await _tubeDl([url], __progress, startTime, desiredFormat)
         elif "v" in message.flags:
             desiredFormat = desiredFormat2 + "+bestaudio"
-            retcode = await _tubeDl(
-                [url], __progress, startTime, desiredFormat
-            )
+            retcode = await _tubeDl([url], __progress, startTime, desiredFormat)
         else:
-            retcode = await _tubeDl(
-                [url], __progress, startTime, None
-            )
+            retcode = await _tubeDl([url], __progress, startTime, None)
     else:
-        retcode = await _tubeDl(
-            [url], __progress, startTime, None
-        )
+        retcode = await _tubeDl([url], __progress, startTime, None)
     _fpath = ""
     if retcode == 0:
         for _path in glob.glob(os.path.join(Config.DOWN_PATH, str(startTime), "*")):
             if not _path.lower().endswith((".jpg", ".png", ".webp")):
                 _fpath = _path
     if not _fpath:
-            return await message.err("nothing found !")
+        return await message.err("nothing found !")
     await message.edit(
         f"**YTDL completed in {round(time() - startTime)} seconds**\n`{_fpath}`"
     )
