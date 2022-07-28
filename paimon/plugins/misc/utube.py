@@ -1,7 +1,3 @@
-""" work with youtube """
-
-# All rights reserved.
-
 import glob
 import os
 from math import floor
@@ -11,15 +7,15 @@ from time import time
 import wget
 import yt_dlp as ytdl
 
-from paimon import Config, Message, paimon, pool
-from paimon.utils import humanbytes, time_formatter
+from paimon import Config, Message, pool, userge
+from userge.utils import humanbytes, time_formatter
 
-from .uploads import upload
+from userge.plugins.misc.uploads import upload
 
-LOGGER = paimon.getLogger(__name__)
+LOGGER = userge.getLogger(__name__)
 
 
-@paimon.on_cmd(
+@userge.on_cmd(
     "ytinfo",
     about={
         "header": "Get info from ytdl",
@@ -57,7 +53,7 @@ __{uploader}__
         await message.edit(out)
 
 
-@paimon.on_cmd(
+@userge.on_cmd(
     "ytdl",
     about={
         "header": "Download from youtube and upload to Telegram.",
@@ -117,56 +113,60 @@ async def ytDown(message: Message):
                         )
                     ),
                 )
-            paimon.loop.create_task(message.edit(out))
+            userge.loop.create_task(message.edit(out))
 
     await message.edit("Hold on \u23f3 ..")
+    reply = message.reply_to_message
+    input_ = reply.text if reply else message.filtered_input_str
+    for i in input_.split():
+        if "http" in i:
+            url = i
     if bool(message.flags):
         desiredFormat1 = str(message.flags.get("a", ""))
         desiredFormat2 = str(message.flags.get("v", ""))
         if "m" in message.flags:
-            retcode = await _mp3Dl([message.filtered_input_str], __progress, startTime)
+            retcode = await _mp3Dl([url], __progress, startTime)
         elif all(k in message.flags for k in ("a", "v")):
             # 1st format must contain the video
             desiredFormat = "+".join([desiredFormat2, desiredFormat1])
             retcode = await _tubeDl(
-                [message.filtered_input_str], __progress, startTime, desiredFormat
+                [url], __progress, startTime, desiredFormat
             )
         elif "a" in message.flags:
             desiredFormat = desiredFormat1
             retcode = await _tubeDl(
-                [message.filtered_input_str], __progress, startTime, desiredFormat
+                [url], __progress, startTime, desiredFormat
             )
         elif "v" in message.flags:
             desiredFormat = desiredFormat2 + "+bestaudio"
             retcode = await _tubeDl(
-                [message.filtered_input_str], __progress, startTime, desiredFormat
+                [url], __progress, startTime, desiredFormat
             )
         else:
             retcode = await _tubeDl(
-                [message.filtered_input_str], __progress, startTime, None
+                [url], __progress, startTime, None
             )
     else:
         retcode = await _tubeDl(
-            [message.filtered_input_str], __progress, startTime, None
+            [url], __progress, startTime, None
         )
+    _fpath = ""
     if retcode == 0:
-        _fpath = ""
         for _path in glob.glob(os.path.join(Config.DOWN_PATH, str(startTime), "*")):
             if not _path.lower().endswith((".jpg", ".png", ".webp")):
                 _fpath = _path
-        if not _fpath:
-            await message.err("nothing found !")
-            return
-        await message.edit(
-            f"**YTDL completed in {round(time() - startTime)} seconds**\n`{_fpath}`"
-        )
+    if not _fpath:
+            return await message.err("nothing found !")
+    await message.edit(
+        f"**YTDL completed in {round(time() - startTime)} seconds**\n`{_fpath}`"
+    )
     if "s" in message.flags:
         await message.edit(str(retcode))
     else:
         await upload(message, Path(_fpath))
 
 
-@paimon.on_cmd(
+@userge.on_cmd(
     "ytdes",
     about={
         "header": "Get the video description",
