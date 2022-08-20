@@ -1,6 +1,6 @@
 import os
 
-from anekos import NekosLifeClient, NSFWImageTags, SFWImageTags
+from anekos import NekosLifeClient, SFWImageTags
 from pyrogram.errors import MediaEmpty, WebpageCurlFailed
 from wget import download
 
