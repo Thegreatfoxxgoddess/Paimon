@@ -6,15 +6,15 @@ from time import time
 
 import wget
 import yt_dlp as ytdl
-from userge.plugins.misc.uploads import upload
-from userge.utils import humanbytes, time_formatter
+from paimon.plugins.misc.uploads import upload
+from paimon.utils import humanbytes, time_formatter
 
-from paimon import Config, Message, pool, userge
+from paimon import Config, Message, pool, paimon
 
-LOGGER = userge.getLogger(__name__)
+LOGGER = paimon.getLogger(__name__)
 
 
-@userge.on_cmd(
+@paimon.on_cmd(
     "ytinfo",
     about={
         "header": "Get info from ytdl",
@@ -52,7 +52,7 @@ __{uploader}__
         await message.edit(out)
 
 
-@userge.on_cmd(
+@paimon.on_cmd(
     "ytdl",
     about={
         "header": "Download from youtube and upload to Telegram.",
