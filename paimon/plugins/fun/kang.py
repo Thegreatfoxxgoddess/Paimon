@@ -1,15 +1,8 @@
 """ kang stickers """
 
-# Copyright (C) 2020 by paimonTeam@Github, < https://github.com/paimonTeam >.
-#
-# This file is part of < https://github.com/paimonTeam/paimon > project,
-# and is released under the "GNU v3.0 License Agreement".
-# Please see < https://github.com/uaudith/paimon/blob/master/LICENSE >
-#
-# All rights reserved.
-
 import io
 import os
+import random
 
 from bs4 import BeautifulSoup as bs
 from PIL import Image
@@ -57,6 +50,8 @@ async def log_kang(message: Message):
         await SAVED_SETTINGS.update_one(
             {"_id": "LOG_KANG"}, {"$set": {"switch": True}}, upsert=True
         )
+    out_ = "ON" if Config.LOG_KANG else "OFF"
+    await message.edit(f"`Logging kang in channel is now {out_}.`")
 
 
 @paimon.on_cmd(
@@ -74,9 +69,9 @@ async def log_kang(message: Message):
             "{tr}kang",
             "{tr}kang -s",
             "{tr}kang -d",
-            "{tr}kang ✨",
+            "{tr}kang 🤔",
             "{tr}kang 2",
-            "{tr}kang ✨ 2",
+            "{tr}kang 🤔 2",
         ],
     },
     allow_channels=False,
@@ -87,10 +82,8 @@ async def kang_(message: Message):
     user = await paimon.get_me()
     replied = message.reply_to_message
     if Config.LOG_KANG:
-        await message.edit("`me stealing this...`", del_in=6)
-        kang_msg = await paimon.send_message(
-            Config.LOG_CHANNEL_ID, "`theft in progress...`"
-        )
+        await message.edit("`me stealing this...`")
+        kang_msg = await paimon.send_message(Config.LOG_CHANNEL_ID, "`Processing...`")
     else:
         kang_msg = await message.edit("`me stealing this...`")
     media_ = None
@@ -136,7 +129,7 @@ async def kang_(message: Message):
         else:
             await kang_msg.edit("`Unsupported File!`")
             return
-        await kang_msg.edit(f"`{KANGING_STR}`")
+        await kang_msg.edit(f"`{random.choice(KANGING_STR)}`")
         media_ = await paimon.download_media(
             message=replied, file_name=f"{Config.DOWN_PATH}"
         )
@@ -159,7 +152,7 @@ async def kang_(message: Message):
         ):
             emoji_ = None
         if not emoji_:
-            emoji_ = "👀"
+            emoji_ = "🤔"
 
         a_name = user.first_name
         u_name = user.username
@@ -172,21 +165,38 @@ async def kang_(message: Message):
             media_ = await resize_photo(media_, is_video, ff_vid)
         if is_anim:
             packname += "_anim"
-            packnick += " (Animated)"
+            packnick += " ani"
             cmd = "/newanimated"
         if is_video:
             packname += "_video"
-            packnick += " "
+            packnick += " vid"
             cmd = "/newvideo"
-        exist = False
-        try:
-            exist = await message.client.send(
-                GetStickerSet(
-                    stickerset=InputStickerSetShortName(short_name=packname), hash=0
+        while True:
+            try:
+                exist = await message.client.send(
+                    GetStickerSet(
+                        stickerset=InputStickerSetShortName(short_name=packname), hash=0
+                    )
                 )
-            )
-        except StickersetInvalid:
-            pass
+            except StickersetInvalid:
+                exist = False
+                break
+            limit = 50 if (is_video or is_anim) else 120
+            if exist.set.count >= limit:
+                pack += 1
+                packname = f"a{user.id}_by_paimon_{pack}"
+                packnick = f"{custom_packnick} Vol.{pack}"
+                if is_anim:
+                    packname += f"_anim{pack}"
+                    packnick += f" (Animated){pack}"
+                if is_video:
+                    packname += f"_video{pack}"
+                    packnick += f" (Video){pack}"
+                await kang_msg.edit(
+                    f"`Switching to Pack {pack} due to insufficient space`"
+                )
+                continue
+            break
         if exist is not False:
             async with paimon.conversation("Stickers", limit=30) as conv:
                 try:
@@ -196,52 +206,7 @@ async def kang_(message: Message):
                     return
                 await conv.get_response(mark_read=True)
                 await conv.send_message(packname)
-                msg = await conv.get_response(mark_read=True)
-                limit = "50" if is_anim else "120"
-                while limit in msg.text:
-                    pack += 1
-                    packname = f"a{user.id}_by_paimon_{pack}"
-                    packnick = f"{custom_packnick} {pack}"
-                    if is_anim:
-                        packname += "_anim"
-                        packnick += " (Animated)"
-                    if is_video:
-                        packname += "_video"
-                        packnick += ""
-                    await kang_msg.edit(
-                        "`Switching to Pack "
-                        + str(pack)
-                        + " due to insufficient space`"
-                    )
-                    await conv.send_message(packname)
-                    msg = await conv.get_response(mark_read=True)
-                    if msg.text == "Invalid pack selected.":
-                        await conv.send_message(cmd)
-                        await conv.get_response(mark_read=True)
-                        await conv.send_message(packnick)
-                        await conv.get_response(mark_read=True)
-                        await conv.send_document(media_)
-                        await conv.get_response(mark_read=True)
-                        await conv.send_message(emoji_)
-                        await conv.get_response(mark_read=True)
-                        await conv.send_message("/publish")
-                        if is_anim:
-                            await conv.get_response(mark_read=True)
-                            await conv.send_message(f"<{packnick}>", parse_mode=None)
-                        await conv.get_response(mark_read=True)
-                        await conv.send_message("/skip")
-                        await conv.get_response(mark_read=True)
-                        await conv.send_message(packname)
-                        await conv.get_response(mark_read=True)
-                        out = (
-                            "__kanged__"
-                            if "-s" in message.flags
-                            else f"[stolen](t.me/addstickers/{packname})"
-                        )
-                        await kang_msg.edit(
-                            f"**Sticker** {out} __in a Different Pack__**!**"
-                        )
-                        return
+                await conv.get_response(mark_read=True)
                 try:
                     await conv.send_document(media_)
                 except BaseException:
@@ -292,7 +257,7 @@ async def kang_(message: Message):
             if "-s" in message.flags
             else f"[stolen](t.me/addstickers/{packname})"
         )
-        await kang_msg.edit(f"**sticker** {out}**!**")
+        await kang_msg.edit(f"**Sticker** {out}**!**")
         if os.path.exists(str(media_)):
             os.remove(media_)
 
@@ -301,7 +266,7 @@ async def kang_(message: Message):
     "stickerinfo",
     about={
         "header": "get sticker pack info",
-        "usage": "reply {tr}stickerinfo to any sticker",
+        "usage": "reply {tr}stkrinfo to any sticker",
     },
 )
 async def sticker_pack_info_(message: Message):
@@ -344,7 +309,7 @@ async def resize_photo(media: str, video: bool, fast_forward: bool) -> str:
         width = info_["pixel_sizes"][0]
         height = info_["pixel_sizes"][1]
         sec = info_["duration_in_ms"]
-        s = sec / 1000
+        s = round(float(sec)) / 1000
 
         if height == width:
             height, width = 512, 512
@@ -410,8 +375,8 @@ async def sticker_search(message: Message):
             "reply to a user or provide text to search sticker packs", del_in=3
         )
 
-    await message.edit(f'Searching for "`{query_}`"...')
-    titlex = f'<b>sticker packs :</b> "<u>{query_}</u>"\n'
+    await message.edit(f'🔎 Searching for sticker packs for "`{query_}`"...')
+    titlex = f'<b>Sticker Packs For:</b> "<u>{query_}</u>"\n'
     sticker_pack = ""
     try:
         text = await get_response.text(
