@@ -112,7 +112,7 @@ async def ytDown(message: Message):
                         )
                     ),
                 )
-            userge.loop.create_task(message.edit(out))
+            paimon.loop.create_task(message.edit(out))
 
     await message.edit("Hold on \u23f3 ..")
     reply = message.reply_to_message
@@ -155,7 +155,7 @@ async def ytDown(message: Message):
         await upload(message, Path(_fpath))
 
 
-@userge.on_cmd(
+@paimon.on_cmd(
     "ytdes",
     about={
         "header": "Get the video description",
