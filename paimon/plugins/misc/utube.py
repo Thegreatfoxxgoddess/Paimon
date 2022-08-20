@@ -8,7 +8,7 @@ import wget
 import yt_dlp as ytdl
 
 from paimon import Config, Message, paimon, pool
-from paimon.plugins.misc.uploads import upload
+from paimon.plugins.misc.upload import upload
 from paimon.utils import humanbytes, time_formatter
 
 LOGGER = paimon.getLogger(__name__)
