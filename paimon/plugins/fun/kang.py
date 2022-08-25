@@ -129,7 +129,7 @@ async def kang_(message: Message):
         else:
             await kang_msg.edit("`Unsupported File!`")
             return
-        await kang_msg.edit(f"`{random.choice(KANGING_STR)}`")
+        await kang_msg.edit(f"`{KANGING_STR}`")
         media_ = await paimon.download_media(
             message=replied, file_name=f"{Config.DOWN_PATH}"
         )
