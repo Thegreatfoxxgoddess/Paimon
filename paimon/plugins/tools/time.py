@@ -4,6 +4,7 @@ from datetime import datetime as dt
 from pytz import country_names as c_n
 from pytz import country_timezones as c_tz
 from pytz import timezone as tz
+
 from paimon import Message, get_collection, paimon
 
 COUNTRY_CITY = os.environ.get("COUNTRY_CITY", None)
@@ -11,7 +12,7 @@ LOC_NAME = get_collection("LOC_NAME")
 
 
 async def get_tz(con):
-    """ Get time zone of the given country. """
+    """Get time zone of the given country."""
     if "(Uk)" in con:
         con = con.replace("Uk", "UK")
     if "(Us)" in con:
@@ -68,9 +69,7 @@ async def date_time_func(message: Message):
     elif COUNTRY_CITY:
         timezones = [COUNTRY_CITY]
     else:
-        await message.edit(
-            f"it's  **{dt.now().strftime(t_form)}**"
-        )
+        await message.edit(f"it's  **{dt.now().strftime(t_form)}**")
         return
 
     if not timezones:
@@ -96,16 +95,14 @@ async def date_time_func(message: Message):
             await message.edit(return_str)
             return
 
-    dtnow = dt.now(tz(time_zone)).strftime(d_form)
+    dt.now(tz(time_zone)).strftime(d_form)
     dttime = dt.now(tz(time_zone)).strftime(t_form)
 
     if not c_name:
         s_o = await LOC_NAME.find_one({"_id": "LOC_NAME"})
         c_name = s_o["name"] if s_o else ""
 
-    await message.edit(
-        f"its {dttime}"
-    )
+    await message.edit(f"its {dttime}")
 
 
 @paimon.on_cmd(
