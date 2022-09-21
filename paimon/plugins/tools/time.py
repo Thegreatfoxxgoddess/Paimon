@@ -69,7 +69,7 @@ async def date_time_func(message: Message):
     elif COUNTRY_CITY:
         timezones = [COUNTRY_CITY]
     else:
-        await message.edit(f"it's  **{dt.now().strftime(t_form)}**")
+        await message.edit(f"its {dt.now().strftime(t_form)}")
         return
 
     if not timezones:
