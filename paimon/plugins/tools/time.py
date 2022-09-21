@@ -1,6 +1,4 @@
- From [PaperPlane Userbot](https://github
-""" Userbot module for getting the date
-    and time of any cort os
+import os
 from datetime import datetime as dt
 
 from pytz import country_names as c_n
@@ -106,5 +104,27 @@ async def date_time_func(message: Message):
         c_name = s_o["name"] if s_o else ""
 
     await message.edit(
-        f"<code>It's</code>  **{dttime}** <code>on</code> **{dtnow}** <code>in</code> {c_name} ({time_zone} timezone)."
+        f"its {dttime}"
     )
+
+
+@paimon.on_cmd(
+    "setloc",
+    about={
+        "header": "Set the location disaplay name with the time zone you set",
+    },
+)
+async def set_loc_(message: Message):
+    """set display location"""
+    loc_name = message.input_str
+    if not loc_name:
+        return await message.err("Input Not found", del_in=3)
+    result = await LOC_NAME.update_one(
+        {"_id": "LOC_NAME"}, {"$set": {"name": loc_name}}, upsert=True
+    )
+    out = "{} Display Location to <b>{}</b>"
+    if result.upserted_id:
+        out = out.format("Added", loc_name)
+    else:
+        out = out.format("Updated", loc_name)
+    await message.edit(out, del_in=5)
