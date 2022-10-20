@@ -81,3 +81,5 @@ prettytable
 newspaper3k
 pydub
 pyfiglet
+wordcloud
+scipy
