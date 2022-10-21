@@ -37,11 +37,11 @@ quit() {
 }
 
 runPythonCode() {
-    python${pVer%.*} -c "$1"
+    python3.10 -c "$1"
 }
 
 runPythonModule() {
-    python${pVer%.*} -m "$@"
+    python3.10 -m "$@"
 }
 
 gitInit() {
