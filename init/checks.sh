@@ -17,6 +17,15 @@ _checkPythonVersion() {
     log "\tPYTHON encontrado- v$pVer ..."
 }
 
+_server() {
+    if test $APACHE2 ; then 
+        service apache2 restart
+        echo "Started Web Server..."
+    else
+        echo "Skipping Web Server..."
+    fi
+}
+
 _checkConfigFile() {
     log "Checking the configuration file..."
     configPath="config.env"
@@ -173,4 +182,5 @@ assertEnvironment() {
     _checkUnoffPlugins
     _checkCustomPlugins
     _flushMessages
+    _server
 }
