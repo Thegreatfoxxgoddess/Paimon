@@ -5,7 +5,7 @@
 # Edited by Alicia
 
 declare -r minPVer=8
-declare -r maxPVer=9
+declare -r maxPVer=10
 
 getPythonVersion() {
     local -i count=$minPVer
@@ -82,16 +82,16 @@ fetchBranches() {
 }
 
 updateBuffer() {
-    git config http.postBuffer 524288000
+    git config http.postBuffer 50000000
 }
 
 upgradePip() {
     pip3 install -U pip &> /dev/null
 }
 
-installReq() {
-    pip3 install -U -r $1/requirements.txt &> /dev/null
-}
+#installReq() {
+#    pip3 install -U -r $1/requirements.txt &> /dev/null
+#}
 
 printLine() {
     echo '->- ->- ->- ->- ->- ->- ->- --- -<- -<- -<- -<- -<- -<- -<-'
