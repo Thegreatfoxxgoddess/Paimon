@@ -1,3 +1,5 @@
+# All rights reserved.
+
 import glob
 import os
 from math import floor
@@ -7,9 +9,10 @@ from time import time
 import wget
 import yt_dlp as ytdl
 
-from paimon import Config, Message, paimon, pool
-from paimon.plugins.misc.upload import upload
+from paimon import Config, Message, pool, paimon
 from paimon.utils import humanbytes, time_formatter
+
+from paimon.plugins.misc.uploads import upload
 
 LOGGER = paimon.getLogger(__name__)
 
@@ -128,24 +131,34 @@ async def ytDown(message: Message):
         elif all(k in message.flags for k in ("a", "v")):
             # 1st format must contain the video
             desiredFormat = "+".join([desiredFormat2, desiredFormat1])
-            retcode = await _tubeDl([url], __progress, startTime, desiredFormat)
+            retcode = await _tubeDl(
+                [url], __progress, startTime, desiredFormat
+            )
         elif "a" in message.flags:
             desiredFormat = desiredFormat1
-            retcode = await _tubeDl([url], __progress, startTime, desiredFormat)
+            retcode = await _tubeDl(
+                [url], __progress, startTime, desiredFormat
+            )
         elif "v" in message.flags:
             desiredFormat = desiredFormat2 + "+bestaudio"
-            retcode = await _tubeDl([url], __progress, startTime, desiredFormat)
+            retcode = await _tubeDl(
+                [url], __progress, startTime, desiredFormat
+            )
         else:
-            retcode = await _tubeDl([url], __progress, startTime, None)
+            retcode = await _tubeDl(
+                [url], __progress, startTime, None
+            )
     else:
-        retcode = await _tubeDl([url], __progress, startTime, None)
+        retcode = await _tubeDl(
+            [url], __progress, startTime, None
+        )
     _fpath = ""
     if retcode == 0:
         for _path in glob.glob(os.path.join(Config.DOWN_PATH, str(startTime), "*")):
             if not _path.lower().endswith((".jpg", ".png", ".webp")):
                 _fpath = _path
     if not _fpath:
-        return await message.err("nothing found !")
+            return await message.err("nothing found !")
     await message.edit(
         f"**YTDL completed in {round(time() - startTime)} seconds**\n`{_fpath}`"
     )
@@ -236,7 +249,7 @@ def _tubeDl(url: list, prog, starttime, uid=None):
         "prefer_ffmpeg": True,
         "postprocessors": [{"key": "FFmpegMetadata"}],
     }
-    _quality = {"format": "bestvideo+bestaudio/best" if not uid else str(uid)}
+    _quality = {"format": "bv[ext=mp4]+ba[ext=m4a]/b[ext=mp4]" if not uid else str(uid)}
     _opts.update(_quality)
     try:
         x = ytdl.YoutubeDL(_opts)
