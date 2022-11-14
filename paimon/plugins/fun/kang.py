@@ -256,7 +256,7 @@ async def kang_(message: Message):
             if "-s" in message.flags
             else f"[stolen](t.me/addstickers/{packname})"
         )
-        await kang_msg.edit(f"**Sticker** {out}**!**")
+        await kang_msg.edit(f"**sticker** {out}**!**")
         if os.path.exists(str(media_)):
             os.remove(media_)
 
