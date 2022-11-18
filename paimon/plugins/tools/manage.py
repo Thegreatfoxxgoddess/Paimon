@@ -4,9 +4,11 @@
 #
 # Edited by Alicia
 
+import asyncio
 import os
 
 from paimon import Config, Message, paimon
+from paimon.helpers import Start
 from paimon.plugins import ROOT
 from paimon.utils import get_import_path
 
@@ -32,7 +34,7 @@ async def status(message: Message) -> None:
     name_ = message.filtered_input_str
     type_ = list(message.flags)
     if not type_:
-        out_str = f"""📊 **--paimon Status--** 📊
+        out_str = f"""**--paimon status--**
 
 🗃 **Plugins** : `{len(paimon.manager.plugins)}`
         ✅ **Loaded** : `{len(paimon.manager.loaded_plugins)}`
@@ -361,6 +363,7 @@ async def load(message: Message) -> None:
         await message.edit(out_str, del_in=0, log=__name__)
     else:
         await message.edit("`Loading...`")
+        restart_ = False
         replied = message.reply_to_message
         if replied and replied.document:
             file_ = replied.document
@@ -370,16 +373,26 @@ async def load(message: Message) -> None:
                 t_path = os.path.join(Config.TMP_PATH, file_.file_name)
                 if os.path.isfile(t_path):
                     os.remove(t_path)
+                    restart_ = True
                 await replied.download(file_name=t_path)
                 plugin = get_import_path(ROOT, t_path)
                 try:
                     await paimon.load_plugin(plugin, reload_plugin=True)
                     await paimon.finalize_load()
                 except (ImportError, SyntaxError, NameError) as i_e:
-                    os.remove(t_path)
                     await message.err(i_e)
                 else:
-                    await message.edit(f"`Loaded {plugin}`", del_in=3, log=__name__)
+                    out_ = f"`Loaded {plugin} `"
+                    del_in_ = 3
+                    if restart_:
+                        out_ += "`and now restarting...`"
+                        del_in_ = -1
+                    end_msg = await message.edit(out_, del_in=del_in_, log=__name__)
+                    if restart_:
+                        await Start.save_msg(
+                            end_msg, f"`Plugin {plugin} loaded successfully...`"
+                        )
+                        asyncio.get_event_loop().create_task(paimon.restart())
             else:
                 await message.edit("`Plugin Not Found`")
         else:
